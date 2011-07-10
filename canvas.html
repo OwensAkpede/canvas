@@ -84,9 +84,10 @@
             high: 1
         }
 
-        var original_width = 10
-        var original_height = 100
+        var original_width = 1020
+        var original_height = 1020
 var padding=1.7;
+var padding=1;
         // var original_width = 9000
         // var original_height = 9000
 
@@ -140,6 +141,10 @@ var padding=1.7;
         }
 
         window.onresize = function (ev) {
+            var rect=canvas_wrapper.getBoundingClientRect()
+            var c_width=rect.width
+            var c_height=rect.height
+
             if (window.navigator.userAgent.match(/Mobile|Android/)) {
                 document.documentElement.setAttribute('from', 'mobile')
             } else {
@@ -151,43 +156,64 @@ var padding=1.7;
                 _innerHeight = canvas_board.offsetHeight
             }
 
-            if (_width>=_height) {
-                if (_innerHeight > _innerWidth ) {
-                zoom = _innerWidth / (_width * padding)
+
+
+//           if (_width>=_height) {
+//             /**
+//              * @wide
+//             */
+//             if ((_width)>_innerWidth) {
+//                 zoom=(_innerWidth/_width)
+//             } else if(1||(_height)>_innerHeight) {
+//                 zoom=(_innerHeight/_width)
+//            }else{
+// zoom=1
+//            }
+//           }else{
+//  /**
+//              * @long
+//             */
+//         //    console.log(c_width,_innerWidth,c_width>_innerWidth);
+//            if ((_width)>_innerWidth) {
+//                zoom=(_innerWidth/_height)
+//         } else if(1||(_height)>_innerHeight) {
+//             zoom=(_innerHeight/_height)
+//            }else{
+// zoom=1
+//            }
+//           }
+
+
+//default
+        //   if (_innerHeight > _innerWidth) {
+        //         zoom = _innerWidth / (_width + _height)
+        //     } else {
+        //         zoom = _innerHeight / (_width + _height)
+        //     }
+        //     zoom=zoom*1.9
+var x_width=_width
+var x_height=_height
+if (x_width>x_height) {
+    x_height=x_width
+}else if(x_height>x_width){
+    x_width=x_height
+}
+
+
+            if (_innerHeight > _innerWidth) {
+                zoom = _innerWidth / (x_width + x_height)
             } else {
-                zoom = _innerHeight / (_width * padding)
-            }
-            }else{
-                if (_innerHeight > _innerWidth ) {
-                zoom = _innerWidth / (_height * (padding-0.2))
-            } else {
-                zoom = _innerHeight / (_height * (padding-0.2))
-            }
+                zoom = _innerHeight / (x_width + x_height)
             }
 
-            // if (_innerHeight > _innerWidth ) {
-            //     zoom = _innerWidth / (_height * 2)
-            //     console.log(1);
-            // } else {
-            //     zoom = _innerHeight / (_height * 2)
-            //     console.log(2);
-            // }
+            zoom=zoom*1.9
 
-            // if (_innerHeight > _innerWidth) {
-            //     zoom = _innerHeight / (_width + _height)
-            // } else {
-            //     zoom = _innerWidth / (_width + _height)
-            // }
-            // zoom = null
             if (typeof zoom === "number") {
-                zoom = zoom * 1.5
-
-                transform_speed = (zoom + 1) * (2.5)
-
+                transform_speed = (zoom + 1) * (1.5)
                 if (!canva) {
                     canva = canvas_wrapper.style
                 }
-                if (canva.hasOwnProperty('zoom')) {
+                if (canva.hasOwnProperty('zooms')) {
                     document.querySelector('x-shadow').style.zoom = 
                     canva.zoom = zoom
                     document.documentElement.setAttribute("zoom", "true")
@@ -317,8 +343,8 @@ var padding=1.7;
             shadow = document.querySelector('x-shadow'),
             footer = document.querySelector('footer'),
             transform_speed = 1;
-        window.onresize()
-        canvas_wrapper.removeAttribute('hidden')
+            canvas_wrapper.removeAttribute('hidden')
+            window.onresize()
         setTimeout(function () {
             document.documentElement.setAttribute('ready', 'true')
         }, 1200)

@@ -1212,4 +1212,5 @@ function _onload() {
     //     popper('done')
     //     });
     footer.firstElementChild.removeAttribute('block')
+
 }

@@ -40,3 +40,43 @@ scratchCtx.fill();
 //everything will look great!
 
 ctx.drawImage(scratchCanves, ...);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if (_width>=_height) {
+    /**
+    * @wide
+   */
+   if (_innerHeight > _innerWidth ) {
+   zoom = _innerWidth / (_width * padding)
+} else {
+   zoom = _innerHeight / (_width * padding)
+}
+}else{
+   /**
+    * @long
+   */
+  if (_width>_innerHeight && _innerHeight>_innerWidth) {
+      zoom = _innerWidth / (_height *( padding))
+   } else {
+       zoom = _innerHeight / (_height *( padding))
+       console.log(zoom);
+}
+}
