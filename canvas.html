@@ -76,7 +76,7 @@
         // suscipit eum quos, eius nam at inventore neque. Impedit quaerat iusto exercitationem eaque sunt.
 
         // `)
-        
+
         var dev_mode = 1
         var _quality = {
             low: 0.3,
@@ -85,7 +85,7 @@
         }
 
         var original_width = 9000
-        var original_height = 9000
+        var original_height = 900
 
         var s = canvas_roundup_size(500, original_width, original_height)
         var _width = s.width
@@ -148,12 +148,16 @@
                 _innerHeight = canvas_board.offsetHeight
             }
 
-
             if (_innerHeight > _innerWidth) {
                 zoom = _innerWidth / (_width + _height)
             } else {
                 zoom = _innerHeight / (_width + _height)
             }
+            // if (_innerHeight > _innerWidth) {
+            //     zoom = _innerHeight / (_width + _height)
+            // } else {
+            //     zoom = _innerWidth / (_width + _height)
+            // }
             // zoom = null
             if (typeof zoom === "number") {
                 zoom = zoom * 1.5
@@ -164,7 +168,8 @@
                     canva = canvas_wrapper.style
                 }
                 if (canva.hasOwnProperty('zoom')) {
-                    shadow.style.zoom = canva.zoom = zoom
+                    document.querySelector('x-shadow').style.zoom = 
+                    canva.zoom = zoom
                     document.documentElement.setAttribute("zoom", "true")
                 } else {
                     document.documentElement.setAttribute("zoom", "false")

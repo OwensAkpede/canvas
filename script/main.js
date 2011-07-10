@@ -1206,12 +1206,10 @@ function incoming(id, data, foo) {
 
 function _onload() {
     // textToSvg(1)
-    // imagedataToSvg(4)
-    // .then(function(e){
-    //     console.log(URL.createObjectURL(e));
-    // })
-    renderAsCanvas(dev_mode=0).then(function(e){
-        popper('done')
-        });
+    // imagedataToSvg(7)
+
+    // renderAsCanvas(dev_mode=0).then(function(e){
+    //     popper('done')
+    //     });
     footer.firstElementChild.removeAttribute('block')
 }
