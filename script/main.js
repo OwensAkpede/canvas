@@ -30,8 +30,8 @@ var
                     PRVY = y
                 }
 
-                e.style.top = (e.offsetTop + (ev.movementY*transform_speed|| 0)) + 'px'
-                e.style.left = (e.offsetLeft + (ev.movementX*transform_speed|| 0)) + 'px'
+                e.style.top = (e.offsetTop + (ev.movementY * transform_speed || 0)) + 'px'
+                e.style.left = (e.offsetLeft + (ev.movementX * transform_speed || 0)) + 'px'
                 // e.scrollIntoViewIfNeeded(true)
             }
         },
@@ -50,7 +50,7 @@ var
                     PRVY = y
                 }
                 p.style.height = p.offsetHeight + "px"
-                p.style.width = (p.offsetWidth + ((ev.movementX *transform_speed|| -1))) + "px";
+                p.style.width = (p.offsetWidth + ((ev.movementX * transform_speed || -1))) + "px";
             }
         },
         "bottom_imagedata": function (event, elm) {
@@ -68,7 +68,7 @@ var
                     PRVY = y
                 }
                 p.style.width = p.offsetWidth + "px";
-                p.style.height = (p.offsetHeight + ((ev.movementY *transform_speed|| -1))) + "px";
+                p.style.height = (p.offsetHeight + ((ev.movementY * transform_speed || -1))) + "px";
             }
         },
         "bottom-right_imagedata": function (event, elm) {
@@ -86,7 +86,7 @@ var
                     PRVY = y
                 }
 
-                p.style.width = (p.offsetWidth + ((ev.movementY *transform_speed|| 0))) + "px";
+                p.style.width = (p.offsetWidth + ((ev.movementY * transform_speed || 0))) + "px";
                 p.style.height = "auto";
 
             }
@@ -106,7 +106,7 @@ var
                     PRVY = y
                 }
                 // font: 900 85px serif;
-                p.style.fontSize = (Number(p.style.fontSize.replace(/[a-z]/img, '')) + ((ev.movementY*transform_speed|| 0))) + "px";
+                p.style.fontSize = (Number(p.style.fontSize.replace(/[a-z]/img, '')) + ((ev.movementY * transform_speed || 0))) + "px";
                 // elm.style.width = p.offsetWidth+"px"//(p.offsetWidth + ((ev.movementX || ev.webkitMovementX || -1))) + "px";
             }
         },
@@ -124,7 +124,7 @@ var
                     PRVY = y
                 }
                 // p.style.height = p.offsetHeight + "px"
-                p.style.width = (p.offsetWidth + ((ev.movementX *transform_speed|| -1))) + "px";
+                p.style.width = (p.offsetWidth + ((ev.movementX * transform_speed || -1))) + "px";
             }
         }
     },
@@ -235,7 +235,6 @@ function imageToCanvas(img, r, both) {
     var _canvas = canvas.cloneNode();
     _canvas.width = img.width
     _canvas.height = img.height
-
     void _canvas.getContext('2d').drawImage(img, 0, 0, _canvas.width, _canvas.height)
 
     if (typeof img.close === "function") {
@@ -256,18 +255,18 @@ function imageToCanvas(img, r, both) {
 
         _canvas_div.style.width = `${_canvas_div.offsetWidth}px`
         _canvas_div.style.height = `${_canvas_div.offsetHeight}px`
-        _canvas_div.style.left = `${_canvas_div.offsetLeft-(_canvas_div.offsetWidth/2)}px`
-        _canvas_div.style.top = `${_canvas_div.offsetTop-(_canvas_div.offsetHeight/2)}px`
+        _canvas_div.style.left = `${_canvas_div.offsetLeft - (_canvas_div.offsetWidth / 2)}px`
+        _canvas_div.style.top = `${_canvas_div.offsetTop - (_canvas_div.offsetHeight / 2)}px`
         void _canvas_div.removeAttribute('default')
 
         void new Promise(function (_r) {
-                if (r instanceof Promise) {
-                    _r(r)
-                } else {
-                    _r()
-                }
-                r = _r = void 0
-            })
+            if (r instanceof Promise) {
+                _r(r)
+            } else {
+                _r()
+            }
+            r = _r = void 0
+        })
             .then(function () {
                 return db.log.setItem(_canvas_div._id, {
                     original_height: _canvas.height,
@@ -282,14 +281,32 @@ function imageToCanvas(img, r, both) {
             })
             .then(function () {
                 r = void 0;
+
                 void db.object.setItem(id[1], _canvas.getContext('2d').getImageData(0, 0, _canvas.width, _canvas.height))
-                id = void 0;
+                var size = canvas_roundup_size(10, _canvas.width, _canvas.height)
+                var size_1 = canvas_roundup_size(200, _canvas.width, _canvas.height)
+
+                var thumb = offscreenCanvas(size.width,size.height)
+                thumb= thumb.getContext('2d')
+                thumb.drawImage(_canvas, 0, 0, thumb.width, thumb.height)
+               
+                var thumb_1 = offscreenCanvas(size_1.width,size_1.height)
+                thumb_1= thumb_1.getContext('2d')
+                thumb_1.drawImage(_canvas, 0, 0, thumb_1.width, thumb.height)
+
                 loadImageData.replicate(void 0, _canvas, void 0, {
                     width: _canvas_div.offsetWidth,
                     height: _canvas_div.offsetHeight
                 }, 'load')
 
-                _canvas_div = _canvas = void 0;
+
+                void db.object_thumb.setItem(id[1], thumb.getContext('2d').getImageData(0, 0, thumb.width, thumb.height))
+                void db.object_thumb_medium.setItem(id[1], thumb_1.getContext('2d').getImageData(0, 0, thumb_1.width, thumb_1.height))
+                
+                thumb.clearRect(0,0,thumb.canvas.width,thumb.canvas.height)
+                thumb_1.clearRect(0,0,thumb_1.canvas.width,thumb_1.canvas.height)
+                
+                size=thumb=thumb_1=_canvas_div = _canvas =id= void 0;
             });
 
     });
@@ -334,9 +351,9 @@ function getText(txt, data) {
         _canvas_div._type = canvas_types.TEXT
         canvas_wrapper._append(_canvas_div)
 
-        _canvas_div.style.width = `${span.offsetWidth+1}px`
-        _canvas_div.style.left = `${_canvas_div.offsetLeft-(_canvas_div.offsetWidth/2)}px`
-        _canvas_div.style.top = `${_canvas_div.offsetTop-(_canvas_div.offsetHeight/2)}px`
+        _canvas_div.style.width = `${span.offsetWidth + 1}px`
+        _canvas_div.style.left = `${_canvas_div.offsetLeft - (_canvas_div.offsetWidth / 2)}px`
+        _canvas_div.style.top = `${_canvas_div.offsetTop - (_canvas_div.offsetHeight / 2)}px`
 
         void _canvas_div.removeAttribute('default')
 
@@ -345,7 +362,7 @@ function getText(txt, data) {
             fontWeight: span.style.fontWeight,
             fontSize: span.style.fontSize,
             fontFamily: span.style.fontFamily,
-            width: span.offsetWidth+1,
+            width: span.offsetWidth + 1,
             x: _canvas_div.offsetLeft,
             y: _canvas_div.offsetTop,
             data: id[1],
@@ -364,6 +381,11 @@ function loadStyleSheet(elm) {
 }
 
 function loadImageData(data, id, foo, _canvas_div) {
+var _data;
+    if (id instanceof Array) {
+        _data=id[1]
+id=id[0]
+    }
 
     var _canvas = canvas.cloneNode();
     void _canvas.setAttribute('hidden', "")
@@ -377,16 +399,30 @@ function loadImageData(data, id, foo, _canvas_div) {
     _canvas_div._id = id
     _canvas_div._type = data.type
     _canvas_div.appendChild(_canvas)
-
-    void loadImageData.replicate(data.data, _canvas, void 0, data, 'reset').then(function () {
+    var _load=function (e) {
+        void loadImageData.replicate(e, _canvas, void 0, data,'reset')
+        // void loadImageData.replicate(data.data, _canvas, void 0, data, 'reset');
         if (foo) {
             void foo(_canvas_div)
             foo = void 0
         }
         void loadStyleSheet(_canvas)
         _canvas_div = _canvas = void 0
-    });
-    id = data = void 0
+        _load=id = data = void 0
+    }
+if (_data) {
+    _load(_data)
+    _data=void 0
+} else {
+    void db.object_thumb.getItem(data.data).then(function(e){
+        if (!e) {
+            void console.error(error_msg)
+            return e = void 0
+        }
+        _load(e)
+        e = void 0
+    })
+}
 }
 
 loadImageData.replicate = function (e, _canvas, cnv, data, type) {
@@ -404,7 +440,7 @@ loadImageData.replicate = function (e, _canvas, cnv, data, type) {
     }
 
     if (!cnv) {
-        cnv = _canvas.cloneNode();
+        cnv = offscreenCanvas(_canvas.width,_canvas.height);
     }
 
 
@@ -426,14 +462,13 @@ loadImageData.replicate = function (e, _canvas, cnv, data, type) {
         }
     }
 
-    if (type === "reset") {
+    if (type === "reset"||type === "update" && data) {
         _canvas.width = data.width
         _canvas.height = data.height
     }
-
     void _canvas.getContext('2d').drawImage(cnv, 0, 0, _canvas.width, _canvas.height)
+    cnv.getContext('2d').clearRect(0,0,cnv.width,cnv.height)
     type = _canvas = data = cnv = e = void 0
-
 }
 
 function loadText(data, id, foo, _canvas_div) {
@@ -619,6 +654,7 @@ function remove() {
         db.log.getItem(pa._id).then(function (val) {
             db.log.removeItem(pa._id)
             db.object.removeItem(val.data)
+            db.object_thumb.removeItem(val.data)
             pa.remove()
             if (canvas_wrapper.lastElementChild) {
                 canvas_wrapper.lastElementChild.click()
@@ -632,25 +668,40 @@ function clone() {
     if (pa) {
         db.log.getItem(pa._id).then(function (val) {
             _zIdexCore().then(function (id) {
-                db.object.getItem(val.data).then(function (e) {
-                    if (!e) {
+                db.object.getItem(val.data).then(function (o) {
+                    if (!o) {
                         console.error(error_msg);
                         return void 0
                     }
-                    val.data = id;
-                    db.log.setItem(id, val)
-                    db.object.setItem(id, e)
-                    incoming(id, val, function (e) {
-                        e.click()
-                    })
-                    val = e = void 0
+                   if (val.type=canvas_types.IMAGEDATA) {
+                    db.object_thumb.getItem(val.data).then(function (ot) {
+                        if (!ot) {
+                            console.error(error_msg);
+                            return void 0
+                        }
+                        val.data = id;
+                        db.log.setItem(id, val)
+                        db.object.setItem(id, o)
+                        db.object_thumb.setItem(id, ot)
+                        incoming([id,ot], val, function (e) {
+                            e.click()
+                        })
+                        val = ot=o = void 0
+                    });
+                   } else {
+                        val.data = id;
+                        db.log.setItem(id, val)
+                        db.object.setItem(id, o)
+                        incoming(id, val, function (e) {
+                            e.click()
+                        })
+                        val =o = void 0
+                   }
                 });
             });
         });
     }
 }
-
-
 
 
 function _zIdexCore(_e) {
@@ -703,7 +754,7 @@ function _zIdexCore(_e) {
             var a = []
             db.log.length().then(function (e) {
                 if (0 >= e) {
-                    return _zIdexCore.default-1
+                    return _zIdexCore.default - 1
                 }
                 return db.log.key(e - 1)
             }).then(function (e) {
@@ -717,7 +768,7 @@ function _zIdexCore(_e) {
                 return db.object.length()
             }).then(function (e) {
                 if (0 >= e) {
-                    return _zIdexCore.default-1
+                    return _zIdexCore.default - 1
                 }
                 return db.object.key(e - 1)
             }).then(function (e) {

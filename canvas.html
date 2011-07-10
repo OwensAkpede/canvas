@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="./style/chrom-scroll.css">
     <script src="lib/typed.js"></script>
     <script src="lib/TypedArray.js"></script>
+    <script src="lib/OffscreenCanvas.js"></script>
     <script src="lib/openFs.js"></script>
     <script src="lib/nimo-DB.js"></script>
     <script src="lib/canvas_roundup_size.js"></script>
@@ -35,6 +36,7 @@
         .canvas_wrapper {}
     </style>
     <script>
+        
         var _width = 100
         var _height = 70
 
@@ -107,11 +109,8 @@
             // zoom = null
             if (typeof zoom === "number") {
                 zoom=zoom*1.5
-                if (zoom>1) {
-                    transform_speed=zoom/2.5
-                }else{
+
                     transform_speed = (zoom+1)*(2.5)
-                }
 
                 if (!canva) {
                     canva = canvas_wrapper.style

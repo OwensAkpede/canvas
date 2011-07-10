@@ -3,6 +3,8 @@ var app_id = 'canva editor'
 var db = {
     log: void 0,
     style: void 0,
+    object_thumb: void 0,
+    object_thumb_medium: void 0,
     object: void 0,
     detail: void 0,
     projectList: void 0,
@@ -14,6 +16,12 @@ var ready = new Promise(function (_r) {
     db.db.forceOpen(project_name, 'image logs').then(function (e) {
         db.log = e
         if (db.log.__new) void canvas_defaults(ready);
+        return db.db.forceOpen(project_name, 'image object thumbs')
+    }).then(function (e) {
+        db.object_thumb = e
+        return db.db.forceOpen(project_name, 'image object medium thumbs')
+    }).then(function (e) {
+        db.object_thumb_medium = e
         return db.db.forceOpen(project_name, 'image objects')
     }).then(function (e) {
         db.object = e
