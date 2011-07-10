@@ -7,19 +7,25 @@
     width: 100vw;
     height: 100vh;
     position: relative;
-    overflow: auto;
+    overflow: overlay;
+    background-color: #ffffff;
 }
 
-[from="mobile"] .canvas_board {
-    overflow: hidden;
+.canvas_board{
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .canvas_wrapper {
     position: absolute;
     top: 0;
     left: 0;
-    width: 500px;
+    /* width: 500px;
     height: 500px;
+
+    width: 300px;
+    height: 600px; */
+
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -27,17 +33,25 @@
     -moz-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
+
+    background: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2"><path fill="none" d="M1,0H2V1H1V0ZM0,1H1V2H0V1Z"/><path fill="%23dddddd" d="M0,0H1V1H0V0ZM1,1H2V2H1V1Z"/></svg>');
+    background-size: 24px;
+    background-color: #ffffff;
 }
 
 .canvas_wrapper::before {
     content: "";
     position: absolute;
-    box-shadow: 0 0 0 1px #a1a1a1;
+    /* box-shadow: 0 0 0 1px #a1a1a1; */
     box-shadow: 0 0 0 1px #a1a1a1, 2px 2px 3px #000000;
     width: 100%;
     height: 100%;
     z-index: 9999;
     pointer-events: none;
+}
+
+.canvas_wrapper>div>span{
+    /* white-space: pre; */
 }
 
 .canvas_wrapper>div {
@@ -47,7 +61,7 @@
     align-items: center;
 }
 
-.canvas_wrapper>div[active]>canvas {
+.canvas_wrapper>div[active]>canvas,.canvas_wrapper>div[active]>span {
     opacity: 0.6;
     z-index: -999;
 }
@@ -113,4 +127,29 @@
     background-color: rgba(0, 0, 0, 0.23);
     outline: 1px solid #727272;
     box-shadow: 0 0 3px #fff;
+}
+
+
+[from="mobile"] .canvas_board {
+    overflow: hidden;
+}
+
+[from="mobile"] .canvas_board {
+    /* background: #c6c6c6; */
+    
+}
+
+[from="mobile"] .canvas_wrapper{
+    /* box-shadow: inset 0 0 0 4px red; */
+    /* background: white; */
+    /* background: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2"><path fill="none" d="M1,0H2V1H1V0ZM0,1H1V2H0V1Z"/><path fill="%23dddddd" d="M0,0H1V1H0V0ZM1,1H2V2H1V1Z"/></svg>');
+    background-size: 24px; */
+}
+
+[from="mobile"] .canvas_wrapper::before {
+    box-shadow: none;
+    background: #ffffff;
+    background: transparent;
+z-index: -999;
+
 }

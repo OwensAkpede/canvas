@@ -2,15 +2,31 @@
 <html lang="en" from>
 
 <head>
+    <style cmp>
+
+    </style>
     <script>
+        var _width = 500
+        var _height = 506
+        document.querySelector('style[cmp]').textContent = `
+        .canvas_wrapper {
+    width: ${_width}px;
+    height: ${_height}px;
+        }
+        `;
+    </script>
+    <script>
+        window.previousInnerWidth = innerWidth
+        window.previousInnerHeight = innerHeight
+
+        var _innerWidth = innerWidth
+        var _innerHeight = innerHeight
         var canvas_events;
         // window.hasOwnProperty('ontouchmove')
         window.onresize = function () {
             // console.log(window.ontouchmove);
+            // console.log(window.navigator.userAgent);
             if (window.navigator.userAgent.match(/Mobile|Android/)) {
-                // if (!confirm('device not supported at the moment')) {
-                //     document.write('device not supported at the moment')
-                // }
                 document.documentElement.setAttribute('from', 'mobile')
                 canvas_events = {
                     mousemove: "ontouchmove",
@@ -27,6 +43,49 @@
                     mouseleave: "onmouseleave"
                 }
             }
+
+            if (canvas_board) {
+                _innerWidth = canvas_board.offsetWidth
+                _innerHeight = canvas_board.offsetHeight
+                // if (innerWidth<500) {
+
+                // } else if() {
+
+                // }
+                var zoom
+                // if (_width>_height && ) {
+
+                // }
+                if (previousInnerWidth !== innerWidth) {
+                    if (_width > _height) {
+                        zoom = _innerWidth / (_width + ((_width + _height) / _height))
+                    } else {
+                        zoom = _innerHeight / (_height + ((_width + _height) / _width))
+                    }
+                } else {
+                    if (_height > _width) {
+                        zoom = _innerHeight / (_height + ((_width + _height) / _width))
+                    } else {
+                        zoom = _innerWidth / (_width + ((_width + _height) / _height))
+                    }
+                }
+                //     zoom=_innerWidth/((_width>_height?_width:_height)+((_width+_height)/(_width>_height?_width:_height)))
+                // } 
+                // if (previousInnerHeight!== innerHeight) {
+                //     zoom=_innerHeight/((_width>_height?_width:_height)+((_width+_height)/(_width>_height?_width:_height)))
+                //     //     zoom=_innerWidth/(_width+((_width+_height)/_width))
+                // }
+                //  zoom=_innerHeight/(_height+((_width+_height)/_width))
+                //  if (_height>_innerHeight||_width>_innerWidth) {
+                if (zoom >= 1) {
+                    zoom = 1
+                }
+                //  }
+                canvas_wrapper.style.zoom = zoom
+            }
+
+            window.previousInnerWidth = innerWidth
+            window.previousInnerHeight = innerHeight
         }
         window.onresize()
     </script>
@@ -40,23 +99,28 @@
     <script>
         var store
         var storeIMGD
+        var localStore
+        var project_name = 'my editor'
+
         var ready = new Promise(function (_r) {
             new Promise(function (r) {
-                new NimoDB().open('my editor', 'image logs').then(function (e) {
+                new NimoDB().open(project_name, 'image logs').then(function (e) {
                     if (e) {
                         r(e)
                     } else {
-                        new NimoDB().create('my editor', 'image logs').then(r);
+                        new NimoDB().create(project_name, 'image logs').then(r);
                     }
                 });
             }).then(function (e) {
                 store = e
-                new NimoDB().open('my editor', 'image objects').then(function (e) {
+                new NimoDB().open(project_name, 'image objects').then(function (e) {
                     if (e) {
                         _r(e)
                     } else {
-                        new NimoDB().openCreatedDatabase('my editor').then(function () {
-                            arguments[0].createTable('image objects').then(_r);
+                        new NimoDB().openCreatedDatabase(project_name).then(function () {
+                            arguments[0].createTable('image objects').then(function () {
+                                _r()
+                            });
                             setTimeout(function () {
                                 getImage()
                             }, 0)
@@ -73,11 +137,6 @@
     <article>
         <header>
             <h1 center ellipsis>Canva</h1>
-            <!-- <h1 center ellipsis>Edit</h1>
-        <h1 center ellipsis>Edit</h1>
-        <h1 center ellipsis>Edit</h1>
-        <h1 center ellipsis>Edit</h1>
-        <h1 center ellipsis>Edit</h1> -->
         </header>
         <main class="canvas_board">
             <div class="canvas_wrapper">
@@ -85,7 +144,7 @@
         </main>
         <footer>
             <div class="ft">
-                <div image="add">
+                <div image="add" onclick="getImage()">
                     <div class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -97,7 +156,7 @@
                     </div>
                     <h5 class="span">Import Image</h5>
                 </div>
-                <div image="remove">
+                <div image="remove" onclick="remove()">
                     <div class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -109,17 +168,18 @@
                     </div>
                     <h5 class="span">Remove Image</h5>
                 </div>
-                <div image="add">
+                <div image="clone" onclick="clone()">
                     <div class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-edit-2">
-                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                            class="feather feather-copy">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                         </svg>
                     </div>
-                    <h5 class="span">Import Image</h5>
+                    <h5 class="span">Clone</h5>
                 </div>
-                <div image="add">
+                <div image="text" onclick="getText()">
                     <div class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -129,23 +189,21 @@
                             <line x1="12" y1="4" x2="12" y2="20"></line>
                         </svg>
                     </div>
-                    <h5 class="span">Import Image</h5>
+                    <h5 class="span">Text</h5>
                 </div>
-                <div image="add">
+                <div image="overlay" onclick="overlay()">
                     <div class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-move">
-                            <polyline points="5 9 2 12 5 15"></polyline>
-                            <polyline points="9 5 12 2 15 5"></polyline>
-                            <polyline points="15 19 12 22 9 19"></polyline>
-                            <polyline points="19 9 22 12 19 15"></polyline>
-                            <line x1="2" y1="12" x2="22" y2="12"></line>
-                            <line x1="12" y1="2" x2="12" y2="22"></line></svg>
+                            class="feather feather-layers">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
                     </div>
-                    <h5 class="span">Import Image</h5>
+                    <h5 class="span">Overlay</h5>
                 </div>
-                <div image="add">
+                <div image="crop">
                     <div class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -154,12 +212,18 @@
                             <path d="M1 6.13L16 6a2 2 0 0 1 2 2v15"></path>
                         </svg>
                     </div>
-                    <h5 class="span">Import Image</h5>
+                    <h5 class="span">Crop</h5>
                 </div>
             </div>
         </footer>
     </article>
     <script src="script/main copy.js"></script>
+    <script>
+        window.onresize()
+        setTimeout(function () {
+            document.documentElement.setAttribute('ready', 'true')
+        }, 3200)
+    </script>
 </body>
 
 </html>
