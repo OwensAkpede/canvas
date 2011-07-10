@@ -2,47 +2,81 @@
 const canvas_wrapper = document.querySelector('.canvas_wrapper'),
     canvas_board = document.querySelector('.canvas_board'),
     canvas_state = [],
-    canvas_events = {
-        mousemove:"onmousemove",
-        mouseup:"onmouseup",
-        mousedown:"onmousedown",
-        mouseleave:"onmouseleave",
-
-        mousemove:"ontouchmove",
-        mouseup:"ontouchend",
-        mousedown:"ontouchstart",
-        mouseleave:"ontouchcancel"
+    canvas_events = window.hasOwnProperty('ontouchmove') ? {
+        mousemove: "ontouchmove",
+        mouseup: "ontouchend",
+        mousedown: "ontouchstart",
+        mouseleave: "ontouchcancel"
+    } :
+    {
+        mousemove: "onmousemove",
+        mouseup: "onmouseup",
+        mousedown: "onmousedown",
+        mouseleave: "onmouseleave"
     },
+
     transform_speed = 2,
     canvas_reshape = {
         right: function (event, elm) {
+            var PRVX;
+            var PRVY;
             var p = elm.parentElement.querySelector('canvas');
-            canvas_board[canvas_events.mousemove] = function (e) {
+            canvas_board[canvas_events.mousemove] = function (ev) {
+                if (typeof ev.movementX !== 'number') {
+                    ev.movementX = PRVX ? (ev.touches[0].clientX - PRVX) : 0;
+                    ev.movementY = PRVY ? (ev.touches[0].clientY - PRVY) : 0;
+                    PRVX = ev.touches[0].clientX
+                    PRVY = ev.touches[0].clientY
+                }
                 p.style.height = p.offsetHeight + "px"
-                p.style.width = (p.offsetWidth + ((e.movementX || e.webkitMovementX || -1))) + "px";
+                p.style.width = (p.offsetWidth + ((ev.movementX || ev.webkitMovementX || -1))) + "px";
             }
         },
         bottom: function (event, elm) {
+            var PRVX;
+            var PRVY;
             var p = elm.parentElement.querySelector('canvas');
-            canvas_board[canvas_events.mousemove] = function (e) {
+            canvas_board[canvas_events.mousemove] = function (ev) {
+                if (typeof ev.movementX !== 'number') {
+                    ev.movementX = PRVX ? (ev.touches[0].clientX - PRVX) : 0;
+                    ev.movementY = PRVY ? (ev.touches[0].clientY - PRVY) : 0;
+                    PRVX = ev.touches[0].clientX
+                    PRVY = ev.touches[0].clientY
+                }
                 p.style.width = p.offsetWidth + "px";
-                p.style.height = (p.offsetHeight + ((e.movementY || e.webkitMovementY || -1))) + "px";
+                p.style.height = (p.offsetHeight + ((ev.movementY || ev.webkitMovementY || -1))) + "px";
             }
         },
         center: function (event, elm) {
             var e = elm.parentElement;
+            var PRVX;
+            var PRVY;
             canvas_board[canvas_events.mousemove] = function (ev) {
-                console.log(22);
+                if (typeof ev.movementX !== 'number') {
+                    ev.movementX = PRVX ? (ev.touches[0].clientX - PRVX) : 0;
+                    ev.movementY = PRVY ? (ev.touches[0].clientY - PRVY) : 0;
+                    PRVX = ev.touches[0].clientX
+                    PRVY = ev.touches[0].clientY
+                }
+
                 e.style.top = (e.offsetTop + (ev.movementY || ev.webkitMovementY || 0)) + 'px'
                 e.style.left = (e.offsetLeft + (ev.movementX || ev.webkitMovementX || 0)) + 'px'
-                e.scrollIntoViewIfNeeded(true)
+                // e.scrollIntoViewIfNeeded(true)
             }
         },
         "bottom-right": function (event, elm) {
             var p = elm.parentElement.querySelector('canvas');
-            canvas_board[canvas_events.mousemove] = function (e) {
-                p.style.height = (p.offsetHeight + ((e.movementY || e.webkitMovementY || -1))) + "px";
-                p.style.width = (p.offsetWidth + ((e.movementY || e.webkitMovementY || -1))) + "px";
+            var PRVX;
+            var PRVY;
+            canvas_board[canvas_events.mousemove] = function (ev) {
+                if (typeof ev.movementX !== 'number') {
+                    ev.movementX = PRVX ? (ev.touches[0].clientX - PRVX) : 0;
+                    ev.movementY = PRVY ? (ev.touches[0].clientY - PRVY) : 0;
+                    PRVX = ev.touches[0].clientX
+                    PRVY = ev.touches[0].clientY
+                }
+                p.style.height = (p.offsetHeight + ((ev.movementY || ev.webkitMovementY || -1))) + "px";
+                p.style.width = (p.offsetWidth + ((ev.movementY || ev.webkitMovementY || -1))) + "px";
             }
         },
         currentX: 0,
@@ -111,7 +145,7 @@ canvas_wrapper._append = function (e) {
         var _canvas_ctrl = canvas_ctrl.cloneNode(true)
 
         if (e._type) {
-            if (e._type==="text") {
+            if (e._type === "text") {
                 _canvas_ctrl.querySelector('[d="right"]').remove()
                 _canvas_ctrl.querySelector('[d="bottom"]').remove()
             }

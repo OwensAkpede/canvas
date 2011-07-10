@@ -14,6 +14,7 @@ body{
     height: 100vh;
     position: relative;
     overflow: auto;
+    overflow: hidden;
 }
 
 .canvas_wrapper {
