@@ -796,3 +796,5 @@ function incoming(id, data, foo) {
     canvas_wrapper._append(_canvas_div, true)
     _canvas_div = id = data = foo = void 0
 }
+
+

@@ -28,8 +28,9 @@
     <script src="lib/typed.js"></script>
     <script src="lib/TypedArray.js"></script>
     <script src="lib/openFs.js"></script>
-    <script src="./lib/nimo-DB.js"></script>
-    <script src="./script/db.js"></script>
+    <script src="lib/nimo-DB.js"></script>
+    <script src="lib/canvas_roundup_size.js"></script>
+    <script src="script/db.js"></script>
     <style cmp>
         .canvas_wrapper {}
     </style>
@@ -37,8 +38,13 @@
         var _width = 100
         var _height = 70
 
-        var _width = 900
-        var _height = 500
+        var _width = 9000
+        var _height = 9000
+
+        var s=canvas_roundup_size(500,_width,_height)
+        var _width = s.width
+        var _height = s.height
+        // fake/origina
         var zoom = 1;
 
         canva = document.querySelector('style[cmp]');
@@ -101,12 +107,16 @@
             // zoom = null
             if (typeof zoom === "number") {
                 zoom=zoom*1.5
-                transform_speed = zoom*(2.5+zoom)
+                if (zoom>1) {
+                    transform_speed=zoom/2.5
+                }else{
+                    transform_speed = (zoom+1)*(2.5)
+                }
 
                 if (!canva) {
                     canva = canvas_wrapper.style
                 }
-                if (canva.hasOwnProperty('zooms')) {
+                if (canva.hasOwnProperty('zoom')) {
                     canva.zoom = zoom
                     document.documentElement.setAttribute("zoom", "true")
                 } else {
