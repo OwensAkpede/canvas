@@ -1,6 +1,6 @@
 "use strict";
-const canvas_wrapper = document.querySelector('.canvas_wrapper'),
-    canvas_board = document.querySelector('.canvas_board'),
+
+var
     transform_speed = 2,
     canvas_types = {
         IMAGEDATA: "imagedata",
@@ -69,8 +69,8 @@ const canvas_wrapper = document.querySelector('.canvas_wrapper'),
                     PRVY = ev.touches[0].clientY
                 }
 
-                        p.style.width = (p.offsetWidth + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
-                       p.style.height = "auto";
+                p.style.width = (p.offsetWidth + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
+                p.style.height = "auto";
             }
         },
         "bottom-right_text": function (event, elm) {
@@ -223,9 +223,9 @@ function imageToCanvas(img) {
     img = void 0
 
     var _canvas_div = canvas_div.cloneNode(true)
-    void _canvas_div.setAttribute('default',canvas_types.IMAGEDATA)
+    void _canvas_div.setAttribute('default', canvas_types.IMAGEDATA)
     void _canvas_div.appendChild(_canvas)
- 
+
 
     void id().then(function (id) {
         _canvas_div._id = id
@@ -287,7 +287,7 @@ function getText(txt, data) {
     span.style.fontFamily = "serif"
 
     var _canvas_div = canvas_div.cloneNode(true)
-    void _canvas_div.setAttribute('default',canvas_types.TEXT)
+    void _canvas_div.setAttribute('default', canvas_types.TEXT)
     _canvas_div.appendChild(span)
 
 
@@ -319,8 +319,20 @@ function getText(txt, data) {
     });
 }
 
-function loadImageData(data, id, foo) {
+function loadImageData(data, id, foo, _canvas_div) {
+
     var _canvas = canvas.cloneNode();
+
+
+    _canvas_div.style.width = `${data.width}px`
+    _canvas_div.style.height = `${data.height}px`
+    _canvas_div.style.left = `${data.x}px`
+    _canvas_div.style.top = `${data.y}px`
+
+    _canvas_div._id = id
+    _canvas_div._type = data.type
+    _canvas_div.appendChild(_canvas)
+
     storeIMGD.getItem(data.data).then(function (e) {
         if (!e) {
             console.error('something unusual here')
@@ -329,20 +341,8 @@ function loadImageData(data, id, foo) {
 
         _canvas.width = data.original_width
         _canvas.height = data.original_height
-
         _canvas.getContext('2d').putImageData(e, 0, 0)
 
-        var _canvas_div = canvas_div.cloneNode(true)
-        _canvas_div.style.width = `${data.width}px`
-        _canvas_div.style.height = `${data.height}px`
-        _canvas_div.style.left = `${data.x}px`
-        _canvas_div.style.top = `${data.y}px`
-
-        _canvas_div._id = id
-        _canvas_div._type = data.type
-        _canvas_div.appendChild(_canvas)
-
-        canvas_wrapper._append(_canvas_div, true)
         if (foo) {
             foo(_canvas_div)
             foo = void 0
@@ -351,12 +351,19 @@ function loadImageData(data, id, foo) {
     });
 }
 
-function loadText(data, id, foo) {
+function loadText(data, id, foo, _canvas_div) {
     var span = document.createElement("span")
+
+    _canvas_div._id = id
+    _canvas_div._type = data.type
+    _canvas_div.style.left = `${data.x}px`
+    _canvas_div.style.top = `${data.y}px`
+    _canvas_div.style.width = `${data.width}px`
 
     span.style.fontSize = data.fontSize
     span.style.fontWeight = data.fontWeight
     span.style.fontFamily = data.fontFamily
+
 
     storeIMGD.getItem(data.data).then(function (e) {
         if (typeof e !== "string") {
@@ -367,16 +374,8 @@ function loadText(data, id, foo) {
         span.innerText = e
         e = void 0
 
-        var _canvas_div = canvas_div.cloneNode(true)
-        _canvas_div._id = id
-        _canvas_div._type = data.type
         _canvas_div.appendChild(span)
 
-        _canvas_div.style.left = `${data.x}px`
-        _canvas_div.style.top = `${data.y}px`
-        _canvas_div.style.width = `${data.width}px`
-
-        canvas_wrapper._append(_canvas_div, true)
         if (foo) {
             foo(_canvas_div)
             foo = void 0
@@ -401,9 +400,9 @@ function update(elm, type) {
         } else if (type.match(/^(bottom-right_text)$/)) {
             var c = elm.querySelector('span')
             e.fontSize = c.style.fontSize
-        }else if (type.match(/^(right_text)$/)) {
+        } else if (type.match(/^(right_text)$/)) {
             e.width = elm.offsetWidth
-        }  else {
+        } else {
             console.error('something unusual!!!')
         }
         store.setItem(elm._id, e)
@@ -429,14 +428,18 @@ function generateItem(e) {
 
 function moveup() {
     var pa = canvas_wrapper.querySelector('div[active]');
-    if (pa&&pa.nextElementSibling) {
+    if (pa && pa.nextElementSibling) {
         store.getItem(pa._id).then(function (val) {
-            id().then(function (e) {
-                    store.setItem(e, val)
-                    store.removeItem(pa._id)
-                    pa._id = e
+            id([pa._id, 1]).then(function (e) {
+                store.setItem(e, val)
+                store.removeItem(pa._id)
+                pa._id = e
+                if (pa.nextElementSibling.nextElementSibling) {
+                    canvas_wrapper.insertBefore(pa, pa.nextElementSibling.nextElementSibling)
+                } else {
                     canvas_wrapper.appendChild(pa)
-                    val=void 0
+                }
+                val = void 0
             });
         });
     }
@@ -444,14 +447,44 @@ function moveup() {
 
 function movedown() {
     var pa = canvas_wrapper.querySelector('div[active]');
-    if (pa&&pa.previousElementSibling) {
+    if (pa && pa.previousElementSibling) {
+        store.getItem(pa._id).then(function (val) {
+            id([pa._id, -1]).then(function (e) {
+                store.setItem(e, val)
+                store.removeItem(pa._id)
+                pa._id = e
+                canvas_wrapper.insertBefore(pa, pa.previousElementSibling)
+                val = void 0
+            });
+        });
+    }
+}
+
+function _moveup() {
+    var pa = canvas_wrapper.querySelector('div[active]');
+    if (pa && pa.nextElementSibling) {
+        store.getItem(pa._id).then(function (val) {
+            id().then(function (e) {
+                store.setItem(e, val)
+                store.removeItem(pa._id)
+                pa._id = e
+                canvas_wrapper.appendChild(pa)
+                val = void 0
+            });
+        });
+    }
+}
+
+function _movedown() {
+    var pa = canvas_wrapper.querySelector('div[active]');
+    if (pa && pa.previousElementSibling) {
         store.getItem(pa._id).then(function (val) {
             id(-1).then(function (e) {
-                    store.setItem(e, val)
-                    store.removeItem(pa._id)
-                    pa._id = e
-                    canvas_wrapper.insertBefore(pa,pa.previousElementSibling)
-                    val=void 0
+                store.setItem(e, val)
+                store.removeItem(pa._id)
+                pa._id = e
+                canvas_wrapper.insertBefore(pa, pa.previousElementSibling)
+                val = void 0
             });
         });
     }
@@ -497,21 +530,79 @@ function clone() {
 
 function id(_e) {
     return new Promise(function (r, j) {
-            if (_e) {
-                    store.key(0).then(function (e) {
-                        r(e-1)
-                    });
-            } else {
-                store.length().then(function (e) {
-                    if (0 >= e) {
-                        return r(id.default)
+
+        if (_e === -1) {
+            store.key(0).then(function (e) {
+                r(e - 1)
+            });
+        } else if (_e instanceof Array) {
+
+            store.getKey(_e[0]).then(function (e) {
+                e = e + _e[1]
+
+                if (0 > e) {
+                    j("null value")
+                    return
+                }
+                store.length().then(function (len) {
+                    if (e>len) {
+                        j("null value")
+                        return
                     }
-                    store.key(e - 1).then(function (e) {
-                        r(e + 1)
-                    });
+                store.key(e).then(function (e) {
+                    _e[0] = e
+                    if (_e[1] === -1) {
+                        if (_e[0] >= 0) {
+                            _e[0] -= 0.1
+                        } else {
+                            _e[0] += 0.1
+                        }
+                    } else {
+                        if (_e[0] >= 0) {
+                            _e[0] += 0.1
+                        } else {
+                            _e[0] -= 0.1
+                        }
+                    }
+                    store.has(_e[0]).then(function (e) {
+                        if (e) {
+                            id(_e).then(function (e) {
+                               r(e)
+                            });
+                        } else {
+                           r(_e[0])
+                        }
+                    })
+                })
                 });
-            }
+            });
+        } else {
+            store.length().then(function (e) {
+                if (0 >= e) {
+                    return r(id.default)
+                }
+                store.key(e - 1).then(function (e) {
+                    r(e + 1)
+                });
+            });
+        }
     });
+}
+
+function canvaSize(w, h) {
+    if (typeof w !== 'number') {
+        w = 500
+    }
+    if (typeof h !== 'number') {
+        h = 500
+    }
+
+    _width = w
+    _height = h
+
+    canva.width = (_width = w) + "px"
+    canva.height = (_height = h) + "px"
+    window.onresize()
 }
 
 function openFs() {
@@ -548,16 +639,19 @@ ready.then(function (e) {
 });
 
 function incoming(id, data, foo) {
+    var _canvas_div = canvas_div.cloneNode(true)
     if (!data) {
         console.error('something unusual here')
-    }else{
+    } else {
         if (data.type === canvas_types.IMAGEDATA) {
-            loadImageData(data, id, foo)
+            loadImageData(data, id, foo, _canvas_div)
         } else if (data.type === canvas_types.TEXT) {
-            loadText(data, id, foo)
+            loadText(data, id, foo, _canvas_div)
         } else {
             console.error('something unusual here')
         }
     }
-    id = data = foo = void 0
+    _canvas_div.key = canvas_wrapper.childElementCount
+    canvas_wrapper._append(_canvas_div, true)
+    _canvas_div = id = data = foo = void 0
 }

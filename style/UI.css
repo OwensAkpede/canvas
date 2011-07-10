@@ -119,43 +119,13 @@ footer>div.ft>div .span {
 }
 
 
-[invert]{
+[invert] {
     transform: rotateX(190deg);
     -webkit-transform: rotateX(190deg);
     -moz-transform: rotateX(190deg);
     -ms-transform: rotateX(190deg);
     -o-transform: rotateX(190deg);
 }
-/* [from="pc"] footer {
-    padding-bottom: 31px;
-} */
-
-/* [from="pc"] footer>div.ft{
-    background: #ffffff57;
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-}
-
-[from="pc"] footer>div.ft>div:hover {
-    margin-left: 8px;
-    margin-right: 8px;
-} */
-
-/* [from="pc"] footer>div.ft>div:hover .feather {
-    transform: translateY(-16px) scale(1.3) skew(0);
-    -webkit-transform: translateY(-16px) scale(1.3) skew(0);
-    -moz-transform: translateY(-16px) scale(1.3) skew(0);
-    -ms-transform: translateY(-16px) scale(1.3) skew(0);
-    -o-transform: translateY(-16px) scale(1.3) skew(0);
-} */
-
-/* [from="pc"] footer>div.ft>div:active .feather {
-    transform: translateY(0px) scale(1) skew(6deg);
-    -webkit-transform: translateY(0px) scale(1) skew(6deg);
-    -moz-transform: translateY(0px) scale(1) skew(6deg);
-    -ms-transform: translateY(0px) scale(1) skew(6deg);
-    -o-transform: translateY(0px) scale(1) skew(6deg);
-} */
 
 
 
@@ -163,7 +133,12 @@ footer>div.ft>div .span {
 
 
 
-/* [from="mobile"] footer {
+
+
+
+
+
+[from="mobile"] footer {
     position: relative;
     justify-content: flex-start;
     padding: 5px 0;
@@ -181,21 +156,31 @@ footer>div.ft>div .span {
     -moz-border-radius: 0;
     -ms-border-radius: 0;
     -o-border-radius: 0;
-} */
+}
+
+[from="mobile"] footer>div.ft>div:active {
+    opacity: 0.6;
+}
+
 @media screen and (min-width:700px) {
-    [interacting="1"] footer>div.ft {
+
+    [from="mobile"] header {
+        height: 70px;
+    }
+
+    [from="pc"][interacting="1"] footer>div.ft {
         pointer-events: none;
     }
 
-    [ready="true"] footer>div.ft {
+    [from="pc"][ready="true"] footer {
         opacity: 0;
     }
 
-    footer>div.ft:hover {
+    [from="pc"][ready="true"] footer:hover {
         opacity: 1;
     }
 
-    footer {
+    [from="pc"] footer {
         padding-bottom: 31px;
     }
 
@@ -205,12 +190,12 @@ footer>div.ft>div .span {
         -webkit-backdrop-filter: blur(3px); */
     }
 
-    footer>div.ft>div:hover {
+    [from="pc"] footer>div.ft>div:hover {
         margin-left: 8px;
         margin-right: 8px;
     }
 
-    footer>div.ft>div:hover .feather {
+    [from="pc"] footer>div.ft>div:hover .feather {
         /* border-radius: 100px; */
         padding: 3px;
         /* border: 1px solid #dddddd; */
@@ -219,9 +204,9 @@ footer>div.ft>div .span {
         -moz-transform: translateY(-16px) scale(1.3) skew(0);
         -ms-transform: translateY(-16px) scale(1.3) skew(0);
         -o-transform: translateY(-16px) scale(1.3) skew(0);
-}
+    }
 
-    footer>div.ft>div:active .feather {
+    [from="pc"] footer>div.ft>div:active .feather {
         transform: translateY(0px) scale(1) skew(6deg);
         -webkit-transform: translateY(0px) scale(1) skew(6deg);
         -moz-transform: translateY(0px) scale(1) skew(6deg);
@@ -233,12 +218,9 @@ footer>div.ft>div .span {
 
 /* mobile */
 @media screen and (max-width:700px) {
-    [from="pc"] footer {
-        padding-bottom: 15px;
-    }
 
-    header {
-        height: 61px;
+    [from="pc"] header {
+        height: 50px;
     }
 
     footer {
@@ -246,14 +228,10 @@ footer>div.ft>div .span {
         justify-content: flex-start;
         padding: 5px 0;
         pointer-events: unset;
-        /* overflow-y: hidden;
-        overflow-x: auto;
-        overflow-x: overlay; */
-        /* overflow: auto;
-overflow: overlay; */
         box-shadow: 0 -2px 4px 1px #d7d7d7;
         overflow: overlay;
         overflow-y: hidden;
+        height: 60px;
     }
 
     footer>div.ft {
@@ -264,9 +242,15 @@ overflow: overlay; */
         -ms-border-radius: 0;
         -o-border-radius: 0;
     }
-
+    
     footer>div.ft>div:active {
-        opacity: 0.8;
+        opacity: 0.6;
+    }
+
+
+    footer>div.ft>div>.icon {
+        width: 40px;
+        height: 40px;
     }
 
     footer>div.ft>div .span {
