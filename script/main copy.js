@@ -241,7 +241,7 @@ function imageToCanvas(img) {
 
         void _canvas_div.removeAttribute('default')
 
-        void store.setItem(_canvas_div._id, {
+        void db.log.setItem(_canvas_div._id, {
             original_height: _canvas.height,
             original_width: _canvas.width,
             height: _canvas_div.offsetHeight,
@@ -251,7 +251,7 @@ function imageToCanvas(img) {
             data: _canvas_div._id,
             type: _canvas_div._type
         }).then(function () {
-            void storeIMGD.setItem(_canvas_div._id, _canvas.getContext('2d').getImageData(0, 0, _canvas.width, _canvas.height))
+            void db.object.setItem(_canvas_div._id, _canvas.getContext('2d').getImageData(0, 0, _canvas.width, _canvas.height))
             _canvas_div = _canvas = void 0;
         });
 
@@ -303,7 +303,7 @@ function getText(txt, data) {
 
         void _canvas_div.removeAttribute('default')
 
-        store.setItem(_canvas_div._id, {
+        db.log.setItem(_canvas_div._id, {
             original_style: span.style.cssText,
             fontWeight: span.style.fontWeight,
             fontSize: span.style.fontSize,
@@ -314,7 +314,7 @@ function getText(txt, data) {
             data: _canvas_div._id,
             type: _canvas_div._type
         }).then(function () {
-            storeIMGD.setItem(_canvas_div._id, span.innerText)
+            db.object.setItem(_canvas_div._id, span.innerText)
         });
 
     });
@@ -340,7 +340,7 @@ function loadImageData(data, id, foo, _canvas_div) {
     _canvas_div._type = data.type
     _canvas_div.appendChild(_canvas)
 
-    storeIMGD.getItem(data.data).then(function (e) {
+    db.object.getItem(data.data).then(function (e) {
         if (!e) {
             console.error('something unusual here')
             return void 0
@@ -373,7 +373,7 @@ function loadText(data, id, foo, _canvas_div) {
     span.style.fontFamily = data.fontFamily
 
 
-    storeIMGD.getItem(data.data).then(function (e) {
+    db.object.getItem(data.data).then(function (e) {
         if (typeof e !== "string") {
             console.error('something unusual here')
             return void 0
@@ -396,7 +396,7 @@ function loadText(data, id, foo, _canvas_div) {
 
 
 function update(elm, type) {
-    store.getItem(elm._id).then(function (e) {
+    db.log.getItem(elm._id).then(function (e) {
         if (!e) {
             console.error('something unusual!!!')
             return
@@ -416,7 +416,7 @@ function update(elm, type) {
         } else {
             console.error('something unusual!!!')
         }
-        store.setItem(elm._id, e)
+        db.log.setItem(elm._id, e)
     });
 }
 
@@ -440,10 +440,10 @@ function generateItem(e) {
 function moveup() {
     var pa = canvas_wrapper.querySelector('div[active]');
     if (pa && pa.nextElementSibling) {
-        store.getItem(pa._id).then(function (val) {
+        db.log.getItem(pa._id).then(function (val) {
             id([pa._id, 1]).then(function (e) {
-                store.setItem(e, val)
-                store.removeItem(pa._id)
+                db.log.setItem(e, val)
+                db.log.removeItem(pa._id)
                 pa._id = e
                 if (pa.nextElementSibling.nextElementSibling) {
                     canvas_wrapper.insertBefore(pa, pa.nextElementSibling.nextElementSibling)
@@ -459,10 +459,10 @@ function moveup() {
 function movedown() {
     var pa = canvas_wrapper.querySelector('div[active]');
     if (pa && pa.previousElementSibling) {
-        store.getItem(pa._id).then(function (val) {
+        db.log.getItem(pa._id).then(function (val) {
             id([pa._id, -1]).then(function (e) {
-                store.setItem(e, val)
-                store.removeItem(pa._id)
+                db.log.setItem(e, val)
+                db.log.removeItem(pa._id)
                 pa._id = e
                 canvas_wrapper.insertBefore(pa, pa.previousElementSibling)
                 val = void 0
@@ -474,10 +474,10 @@ function movedown() {
 function _moveup() {
     var pa = canvas_wrapper.querySelector('div[active]');
     if (pa && pa.nextElementSibling) {
-        store.getItem(pa._id).then(function (val) {
+        db.log.getItem(pa._id).then(function (val) {
             id().then(function (e) {
-                store.setItem(e, val)
-                store.removeItem(pa._id)
+                db.log.setItem(e, val)
+                db.log.removeItem(pa._id)
                 pa._id = e
                 canvas_wrapper.appendChild(pa)
                 val = void 0
@@ -489,10 +489,10 @@ function _moveup() {
 function _movedown() {
     var pa = canvas_wrapper.querySelector('div[active]');
     if (pa && pa.previousElementSibling) {
-        store.getItem(pa._id).then(function (val) {
+        db.log.getItem(pa._id).then(function (val) {
             id(-1).then(function (e) {
-                store.setItem(e, val)
-                store.removeItem(pa._id)
+                db.log.setItem(e, val)
+                db.log.removeItem(pa._id)
                 pa._id = e
                 canvas_wrapper.insertBefore(pa, pa.previousElementSibling)
                 val = void 0
@@ -506,9 +506,9 @@ function remove() {
     var pa = canvas_wrapper.querySelector('div[active]');
     if (pa) {
         canvas_wrapper._remove()
-        store.getItem(pa._id).then(function (val) {
-            store.removeItem(pa._id)
-            storeIMGD.removeItem(val.data)
+        db.log.getItem(pa._id).then(function (val) {
+            db.log.removeItem(pa._id)
+            db.object.removeItem(val.data)
             pa.remove()
             if (canvas_wrapper.lastElementChild) {
                 canvas_wrapper.lastElementChild.click()
@@ -520,12 +520,12 @@ function remove() {
 function clone() {
     var pa = canvas_wrapper.querySelector('div[active]');
     if (pa) {
-        store.getItem(pa._id).then(function (val) {
+        db.log.getItem(pa._id).then(function (val) {
             id().then(function (id) {
                 val.data = id;
-                store.setItem(id, val)
-                storeIMGD.getItem(pa._id).then(function (e) {
-                    storeIMGD.setItem(id, e)
+                db.log.setItem(id, val)
+                db.object.getItem(pa._id).then(function (e) {
+                    db.object.setItem(id, e)
                     incoming(id, val, function (e) {
                         e.click()
                     })
@@ -543,24 +543,24 @@ function id(_e) {
     return new Promise(function (r, j) {
 
         if (_e === -1) {
-            store.key(0).then(function (e) {
+            db.log.key(0).then(function (e) {
                 r(e - 1)
             });
         } else if (_e instanceof Array) {
 
-            store.getKey(_e[0]).then(function (e) {
+            db.log.getKey(_e[0]).then(function (e) {
                 e = e + _e[1]
 
                 if (0 > e) {
                     j("null value")
                     return
                 }
-                store.length().then(function (len) {
+                db.log.length().then(function (len) {
                     if (e>len) {
                         j("null value")
                         return
                     }
-                store.key(e).then(function (e) {
+                db.log.key(e).then(function (e) {
                     _e[0] = e
                     if (_e[1] === -1) {
                         if (_e[0] >= 0) {
@@ -575,7 +575,7 @@ function id(_e) {
                             _e[0] -= 0.1
                         }
                     }
-                    store.has(_e[0]).then(function (e) {
+                    db.log.has(_e[0]).then(function (e) {
                         if (e) {
                             id(_e).then(function (e) {
                                r(e)
@@ -588,11 +588,11 @@ function id(_e) {
                 });
             });
         } else {
-            store.length().then(function (e) {
+            db.log.length().then(function (e) {
                 if (0 >= e) {
                     return r(id.default)
                 }
-                store.key(e - 1).then(function (e) {
+                db.log.key(e - 1).then(function (e) {
                     r(e + 1)
                 });
             });
@@ -645,7 +645,7 @@ function round(number, number_max, percentage) {
 
 
 ready.then(function (e) {
-    store.getAllItem(incoming)
+    db.log.getAllItem(incoming)
 });
 
 function incoming(id, data, foo) {
