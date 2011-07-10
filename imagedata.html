@@ -13,7 +13,7 @@
 
         img,
         canvas {
-            /* max-width: 70vw; */
+            max-width: 70vw;
             /* height: auto; */
             max-height: 60vh;
             border: 1px solid black;
@@ -28,6 +28,7 @@
     <script src="lib/typed.js"></script>
     <script src="lib/TypedArray.js"></script>
     <script src="lib/openFs.js"></script>
+    <link rel="stylesheet" href="style/imgdata.css">
     <title>Document</title>
 </head>
 
@@ -59,7 +60,7 @@
         </div>
     </div>
 
-    <button onclick="reset()">reset</button>
+    <button onclick="reset(0,0,0,0)">reset</button>
     <script>
         var img = new Image()
         img.src = "image/1.png";
@@ -67,7 +68,7 @@
         if (board.offsetWidth > innerWidth) {
             style.maxWidth = (innerWidth / 2.5) + "px"
             style.maxHeight = (innerWidth / 2.5) + "px"
-        }else{
+        } else {
         }
         var controllers = contr.children;
 
@@ -75,12 +76,10 @@
         var data
         var fkdata
         img.onload = function () {
-            var sz=size(500,img.naturalWidth,img.naturalHeight)
-
-
-            canv.width =sz.width
-                canv.height =sz.height
-                ctx = canv.getContext('2d')
+            var sz = size(500, img.naturalWidth, img.naturalHeight)
+            canv.width = sz.width
+            canv.height = sz.height
+            ctx = canv.getContext('2d')
             ctx.drawImage(img, 0, 0, canv.width, canv.height)
             data = ctx.getImageData(0, 0, canv.width, canv.height)
             fkdata = ctx.getImageData(0, 0, canv.width, canv.height)
@@ -88,13 +87,12 @@
 
         function foo() {
             openFs().then(function (e) {
-                reset()
+                reset(0,0,0,0)
                 e = URL.createObjectURL(e)
                 img.src = e
-                img.addEventListener('load',function(){
+                img.addEventListener('load', function (e) {
+                    new CloseEvent(e)
                     URL.revokeObjectURL(img.src)
-                    img.removeEventListener('load',arguments.callee,true)
-                    console.log(arguments.callee);
                 })
             });
         }
@@ -112,7 +110,8 @@
         function reset() {
             ctx.putImageData(data, 0, 0);
             for (var i = 0; i < controllers.length; i++) {
-                controllers[i].querySelector('input').value = '0'
+                controllers[i].querySelector('input').value = arguments[i]
+                range[i](arguments[i])
             }
         }
 
@@ -130,8 +129,8 @@
             }
         }
 
-        function size(sz,w,h) {
-            type.number(sz,w,h)
+        function size(sz, w, h) {
+            type.number(sz, w, h)
             // w = 100
             // h = 99
 
@@ -147,8 +146,7 @@
 
             w = w * _sz
             h = h * _sz
-console.log(w,h);
-return{width:w,height:h}
+            return { width: w, height: h }
         }
 
     </script>
