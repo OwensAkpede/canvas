@@ -15,8 +15,8 @@
             Element.prototype.requestFullscreen = Element.prototype.webkitRequestFullscreen
         }
 
-        
-      
+
+
     </script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -36,14 +36,14 @@
         .canvas_wrapper {}
     </style>
     <script>
-        
+
         var _width = 100
         var _height = 70
 
         var _width = 9000
         var _height = 9000
 
-        var s=canvas_roundup_size(500,_width,_height)
+        var s = canvas_roundup_size(500, _width, _height)
         var _width = s.width
         var _height = s.height
         // fake/origina
@@ -108,9 +108,9 @@
             }
             // zoom = null
             if (typeof zoom === "number") {
-                zoom=zoom*1.5
+                zoom = zoom * 1.5
 
-                    transform_speed = (zoom+1)*(2.5)
+                transform_speed = (zoom + 1) * (2.5)
 
                 if (!canva) {
                     canva = canvas_wrapper.style
@@ -221,17 +221,17 @@
                     </div>
                     <span class="span">Move down</span>
                 </div>
-                <div image="more" onclick="db.db.deleteAllCreatedDatabase().then(location.reload())">
+                <div image="clear" onclick="db.db.deleteAllCreatedDatabase().then(location.reload())">
                     <div class="icon" invertx>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="currentColor" stroke="currentColor" stroke-width="0" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-more-horizontal">
-                            <circle cx="12" cy="12" r="1"></circle>
-                            <circle cx="19" cy="12" r="1"></circle>
-                            <circle cx="5" cy="12" r="1"></circle>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-delete">
+                            <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+                            <line x1="18" y1="9" x2="12" y2="15"></line>
+                            <line x1="12" y1="9" x2="18" y2="15"></line>
                         </svg>
                     </div>
-                    <span class="span">more</span>
+                    <span class="span">clear</span>
                 </div>
             </div>
         </footer>
@@ -239,7 +239,7 @@
     <script>
         var canvas_wrapper = document.querySelector('.canvas_wrapper'),
             canvas_board = document.querySelector('.canvas_board'),
-    transform_speed = 1,
+            transform_speed = 1,
             footer = document.querySelector('footer');
         window.onresize()
         canvas_wrapper.removeAttribute('hidden')

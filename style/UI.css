@@ -22,6 +22,14 @@ header [ellipsis] {
 
 
 main {}
+footer::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+}
+
+footer::-webkit-scrollbar-thumb {
+    border-radius: 150px;
+}
 
 footer {
     padding: 10px 0;
@@ -36,6 +44,7 @@ footer {
     color: #7c7c7c;
     background: #ffffff;
     overflow-x: auto;
+    overflow-x: overlay;
     overflow-y: hidden;
     margin-top: 5px;
 }

@@ -147,7 +147,17 @@
     outline: 1px solid #727272;
     box-shadow: 0 0 3px #fff;
 }
-
+.canvas_wrapper>div>div[controller] div[d="rotate"] {
+    width: 50px;
+    height: 20px;
+    border: 9px solid #000000;
+    bottom: -28px;
+    border-top: none;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 150px;
+    display: none;
+}
 
 
 /*  */
