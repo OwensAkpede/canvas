@@ -360,7 +360,7 @@ function loadImageData(data, id, foo, _canvas_div) {
 
 function loadText(data, id, foo, _canvas_div) {
     var span = document.createElement("span")
-    span.setAttribute('hidden',"")
+    void span.setAttribute('hidden',"")
 
     _canvas_div._id = id
     _canvas_div._type = data.type
@@ -373,7 +373,7 @@ function loadText(data, id, foo, _canvas_div) {
     span.style.fontFamily = data.fontFamily
 
 
-    db.object.getItem(data.data).then(function (e) {
+    void db.object.getItem(data.data).then(function (e) {
         if (typeof e !== "string") {
             console.error('something unusual here')
             return void 0
@@ -382,7 +382,7 @@ function loadText(data, id, foo, _canvas_div) {
         span.innerText = e
         e = void 0
 
-        _canvas_div.appendChild(span)
+        void _canvas_div.appendChild(span)
 
         if (foo) {
             foo(_canvas_div)
