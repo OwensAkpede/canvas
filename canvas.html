@@ -122,7 +122,11 @@
                                 _r()
                             });
                             setTimeout(function () {
-                                getImage()
+                                var img = new Image();
+                                img.src = "image/1.png"
+                                img.onload = function () {
+                                    imageToCanvas(img)
+                                }
                             }, 0)
                         });
                     }

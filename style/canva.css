@@ -50,6 +50,11 @@
     pointer-events: none;
 }
 
+.canvas_wrapper>div>canvas{
+width: 100%;
+height: 100%;
+}
+
 .canvas_wrapper>div>span{
     /* white-space: pre; */
 }
