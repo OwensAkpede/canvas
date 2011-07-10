@@ -18,6 +18,10 @@
             }
         }
 
+        if (!Element.prototype.hasOwnProperty('attachShadow')) {
+            Element.prototype.attachShadow = Element.prototype.createShadowRoot
+        }
+        
         if (!Element.prototype.hasOwnProperty('requestFullscreen')) {
             Element.prototype.requestFullscreen = Element.prototype.webkitRequestFullscreen
         }
@@ -77,7 +81,7 @@
 
         // `)
 
-        var dev_mode = 0
+        var dev_mode = 1
         var prv_mode=0
 
         var _quality = {
@@ -107,17 +111,24 @@
         var zoom = 1;
 
         canva = document.querySelector('style[cmp]');
-        canva = (canva.sheet.rules || canva.sheet.cssRules)[0]
-        if (canva) {
-            canva = canva.style
-            canva.width = `${_width}px`
-            canva.height = `${_height}px`
-        } else {
-            canva.textContent = `
+        canva.textContent = `
                     .canvas_wrapper {
                        width: ${_width}px;
                         height: ${_height}px;
                      }`;
+
+        canva = (canva.sheet.rules || canva.sheet.cssRules)[0]
+        if (canva) {
+            // console.log(canva);
+            canva = canva.style
+            // canva.width = `${_width}px`
+            // canva.height = `${_height}px`
+        } else {
+            // canva.textContent = `
+            //         .canvas_wrapper {
+            //            width: ${_width}px;
+            //             height: ${_height}px;
+            //          }`;
         }
 
         window.previousInnerWidth = innerWidth

@@ -581,7 +581,7 @@ getText.load = function (txt, style) {
                 fontFamily: span.style.fontFamily,
                 textAlign: span.style.textAlign,
                 color: span.style.color,
-                transform: _canvas_div.style.transform,
+                // transform: _canvas_div.style.transform,
                 backgroundColor: span.style.backgroundColor,
                 width: _canvas_div.offsetWidth,
                 height: _canvas_div.offsetHeight,
@@ -954,6 +954,7 @@ Zindex._down = function () {
 
 function remove() {
     var pa = canvas_wrapper.querySelector('div[active]');
+    // console.log(pa);
     if (pa) {
         canvas_wrapper._remove()
         db.log.getItem(pa._id).then(function (val) {
@@ -1177,8 +1178,10 @@ function round(number, number_max, percentage) {
 }
 
 function save() {
-    void renderAsCanvas('low',console.log).then(function(e){
-        if (prv_mode) {
+    void renderAsCanvas('low',function(){
+        console.log(arguments[0])
+    }).then(function(e){
+        if (prv_mode||dev_mode) {
             return void 0;
         }
         e.toBlob(function(e){
@@ -1227,7 +1230,7 @@ function incoming(id, data, foo) {
 function _onload() {
     // textToSvg(1)
     // imagedataToSvg(7)
-    dev_mode=0,
+    
     footer.firstElementChild.removeAttribute('block')
 
 }
