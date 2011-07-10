@@ -1132,7 +1132,7 @@ function _zIdexCore(_e) {
     });
 }
 
-function canvaSize(w, h) {
+function canvasSize(w, h) {
     type.number(w,h)
     if (w<5) {
         w = 5
