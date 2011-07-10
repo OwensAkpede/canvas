@@ -87,7 +87,7 @@ createdObjectURL=[],
                 df = Number(df.replace(/rotate\(([^\)]*)(deg)?\)/img, '$1').replace(/[a-z]/img, '')) || 0
 
                 // df=df-(ev.movementY*ev.movementX);
-                df = (df - (ev.movementX+ev.movementY));
+                df = (df - (ev.movementX+ev.movementY))*1;
 console.log(df);
                 e.style.transform = e.style.transform.
                     replace(/(rotate\()([^\)]*)(deg)?(\))/img, '$1' + df + "deg" + '$4')

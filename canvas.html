@@ -175,7 +175,7 @@
             zoom = zoom * 1.9
 
             if (typeof zoom === "number") {
-                transform_speed = (zoom + 1) * (1.5)
+                transform_speed = zoom*1.2
                 if (!canva) {
                     canva = canvas_wrapper.style
                 }
