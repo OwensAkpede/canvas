@@ -213,3 +213,12 @@ background: radial-gradient(black 23%, #ffffff, 34%, transparent 30%);
     z-index: -999;
 
 }
+
+
+[notzoomable] .canvas_board{
+
+}
+
+[notzoomable] .canvas_wrapper{
+
+}

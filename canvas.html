@@ -90,13 +90,18 @@
                 if (!canva) {
                     canva = canvas_wrapper.style
                 }
-                canva.zoom = zoom
+                if(canva.zoom){
+                    canva.zoom = zoom
+                }else{
+                    document.documentElement.setAttribute("notzoomable","")
+                    canva.scale = zoom
+                }
             }
 
             window.previousInnerWidth = innerWidth
             window.previousInnerHeight = innerHeight
         }
-    
+
     </script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -196,14 +201,26 @@
                     </div>
                     <span class="span">Move down</span>
                 </div>
+                <div image="more" onclick="">
+                    <div class="icon" invertx>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
+                            stroke="currentColor" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-more-horizontal">
+                            <circle cx="12" cy="12" r="1"></circle>
+                            <circle cx="19" cy="12" r="1"></circle>
+                            <circle cx="5" cy="12" r="1"></circle>
+                        </svg>
+                    </div>
+                    <span class="span">more</span>
+                </div>
             </div>
         </footer>
     </article>
     <script>
         var canvas_wrapper = document.querySelector('.canvas_wrapper'),
             canvas_board = document.querySelector('.canvas_board');
-            window.onresize()
-            canvas_wrapper.removeAttribute('hidden')
+        window.onresize()
+        canvas_wrapper.removeAttribute('hidden')
         setTimeout(function () {
             document.documentElement.setAttribute('ready', 'true')
         }, 1200)
@@ -217,4 +234,5 @@
 // }
 // }
 </script>
+
 </html>

@@ -37,6 +37,10 @@ footer {
     /* padding: 5px; */
     /* padding-bottom: 31px; */
     pointer-events: none;
+    overflow-y: hidden;
+    overflow-x: auto;
+    overflow-x: overlay;
+    scrollbar-width: thin;
 }
 
 footer>div.ft {
@@ -143,9 +147,6 @@ footer>div.ft>div .span {
     justify-content: flex-start;
     padding: 5px 0;
     pointer-events: unset;
-    overflow-y: hidden;
-    overflow-x: auto;
-    overflow-x: overlay;
     box-shadow: 0 -2px 4px 1px #d7d7d7;
 }
 
@@ -229,8 +230,6 @@ footer>div.ft>div .span {
         padding: 5px 0;
         pointer-events: unset;
         box-shadow: 0 -2px 4px 1px #d7d7d7;
-        overflow: overlay;
-        overflow-y: hidden;
         height: 60px;
         background: #ffffff;
     }
@@ -259,3 +258,25 @@ footer>div.ft>div .span {
         display: none;
     }
 }
+
+@media screen and (min-width:492px) {
+ footer{
+justify-content: center;
+}
+}
+
+@media screen and (max-width:492px) {
+    footer::after{
+        content: "";
+        background: linear-gradient(90deg, #ffffff -4%,transparent 8%, transparent 81%, #ffffff 100%);
+        width: 100%;
+        height: inherit;
+        display: block;
+        position: fixed;
+        pointer-events: none;
+        bottom:-2px;
+   }
+   footer>div.ft{
+    padding-right: 43px;
+   }
+   }
