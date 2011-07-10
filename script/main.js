@@ -87,8 +87,8 @@ createdObjectURL=[],
                 df = Number(df.replace(/rotate\(([^\)]*)(deg)?\)/img, '$1').replace(/[a-z]/img, '')) || 0
 
                 // df=df-(ev.movementY*ev.movementX);
-                df = df - (ev.movementX);
-
+                df = (df - (ev.movementX+ev.movementY));
+console.log(df);
                 e.style.transform = e.style.transform.
                     replace(/(rotate\()([^\)]*)(deg)?(\))/img, '$1' + df + "deg" + '$4')
                 // console.log(e.style.transform);
@@ -538,7 +538,7 @@ getText.load = function (txt, style) {
         txt = void 0;
 
         span.style.fontSize = "40px"
-        span.style.fontFamily = "serif"
+        span.style.fontFamily = "san-serif"
         span.style.fontWeight = "900"
         span.style.color = "rgba(0,0,0,255)"
         span.style.textAlign=''
@@ -1208,9 +1208,7 @@ function _onload() {
     // textToSvg(1)
     // imagedataToSvg(7)
 
-    // renderAsCanvas(dev_mode=0).then(function(e){
-    //     popper('done')
-    //     });
+    // renderAsCanvas(dev_mode=0)
     footer.firstElementChild.removeAttribute('block')
 
 }

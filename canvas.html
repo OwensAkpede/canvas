@@ -79,15 +79,15 @@
 
         var dev_mode = 1
         var _quality = {
-            low: 0.3,
-            medium: 0.6,
-            high: 1
+            low: {quality:0.3,type:'image/png'},
+            medium: {quality:0.6,type:'image/png'},
+            high: {quality:1,type:'image/webp'}
         }
 
         var original_width = 1020
         var original_height = 1020
-var padding=1.7;
-var padding=1;
+        var padding = 1.7;
+        var padding = 1;
         // var original_width = 9000
         // var original_height = 9000
 
@@ -141,9 +141,9 @@ var padding=1;
         }
 
         window.onresize = function (ev) {
-            var rect=canvas_wrapper.getBoundingClientRect()
-            var c_width=rect.width
-            var c_height=rect.height
+            var rect = canvas_wrapper.getBoundingClientRect()
+            var c_width = rect.width
+            var c_height = rect.height
 
             if (window.navigator.userAgent.match(/Mobile|Android/)) {
                 document.documentElement.setAttribute('from', 'mobile')
@@ -157,47 +157,13 @@ var padding=1;
             }
 
 
-
-//           if (_width>=_height) {
-//             /**
-//              * @wide
-//             */
-//             if ((_width)>_innerWidth) {
-//                 zoom=(_innerWidth/_width)
-//             } else if(1||(_height)>_innerHeight) {
-//                 zoom=(_innerHeight/_width)
-//            }else{
-// zoom=1
-//            }
-//           }else{
-//  /**
-//              * @long
-//             */
-//         //    console.log(c_width,_innerWidth,c_width>_innerWidth);
-//            if ((_width)>_innerWidth) {
-//                zoom=(_innerWidth/_height)
-//         } else if(1||(_height)>_innerHeight) {
-//             zoom=(_innerHeight/_height)
-//            }else{
-// zoom=1
-//            }
-//           }
-
-
-//default
-        //   if (_innerHeight > _innerWidth) {
-        //         zoom = _innerWidth / (_width + _height)
-        //     } else {
-        //         zoom = _innerHeight / (_width + _height)
-        //     }
-        //     zoom=zoom*1.9
-var x_width=_width
-var x_height=_height
-if (x_width>x_height) {
-    x_height=x_width
-}else if(x_height>x_width){
-    x_width=x_height
-}
+            var x_width = _width
+            var x_height = _height
+            if (x_width > x_height) {
+                x_height = x_width
+            } else if (x_height > x_width) {
+                x_width = x_height
+            }
 
 
             if (_innerHeight > _innerWidth) {
@@ -206,7 +172,7 @@ if (x_width>x_height) {
                 zoom = _innerHeight / (x_width + x_height)
             }
 
-            zoom=zoom*1.9
+            zoom = zoom * 1.9
 
             if (typeof zoom === "number") {
                 transform_speed = (zoom + 1) * (1.5)
@@ -214,8 +180,8 @@ if (x_width>x_height) {
                     canva = canvas_wrapper.style
                 }
                 if (canva.hasOwnProperty('zooms')) {
-                    document.querySelector('x-shadow').style.zoom = 
-                    canva.zoom = zoom
+                    document.querySelector('x-shadow').style.zoom =
+                        canva.zoom = zoom
                     document.documentElement.setAttribute("zoom", "true")
                 } else {
                     document.documentElement.setAttribute("zoom", "false")
@@ -343,8 +309,8 @@ if (x_width>x_height) {
             shadow = document.querySelector('x-shadow'),
             footer = document.querySelector('footer'),
             transform_speed = 1;
-            canvas_wrapper.removeAttribute('hidden')
-            window.onresize()
+        canvas_wrapper.removeAttribute('hidden')
+        window.onresize()
         setTimeout(function () {
             document.documentElement.setAttribute('ready', 'true')
         }, 1200)
