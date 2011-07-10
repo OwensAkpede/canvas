@@ -33,7 +33,7 @@
 
         var _width = 900
         var _height = 500
-        var zoom =1;
+        var zoom = 1;
 
         canva = document.querySelector('style[cmp]');
         canva = (canva.sheet.rules || canva.sheet.cssRules)[0]
@@ -87,14 +87,12 @@
             }
 
 
-            if (_innerHeight > _innerWidth ) {
-                console.log(1);
-                zoom = _innerWidth/(_width+_height)
+            if (_innerHeight > _innerWidth) {
+                zoom = _innerWidth / (_width + _height)
             } else {
-                    zoom = _innerHeight/(_width+_height)
-                console.log(2);
+                zoom = _innerHeight / (_width + _height)
             }
-            // zoom = null
+            zoom = null
 
             if (typeof zoom === "number") {
                 if (!canva) {
@@ -107,8 +105,8 @@
                     document.documentElement.setAttribute("zoom", "false")
                     canva.transform = `scale(${zoom})`
                 }
-            }else{
-                zoom=1
+            } else {
+                zoom = 1
             }
 
             window.previousInnerWidth = innerWidth
