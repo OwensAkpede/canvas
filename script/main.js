@@ -1129,18 +1129,21 @@ function _zIdexCore(_e) {
 }
 
 function canvaSize(w, h) {
-    if (typeof w !== 'number') {
-        w = 500
+    type.number(w,h)
+    if (w<5) {
+        w = 5
     }
-    if (typeof h !== 'number') {
-        h = 500
+    if (h<5) {
+        h = 5
     }
 
-    _width = w
-    _height = h
+     original_width = w
+     original_height = h
 
-    canva.width = (_width = w) + "px"
-    canva.height = (_height = h) + "px"
+     s = canvas_roundup_size(500, original_width, original_height)
+     canva.width= (_width = s.width)+'px'
+     canva.height= (_height = s.height)+'px'
+
     window.onresize()
 }
 
