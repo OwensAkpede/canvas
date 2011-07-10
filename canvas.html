@@ -21,26 +21,26 @@
         if (!Element.prototype.hasOwnProperty('requestFullscreen')) {
             Element.prototype.requestFullscreen = Element.prototype.webkitRequestFullscreen
         }
-        
+
         if (!HTMLCanvasElement.prototype.hasOwnProperty('toBlob')) {
-            HTMLCanvasElement.prototype.toBlob=function(callback,type,quality){
-                callback(new Blob([atob(this.toDataURL(type,quality).replace(/data[^,]+,/,''))],{type:type}))
+            HTMLCanvasElement.prototype.toBlob = function (callback, type, quality) {
+                callback(new Blob([atob(this.toDataURL(type, quality).replace(/data[^,]+,/, ''))], { type: type }))
             }
         }
 
         if (!HTMLCanvasElement.prototype.hasOwnProperty('convertToBlob')) {
-            HTMLCanvasElement.prototype.convertToBlob=function(opt){
-                var t=this
-                return new Promise(function(r){
-                t.toBlob(r,opt.type,opt.quality),t=r=void 0;
+            HTMLCanvasElement.prototype.convertToBlob = function (opt) {
+                var t = this
+                return new Promise(function (r) {
+                    t.toBlob(r, opt.type, opt.quality), t = r = void 0;
                 });
             }
         }
-        
+
         Object.defineProperty(Element.prototype, '_id', {
             set: function (e) {
-                    this._title=e
-                    this.setAttribute('_id', e)
+                this._title = e
+                this.setAttribute('_id', e)
             },
             get: function () {
                 return this._title
@@ -77,12 +77,16 @@
 
         // `)
 
-        var original_width = 500
-        var original_height = 500
+        var original_width = 9000
+        var original_height = 9000
 
         var s = canvas_roundup_size(500, original_width, original_height)
         var _width = s.width
         var _height = s.height
+
+        var scalex = (original_width / _width);
+        var scaley = (original_height / _height);
+
         // fake/origina
         var zoom = 1;
 
@@ -153,7 +157,7 @@
                     canva = canvas_wrapper.style
                 }
                 if (canva.hasOwnProperty('zoom')) {
-                    shadow.style.zoom=canva.zoom = zoom
+                    shadow.style.zoom = canva.zoom = zoom
                     document.documentElement.setAttribute("zoom", "true")
                 } else {
                     document.documentElement.setAttribute("zoom", "false")
@@ -287,8 +291,8 @@
             document.documentElement.setAttribute('ready', 'true')
         }, 1200)
 
-        shadow=shadow.attachShadow({mode:"closed"})
-        shadow.innerHTML+=`
+        shadow = shadow.attachShadow({ mode: "closed" })
+        shadow.innerHTML += `
         <style>
             xcanvas,svg{
                 max-width: 90vw;

@@ -1143,7 +1143,9 @@ function canvaSize(w, h) {
      s = canvas_roundup_size(500, original_width, original_height)
      canva.width= (_width = s.width)+'px'
      canva.height= (_height = s.height)+'px'
-
+      scalex = (original_width / _width);
+      scaley = (original_height / _height);
+      
     window.onresize()
 }
 
@@ -1208,7 +1210,7 @@ function _onload() {
     // .then(function(e){
     //     console.log(URL.createObjectURL(e));
     // })
-    render(dev_mode=0).then(function(e){
+    renderAsCanvas(dev_mode=0).then(function(e){
         popper('done')
         });
     footer.firstElementChild.removeAttribute('block')
