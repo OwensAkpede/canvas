@@ -7,6 +7,11 @@ const canvas_wrapper = document.querySelector('.canvas_wrapper'),
         mouseup:"onmouseup",
         mousedown:"onmousedown",
         mouseleave:"onmouseleave",
+
+        mousemove:"ontouchmove",
+        mouseup:"ontouchend",
+        mousedown:"ontouchstart",
+        mouseleave:"ontouchcancel"
     },
     transform_speed = 2,
     canvas_reshape = {
@@ -27,12 +32,10 @@ const canvas_wrapper = document.querySelector('.canvas_wrapper'),
         center: function (event, elm) {
             var e = elm.parentElement;
             canvas_board[canvas_events.mousemove] = function (ev) {
+                console.log(22);
                 e.style.top = (e.offsetTop + (ev.movementY || ev.webkitMovementY || 0)) + 'px'
                 e.style.left = (e.offsetLeft + (ev.movementX || ev.webkitMovementX || 0)) + 'px'
-                // canvas_board.scrollTo(ev.clientX-e.offsetWidth-e.offsetWidth,ev.clientY-e.offsetHeight-e.offsetHeight)
-                // canvas_board.scrollLeft=80000
                 e.scrollIntoViewIfNeeded(true)
-                // console.log(e.parentElement);
             }
         },
         "bottom-right": function (event, elm) {
