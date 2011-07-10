@@ -26,6 +26,7 @@
         }
     </style>
     <script src="lib/typed.js"></script>
+    <script src="lib/threads.js"></script>
     <script src="lib/TypedArray.js"></script>
     <script src="lib/openFs.js"></script>
     <link rel="stylesheet" href="style/imgdata.css">
@@ -111,6 +112,7 @@
             ctx.putImageData(data, 0, 0);
             for (var i = 0; i < controllers.length; i++) {
                 controllers[i].querySelector('input').value = arguments[i]
+                console.log(i);
                 range[i](arguments[i])
             }
         }
@@ -148,6 +150,8 @@
             h = h * _sz
             return { width: w, height: h }
         }
+
+      
 
     </script>
 </body>
