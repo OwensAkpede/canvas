@@ -115,44 +115,7 @@
     <link rel="stylesheet" href="./style/canva.css">
     <link rel="stylesheet" href="./style/ui.css">
     <script src="./lib/nimo-DB.js"></script>
-    <script>
-        var store
-        var storeIMGD
-        var localStore
-        var project_name = 'my editor'
-
-        var ready = new Promise(function (_r) {
-            new Promise(function (r) {
-                new NimoDB().open(project_name, 'image logs').then(function (e) {
-                    if (e) {
-                        r(e)
-                    } else {
-                        new NimoDB().create(project_name, 'image logs').then(r);
-                    }
-                });
-            }).then(function (e) {
-                store = e
-                new NimoDB().open(project_name, 'image objects').then(function (e) {
-                    if (e) {
-                        _r(e)
-                    } else {
-                        new NimoDB().openCreatedDatabase(project_name).then(function () {
-                            arguments[0].createTable('image objects').then(function () {
-                                _r()
-                            });
-                            setTimeout(function () {
-                                var img = new Image();
-                                img.src = "./image/1.png"
-                                img.onload = function () {
-                                    imageToCanvas(img)
-                                }
-                            }, 0)
-                        });
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="./script/db.js"></script>
     <title>Canvas</title>
 </head>
 
@@ -177,7 +140,7 @@
                             <polyline points="21 15 16 10 5 21"></polyline>
                         </svg>
                     </div>
-                    <h5 class="span">Import Image</h5>
+                    <span class="span">Import Image</span>
                 </div>
                 <div image="remove" onclick="remove()">
                     <div class="icon">
@@ -189,7 +152,7 @@
                             </path>
                         </svg>
                     </div>
-                    <h5 class="span">Remove Image</h5>
+                    <span class="span">Remove Image</span>
                 </div>
                 <div image="clone" onclick="clone()">
                     <div class="icon">
@@ -200,7 +163,7 @@
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                         </svg>
                     </div>
-                    <h5 class="span">Clone</h5>
+                    <span class="span">Clone</span>
                 </div>
                 <div image="text" onclick="getText()">
                     <div class="icon">
@@ -212,7 +175,7 @@
                             <line x1="12" y1="4" x2="12" y2="20"></line>
                         </svg>
                     </div>
-                    <h5 class="span">Text</h5>
+                    <span class="span">Text</span>
                 </div>
                 <div image="move up" onclick="moveup()">
                     <div class="icon">
@@ -224,7 +187,7 @@
                             <polyline points="2 12 12 17 22 12"></polyline>
                         </svg>
                     </div>
-                    <h5 class="span">Move up</h5>
+                    <span class="span">Move up</span>
                 </div>
                 <div image="move down" onclick="movedown()">
                     <div class="icon" invertx>
@@ -237,7 +200,7 @@
                             <polygon points="2,7 12,12 22,7 12,2 " id="polygon6" transform="rotate(178.4735,12,12)" />
                         </svg>
                     </div>
-                    <h5 class="span">Move down</h5>
+                    <span class="span">Move down</span>
                 </div>
             </div>
         </footer>

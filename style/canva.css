@@ -144,8 +144,8 @@
     height: 50px;
     background-color: rgb(255, 255, 255);
     cursor: nwse-resize;
-    bottom: -16px;
-    right: -16px;
+    bottom: -24px;
+    right: -24px;
     border-radius: 100%;
 }
 

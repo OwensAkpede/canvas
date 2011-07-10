@@ -87,6 +87,7 @@ var
                 }
                 // font: 900 85px serif;
                 p.style.fontSize = (Number(p.style.fontSize.replace(/[a-z]/img, '')) + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
+                // elm.style.width = p.offsetWidth+"px"//(p.offsetWidth + ((ev.movementX || ev.webkitMovementX || -1))) + "px";
             }
         },
         "right_text": function (event, elm) {
@@ -319,9 +320,15 @@ function getText(txt, data) {
     });
 }
 
+function loadStyleSheet(elm){
+    void elm.removeAttribute('hidden')
+    //
+}
+
 function loadImageData(data, id, foo, _canvas_div) {
 
     var _canvas = canvas.cloneNode();
+    void _canvas.setAttribute('hidden',"")
 
 
     _canvas_div.style.width = `${data.width}px`
@@ -342,17 +349,18 @@ function loadImageData(data, id, foo, _canvas_div) {
         _canvas.width = data.original_width
         _canvas.height = data.original_height
         _canvas.getContext('2d').putImageData(e, 0, 0)
-
         if (foo) {
             foo(_canvas_div)
             foo = void 0
         }
+        void loadStyleSheet(_canvas)
         data = e = void 0
     });
 }
 
 function loadText(data, id, foo, _canvas_div) {
     var span = document.createElement("span")
+    span.setAttribute('hidden',"")
 
     _canvas_div._id = id
     _canvas_div._type = data.type
@@ -380,6 +388,8 @@ function loadText(data, id, foo, _canvas_div) {
             foo(_canvas_div)
             foo = void 0
         }
+
+        void loadStyleSheet(span)
         data = void 0
     });
 }
@@ -400,6 +410,7 @@ function update(elm, type) {
         } else if (type.match(/^(bottom-right_text)$/)) {
             var c = elm.querySelector('span')
             e.fontSize = c.style.fontSize
+            e.width = elm.offsetWidth
         } else if (type.match(/^(right_text)$/)) {
             e.width = elm.offsetWidth
         } else {
@@ -634,7 +645,6 @@ function round(number, number_max, percentage) {
 
 
 ready.then(function (e) {
-    storeIMGD = e
     store.getAllItem(incoming)
 });
 
@@ -651,7 +661,7 @@ function incoming(id, data, foo) {
             console.error('something unusual here')
         }
     }
-    _canvas_div.key = canvas_wrapper.childElementCount
+    // _canvas_div.key = canvas_wrapper.childElementCount
     canvas_wrapper._append(_canvas_div, true)
     _canvas_div = id = data = foo = void 0
 }
