@@ -33,3 +33,13 @@ body>nav{
     backdrop-filter: blur(3px);
     display: none;
 }
+
+body>svg{
+position: absolute;
+z-index: 2;
+background-color: #ffffff;
+width: 50%;
+    height: auto;
+    top:20px;
+    left: 20px;
+}

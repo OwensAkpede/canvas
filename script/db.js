@@ -30,7 +30,7 @@ var ready = new Promise(function (_r) {
     }).then(function (e) {
         // object
         db.__proto__.object = e
-        if (db.log.__new) void canvas_defaults(_r);
+        if (db.log.__new) void canvas_defaults(_r),_r=new Function();
         return db.db.forceOpen(project_name, 'image style')
     }).then(function (e) {
         db.__proto__.style = e

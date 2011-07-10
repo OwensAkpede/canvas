@@ -76,11 +76,17 @@
         var ctx;
         var data
         var fkdata
+        var r=new DOMMatrix()
+        _r=60
+        _x=2.78
+        r=r.translate(_r*_x,_r*_x,0)
+        r=r.rotate(_r)
         img.onload = function () {
             var sz = size(500, img.naturalWidth, img.naturalHeight)
             canv.width = sz.width
             canv.height = sz.height
             ctx = canv.getContext('2d')
+            ctx.setTransform(r)
             ctx.drawImage(img, 0, 0, canv.width, canv.height)
             data = ctx.getImageData(0, 0, canv.width, canv.height)
             fkdata = ctx.getImageData(0, 0, canv.width, canv.height)

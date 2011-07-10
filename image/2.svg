@@ -1,19 +1,21 @@
        
        
-        <svg version="1.1"  xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" width="500" height="500" viewBox="0 0 500 500" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <svg version="1.1"   xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" width="500" height="500" viewBox="0 0 500 500" xmlns:xlink="http://www.w3.org/1999/xlink">
             <title>finish line_katerina_limpitsouni</title>
 <foreignObject x="0" y="0" width="500" height="500">
-<xhtml:style>
+<body xmlns="http://www.w3.org/1999/xhtml">
+<style>
 h1{
     background:red;
-    display:inline;
+    display:inline-block;
     color:blue;
     box-shadow:1px 1px 4px blue;
+    
 }
-</xhtml:style>
-                    <canvas  id="canvas" xmlns="http://www.w3.org/1999/xhtml">8hello</canvas>
+</style>
+                    <canvas  id="canvas">8hello</canvas>
 
-<xhtml:script>
+<script>
    // alert(9)
     var img = new Image();
     img.src = "../image/1.png";
@@ -33,11 +35,12 @@ console.log(canvas)
         // var _canvas_div = canvas_div.cloneNode(true)
         console.log(canvas);
     }
-</xhtml:script>
-    <xhtml:h1>hello</xhtml:h1>
-    <xhtml:b>hello</xhtml:b>
-    <div xmlns="http://www.w3.org/1999/xhtml">hhhhh</div>
+</script>
+    <h1 style="transform:translate(2px) rotate(180deg);">hello</h1>
+    <b>hello</b>
+    <div>hhhhh</div>
     <div>09hhhhh</div>
+</body>
 
 </foreignObject>
 <t-span>ghhhh</t-span>

@@ -18,11 +18,11 @@ var
     canvas_low_resolution = false,
     canvas_display_thumb = 1,
     canvas_defaults = function (r) {
-        r()
+        // r()
         getSticker("smiling", void 0, {
             ImgCssText: '',
             ParentCssText: 'top:100px;'
-        })
+        }).then(_onload)
         getText.load("Lorem ipsum dolor", {
             ImgCssText: 'text-align:center;',
             ParentCssText: 'top:300px;'
@@ -433,6 +433,8 @@ function imageToCanvas(img, r, both, info, val, style) {
                 data: id[1],
                 type: _canvas_div._type
             }).then(arguments[0])
+            void db.style.setItem(id[1], "")
+
         })
             .then(function () {
                 r = void 0;
@@ -566,7 +568,8 @@ getText.load = function (txt, style) {
             void _canvas_div.removeAttribute('default')
 
             _canvas_div.style.transform = 'rotate(0deg)'
-
+            
+            void db.style.setItem(id[1], "")
             db.log.setItem(_canvas_div._id, {
                 original_style: span.style.cssText,
                 fontWeight: span.style.fontWeight,
@@ -1165,10 +1168,10 @@ ready.then(function (e) {
         console.log("loaded");
         incoming(arguments[0], arguments[1])
     }).then(function (e) {
+        _onload()
     });
     // .then(function(e){
     // })
-    footer.firstElementChild.removeAttribute('block')
 });
 
 function incoming(id, data, foo) {
@@ -1192,4 +1195,7 @@ function incoming(id, data, foo) {
     _canvas_div = id = data = foo = void 0
 }
 
-
+function _onload() {
+    htmlTextToCanvas(1)
+    footer.firstElementChild.removeAttribute('block')
+}
