@@ -2,36 +2,42 @@
 const canvas_wrapper = document.querySelector('.canvas_wrapper'),
     canvas_board = document.querySelector('.canvas_board'),
     canvas_state = [],
+    canvas_events = {
+        mousemove:"onmousemove",
+        mouseup:"onmouseup",
+        mousedown:"onmousedown",
+        mouseleave:"onmouseleave",
+    },
     transform_speed = 2,
     canvas_reshape = {
         right: function (event, elm) {
             var p = elm.parentElement.querySelector('canvas');
-            canvas_board.onmousemove = function (e) {
+            canvas_board[canvas_events.mousemove] = function (e) {
                 p.style.height = p.offsetHeight + "px"
                 p.style.width = (p.offsetWidth + ((e.movementX || e.webkitMovementX || -1))) + "px";
             }
         },
         bottom: function (event, elm) {
             var p = elm.parentElement.querySelector('canvas');
-            canvas_board.onmousemove = function (e) {
+            canvas_board[canvas_events.mousemove] = function (e) {
                 p.style.width = p.offsetWidth + "px";
                 p.style.height = (p.offsetHeight + ((e.movementY || e.webkitMovementY || -1))) + "px";
             }
         },
         center: function (event, elm) {
             var e = elm.parentElement;
-            canvas_board.onmousemove = function (ev) {
+            canvas_board[canvas_events.mousemove] = function (ev) {
                 e.style.top = (e.offsetTop + (ev.movementY || ev.webkitMovementY || 0)) + 'px'
                 e.style.left = (e.offsetLeft + (ev.movementX || ev.webkitMovementX || 0)) + 'px'
                 // canvas_board.scrollTo(ev.clientX-e.offsetWidth-e.offsetWidth,ev.clientY-e.offsetHeight-e.offsetHeight)
                 // canvas_board.scrollLeft=80000
-                // e.scrollIntoViewIfNeeded(true)
+                e.scrollIntoViewIfNeeded(true)
                 // console.log(e.parentElement);
             }
         },
-        "bottom-r": function (event, elm) {
+        "bottom-right": function (event, elm) {
             var p = elm.parentElement.querySelector('canvas');
-            canvas_board.onmousemove = function (e) {
+            canvas_board[canvas_events.mousemove] = function (e) {
                 p.style.height = (p.offsetHeight + ((e.movementY || e.webkitMovementY || -1))) + "px";
                 p.style.width = (p.offsetWidth + ((e.movementY || e.webkitMovementY || -1))) + "px";
             }
@@ -42,33 +48,29 @@ const canvas_wrapper = document.querySelector('.canvas_wrapper'),
 
 let canvas = document.createElement('canvas')
 let canvas_div = document.createElement('div')
-canvas_div.innerHTML = `
+let canvas_ctrl = document.createElement('div')
+canvas_ctrl.setAttribute("controller", "")
+canvas_ctrl.innerHTML = `
 <div d="center"></div>
 <div d="bottom"></div>
 <div d="right"></div>
-<div d="bottom-r"></div>
-
-
+<div d="bottom-right"></div>
 `
 
-canvas_div.querySelectorAll('div').forEach(function (e) {
+canvas_ctrl.querySelectorAll('div').forEach(function (e) {
     if (canvas_reshape.hasOwnProperty(e.getAttribute('d'))) {
-        e.setAttribute('onmousedown', `canvas_reshape['${e.getAttribute('d')}'](event,this);
+        e.setAttribute(canvas_events.mousedown, `canvas_reshape['${e.getAttribute('d')}'](event,this.parentElement);
         var elm=this
         // elm.ondragj=function() {
-        //     canvas_board.onmouseleave=canvas_board.onmouseup=elm.onmouseleave=canvas_board.onmousemove=null
+        //     canvas_board[canvas_events.mouseleave]=canvas_board[canvas_events.mouseup]=elm[canvas_events.mouseleave]=canvas_board[canvas_events.mousemove]=null
         //     // canvas_board.blur()
         //     // elm.parentElement.click()
         //     // canvas_board.click()
-        //     update(elm.parentElement,'${e.getAttribute('d')}')
+        //     update(elm.parentElement.parentElement,'${e.getAttribute('d')}')
         // }
-        canvas_board.onmouseleave=canvas_board.onmouseup=function(){
-            // console.log('up');
-            canvas_board.onmouseleave=canvas_board.onmouseup=elm.onmouseleave=canvas_board.onmousemove=null
-            // console.log(elm);
-            // elm.parentElement.style.pointerEvents =""
-            // canvas_wrapper.removeAttribute('mode')
-            update(elm.parentElement,'${e.getAttribute('d')}')
+        canvas_board[canvas_events.mouseleave]=canvas_board[canvas_events.mouseup]=function(){
+            canvas_board[canvas_events.mouseleave]=canvas_board[canvas_events.mouseup]=elm[canvas_events.mouseleave]=canvas_board[canvas_events.mousemove]=null
+            update(elm.parentElement.parentElement,'${e.getAttribute('d')}')
         }
         `)
     }
@@ -76,11 +78,21 @@ canvas_div.querySelectorAll('div').forEach(function (e) {
 
 // console.log(canvas.getContext('2d'));
 
+canvas_wrapper._remove = function () {
+    var pa = canvas_wrapper.querySelector('div[active]');
+    if (pa) {
+        pa[canvas_events.mouseup] = pa[canvas_events.mousedown] = null
+        pa.removeAttribute('active')
+        pa.querySelector('[controller]').remove()
+        pa = void 0
+    }
+}
 
 canvas_wrapper._append = function (e) {
     // if (!e._id) {
     //     e._id = id()
     // }
+
     // if (!e._type) {
     //     e._type = "imagedata"
     // }
@@ -90,27 +102,31 @@ canvas_wrapper._append = function (e) {
         if (e.hasAttribute('active')) {
             return
         }
-        var pa = canvas_wrapper.querySelector('div[active]');
-        if (pa) {
-            pa.onmouseup = pa.onmousedown = null
-            pa.removeAttribute('active')
-            pa = void 0
-        }
+        canvas_wrapper._remove();
 
         e.setAttribute("active", "")
+        var _canvas_ctrl = canvas_ctrl.cloneNode(true)
 
-        e.onmouseup = function () {
-            canvas_board.onmousemove = null
+        if (e._type) {
+            if (e._type==="text") {
+                _canvas_ctrl.querySelector('[d="right"]').remove()
+                _canvas_ctrl.querySelector('[d="bottom"]').remove()
+            }
+        } else {
+            _canvas_ctrl.querySelector('[d="right"]').remove()
+            _canvas_ctrl.querySelector('[d="bottom"]').remove()
+            _canvas_ctrl.querySelector('[d="bottom-right"]').remove()
+        }
+
+        e.appendChild(_canvas_ctrl)
+
+        e[canvas_events.mouseup] = function () {
+            canvas_board[canvas_events.mousemove] = null
         }
 
         canvas_board.onclick = function (e) {
             if (e.target === this || e.target === canvas_wrapper) {
-                var pa = canvas_wrapper.querySelector('div[active]');
-                if (pa) {
-                    pa.onmouseup = pa.onmousedown = null
-                    pa.removeAttribute('active')
-                    pa = void 0
-                }
+                canvas_wrapper._remove();
                 canvas_board.onclick = null
             }
         }
@@ -178,16 +194,16 @@ function getText(txt, data) {
 
 function loadImageData(data) {
     var _canvas = canvas.cloneNode();
-    storeIMGD.getItem(data.data).then(function () {
+    storeIMGD.getItem(data.data).then(function (e) {
         _canvas.width = data.original_width
         _canvas.height = data.original_height
         _canvas.style.width = `${data.width||data.original_width}px`
         _canvas.style.height = `${data.height||data.original_height}px`
-
-        _canvas.getContext('2d').putImageData(arguments[0], 0, 0)
+        _canvas.getContext('2d').putImageData(e, 0, 0)
 
         var _canvas_div = canvas_div.cloneNode(true)
         _canvas_div._id = data.data
+        _canvas_div._type = data.type
         _canvas_div.appendChild(_canvas)
 
         _canvas_div.style.left = `${data.x}px`
@@ -272,7 +288,7 @@ function update(elm, type) {
         if (type === 'center') {
             e.x = elm.offsetLeft
             e.y = elm.offsetTop
-        } else if(type.match(/^(bottom|right|bottom\-r)/)) {
+        } else if (type.match(/^(bottom|right|bottom\-r)/)) {
             var c = elm.querySelector('canvas')
             e.width = c.offsetWidth;
             e.height = c.offsetHeight;

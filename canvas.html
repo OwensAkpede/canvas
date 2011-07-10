@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style/main.css">
     <script src="lib/nimo-DB.js"></script>
     <script>
@@ -11,21 +11,21 @@
         var storeIMGD
         var ready=new Promise(function(_r){
             new Promise(function(r){
-            new NimoDB().open('a','b').then(function(e){
+            new NimoDB().open('my editor','image logs').then(function(e){
         if (e) {
             r(e)
         }else{
-            new NimoDB().create('a','b').then(r);
+            new NimoDB().create('my editor','image logs').then(r);
         }
         });
         }).then(function(e){
             store=e
-            new NimoDB().open('a','imageData').then(function(e){
+            new NimoDB().open('my editor','image objects').then(function(e){
         if (e) {
             _r(e)
         }else{
-            new NimoDB().openCreatedDatabase('a').then(function(){
-                arguments[0].createTable('imageData').then(_r);
+            new NimoDB().openCreatedDatabase('my editor').then(function(){
+                arguments[0].createTable('image objects').then(_r);
             });
         }
         });
