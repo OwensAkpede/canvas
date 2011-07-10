@@ -119,7 +119,13 @@ footer>div.ft>div .span {
 }
 
 
-
+[invert]{
+    transform: rotateX(190deg);
+    -webkit-transform: rotateX(190deg);
+    -moz-transform: rotateX(190deg);
+    -ms-transform: rotateX(190deg);
+    -o-transform: rotateX(190deg);
+}
 /* [from="pc"] footer {
     padding-bottom: 31px;
 } */

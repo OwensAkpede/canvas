@@ -70,69 +70,7 @@ const canvas_wrapper = document.querySelector('.canvas_wrapper'),
                 }
 
                         p.style.width = (p.offsetWidth + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
-                    p.style.height = "auto";
-// var rt=0.5600000000000023
-                // p.style.width = (p.offsetWidth + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
-                // p.style.height = "auto";
-
-                // p.style.height = (p.offsetHeight + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
-                // p.style.width = (p.offsetWidth + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
-// rt=p.offsetWidth>p.offsetHeight?p.offsetWidth/p.offsetHeight:p.offsetHeight/p.offsetWidth
-// if (ev.movementY>0) {
-//     if (p.offsetWidth > p.offsetHeight) {
-//         p.style.height = ((p.offsetHeight) + ((ev.movementY ||0))) + "px";
-//         p.style.width = ((p.offsetWidth+rt) + ((ev.movementY ||0))) + "px";
-//     } else if (p.offsetHeight > p.offsetWidth) {
-//         p.style.width = ((p.offsetWidth) + ((ev.movementY ||0))) + "px";
-//         p.style.height = ((p.offsetHeight+rt) + ((ev.movementY ||0))) + "px";
-//     } else {
-//         p.style.height = (p.offsetHeight + ((ev.movementY ||0))) + "px";
-//         p.style.width = (p.offsetWidth + ((ev.movementY ||0))) + "px";
-//     }
-// }else if(0>ev.movementY){
-//     if (p.offsetWidth > p.offsetHeight) {
-//         p.style.height = ((p.offsetHeight) + ((ev.movementY ||0))) + "px";
-//         p.style.width = ((p.offsetWidth-rt) + ((ev.movementY ||0))) + "px";
-//     } else if (p.offsetHeight > p.offsetWidth) {
-//         p.style.width = ((p.offsetWidth) + ((ev.movementY ||0))) + "px";
-//         p.style.height = ((p.offsetHeight-rt) + ((ev.movementY ||0))) + "px";
-//     } else {
-//         p.style.height = (p.offsetHeight + ((ev.movementY ||0))) + "px";
-//         p.style.width = (p.offsetWidth + ((ev.movementY ||0))) + "px";
-//     }
-// }else{
-
-// }
-                // if (p.offsetWidth > p.offsetHeight) {
-                //     p.style.height = ((p.offsetHeight-rt) + ((ev.movementY ||0))) + "px";
-                //     p.style.width = ((p.offsetWidth) + ((ev.movementY ||0))) + "px";
-                // } else if (p.offsetHeight > p.offsetWidth) {
-                //     p.style.width = ((p.offsetWidth-rt) + ((ev.movementY ||0))) + "px";
-                //     p.style.height = ((p.offsetHeight) + ((ev.movementY ||0))) + "px";
-                // } else {
-                //     p.style.height = (p.offsetHeight + ((ev.movementY ||0))) + "px";
-                //     p.style.width = (p.offsetWidth + ((ev.movementY ||0))) + "px";
-                // }
-                
-                // if (p.offsetWidth > p.offsetHeight) {
-                //     p.style.height = (p.offsetWidth + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
-                //     p.style.width = "auto";
-                // } else if (p.offsetHeight > p.offsetWidth) {
-                //     p.style.width = (p.offsetWidth + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
-                //     p.style.height = "auto";
-                // } else {
-                //     p.style.width = (p.offsetWidth + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
-                //     p.style.height = "auto";
-                // }
-                // p.style.height = p.offsetHeight+"px";
-
-                // if (p.offsetHeight === p.offsetWidth) {
-                //     p.style.height = (p.offsetHeight + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
-                //     p.style.width = (p.offsetWidth + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
-                // } else {
-                //     p.style.width = (p.offsetWidth + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
-                //     p.style.height = "auto";
-                // }
+                       p.style.height = "auto";
             }
         },
         "bottom-right_text": function (event, elm) {
@@ -149,6 +87,21 @@ const canvas_wrapper = document.querySelector('.canvas_wrapper'),
                 }
                 // font: 900 85px serif;
                 p.style.fontSize = (Number(p.style.fontSize.replace(/[a-z]/img, '')) + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
+            }
+        },
+        "right_text": function (event, elm) {
+            var PRVX;
+            var PRVY;
+            var p = elm.parentElement
+            canvas_board[canvas_events.mousemove] = function (ev) {
+                if (typeof ev.movementX !== 'number') {
+                    ev.movementX = PRVX ? (ev.touches[0].clientX - PRVX) : 0;
+                    ev.movementY = PRVY ? (ev.touches[0].clientY - PRVY) : 0;
+                    PRVX = ev.touches[0].clientX
+                    PRVY = ev.touches[0].clientY
+                }
+                // p.style.height = p.offsetHeight + "px"
+                p.style.width = (p.offsetWidth + ((ev.movementX || ev.webkitMovementX || -1))) + "px";
             }
         }
     },
@@ -196,7 +149,7 @@ canvas_ctrl.querySelectorAll('div').forEach(function (e) {
     }
 })
 
-// console.log(canvas.getContext('2d'));
+
 
 canvas_wrapper._remove = function () {
     var pa = canvas_wrapper.querySelector('[interacting] div[active]');
@@ -256,8 +209,6 @@ function insert(data) {
     canvas_wrapper.appendChild(canvas)
 }
 
-
-
 function imageToCanvas(img) {
     var _canvas = canvas.cloneNode();
     _canvas.width = img.width
@@ -272,32 +223,22 @@ function imageToCanvas(img) {
     img = void 0
 
     var _canvas_div = canvas_div.cloneNode(true)
-    var w = _canvas.width
-    var h = _canvas.height
-
-    if (w > canvas_wrapper.offsetWidth) {
-        h = h / (w / canvas_wrapper.offsetWidth)
-        w = w / (w / canvas_wrapper.offsetWidth)
-    } else if (h > canvas_wrapper.offsetHeight) {
-        w = w / (h / canvas_wrapper.offsetHeight)
-        h = h / (h / canvas_wrapper.offsetHeight)
-    }
-
-    h = h / 1.5
-    w = w / 1.5
-    _canvas_div.style.width = `${(w)/2}px`
-    _canvas_div.style.height = `${(h)/2}px`
-    w = h = void 0;
+    void _canvas_div.setAttribute('default',canvas_types.IMAGEDATA)
     void _canvas_div.appendChild(_canvas)
-
-    _canvas_div.style.left = `${(canvas_wrapper.offsetWidth-_canvas_div.offsetWidth)/2}px`
-    _canvas_div.style.top = `${(canvas_wrapper.offsetHeight-_canvas_div.offsetHeight)/2}px`
+ 
 
     void id().then(function (id) {
         _canvas_div._id = id
         id = void 0;
         _canvas_div._type = canvas_types.IMAGEDATA
         void canvas_wrapper._append(_canvas_div)
+
+        _canvas_div.style.width = `${_canvas_div.offsetWidth}px`
+        _canvas_div.style.height = `${_canvas_div.offsetHeight}px`
+        _canvas_div.style.left = `${_canvas_div.offsetLeft-(_canvas_div.offsetWidth/2)}px`
+        _canvas_div.style.top = `${_canvas_div.offsetTop-(_canvas_div.offsetHeight/2)}px`
+
+        void _canvas_div.removeAttribute('default')
 
         void store.setItem(_canvas_div._id, {
             original_height: _canvas.height,
@@ -312,6 +253,7 @@ function imageToCanvas(img) {
             void storeIMGD.setItem(_canvas_div._id, _canvas.getContext('2d').getImageData(0, 0, _canvas.width, _canvas.height))
             _canvas_div = _canvas = void 0;
         });
+
     });
 }
 
@@ -325,7 +267,7 @@ function getImage() {
     });
 }
 
-function _getImage() {
+function getImage() {
     var img = new Image();
     img.src = "image/1.png"
     img.onload = function () {
@@ -342,24 +284,30 @@ function getText(txt, data) {
     txt = void 0;
 
     span.style.fontSize = "24px"
-    span.style.fontWeight = "900"
     span.style.fontFamily = "serif"
 
     var _canvas_div = canvas_div.cloneNode(true)
+    void _canvas_div.setAttribute('default',canvas_types.TEXT)
     _canvas_div.appendChild(span)
 
-    _canvas_div.style.left = `${(canvas_wrapper.offsetWidth-span.offsetWidth)/2}px`
-    _canvas_div.style.top = `${(canvas_wrapper.offsetHeight-span.offsetHeight)/2}px`
 
     id().then(function (id) {
         _canvas_div._id = id
         _canvas_div._type = canvas_types.TEXT
         canvas_wrapper._append(_canvas_div)
+
+        _canvas_div.style.width = `${span.offsetWidth+1}px`
+        _canvas_div.style.left = `${_canvas_div.offsetLeft-(_canvas_div.offsetWidth/2)}px`
+        _canvas_div.style.top = `${_canvas_div.offsetTop-(_canvas_div.offsetHeight/2)}px`
+
+        void _canvas_div.removeAttribute('default')
+
         store.setItem(_canvas_div._id, {
             original_style: span.style.cssText,
             fontWeight: span.style.fontWeight,
             fontSize: span.style.fontSize,
             fontFamily: span.style.fontFamily,
+            width: _canvas_div.offsetWidth,
             x: _canvas_div.offsetLeft,
             y: _canvas_div.offsetTop,
             data: _canvas_div._id,
@@ -367,6 +315,7 @@ function getText(txt, data) {
         }).then(function () {
             storeIMGD.setItem(_canvas_div._id, span.innerText)
         });
+
     });
 }
 
@@ -386,13 +335,13 @@ function loadImageData(data, id, foo) {
         var _canvas_div = canvas_div.cloneNode(true)
         _canvas_div.style.width = `${data.width}px`
         _canvas_div.style.height = `${data.height}px`
+        _canvas_div.style.left = `${data.x}px`
+        _canvas_div.style.top = `${data.y}px`
 
         _canvas_div._id = id
         _canvas_div._type = data.type
         _canvas_div.appendChild(_canvas)
 
-        _canvas_div.style.left = `${data.x}px`
-        _canvas_div.style.top = `${data.y}px`
         canvas_wrapper._append(_canvas_div, true)
         if (foo) {
             foo(_canvas_div)
@@ -425,6 +374,8 @@ function loadText(data, id, foo) {
 
         _canvas_div.style.left = `${data.x}px`
         _canvas_div.style.top = `${data.y}px`
+        _canvas_div.style.width = `${data.width}px`
+
         canvas_wrapper._append(_canvas_div, true)
         if (foo) {
             foo(_canvas_div)
@@ -450,9 +401,9 @@ function update(elm, type) {
         } else if (type.match(/^(bottom-right_text)$/)) {
             var c = elm.querySelector('span')
             e.fontSize = c.style.fontSize
-            // e.fontFamily = c.style.fontFamily
-            // e.fontWeight = c.style.fontWeight
-        } else {
+        }else if (type.match(/^(right_text)$/)) {
+            e.width = elm.offsetWidth
+        }  else {
             console.error('something unusual!!!')
         }
         store.setItem(elm._id, e)
@@ -476,21 +427,36 @@ function generateItem(e) {
     // }
 }
 
-function overlay() {
+function moveup() {
     var pa = canvas_wrapper.querySelector('div[active]');
-    if (pa) {
+    if (pa&&pa.nextElementSibling) {
         store.getItem(pa._id).then(function (val) {
             id().then(function (e) {
-                if (pa.nextElementSibling) {
                     store.setItem(e, val)
                     store.removeItem(pa._id)
-                    canvas_wrapper.appendChild(pa)
                     pa._id = e
-                }
+                    canvas_wrapper.appendChild(pa)
+                    val=void 0
             });
         });
     }
 }
+
+function movedown() {
+    var pa = canvas_wrapper.querySelector('div[active]');
+    if (pa&&pa.previousElementSibling) {
+        store.getItem(pa._id).then(function (val) {
+            id(-1).then(function (e) {
+                    store.setItem(e, val)
+                    store.removeItem(pa._id)
+                    pa._id = e
+                    canvas_wrapper.insertBefore(pa,pa.previousElementSibling)
+                    val=void 0
+            });
+        });
+    }
+}
+
 
 function remove() {
     var pa = canvas_wrapper.querySelector('div[active]');
@@ -529,21 +495,22 @@ function clone() {
 
 
 
-function id(e) {
+function id(_e) {
     return new Promise(function (r, j) {
-        if (e) {
-            e = id.split(e).join("");
-            j()
-        } else {
-            store.length().then(function (e) {
-                if (0 >= e) {
-                    return r(id.default)
-                }
-                store.key(e - 1).then(function (e) {
-                    r(e + 1)
+            if (_e) {
+                    store.key(0).then(function (e) {
+                        r(e-1)
+                    });
+            } else {
+                store.length().then(function (e) {
+                    if (0 >= e) {
+                        return r(id.default)
+                    }
+                    store.key(e - 1).then(function (e) {
+                        r(e + 1)
+                    });
                 });
-            });
-        }
+            }
     });
 }
 
@@ -581,12 +548,16 @@ ready.then(function (e) {
 });
 
 function incoming(id, data, foo) {
-    if (data.type === canvas_types.IMAGEDATA) {
-        loadImageData(data, id, foo)
-    } else if (data.type === canvas_types.TEXT) {
-        loadText(data, id, foo)
-    } else {
+    if (!data) {
         console.error('something unusual here')
+    }else{
+        if (data.type === canvas_types.IMAGEDATA) {
+            loadImageData(data, id, foo)
+        } else if (data.type === canvas_types.TEXT) {
+            loadText(data, id, foo)
+        } else {
+            console.error('something unusual here')
+        }
     }
     id = data = foo = void 0
 }
