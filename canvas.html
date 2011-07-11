@@ -11,7 +11,7 @@
         canva = document.querySelector('style[cmp]');
         canva = (canva.sheet.rules || canva.sheet.cssRules)[0]
         if (canva) {
-            canva=canva.style
+            canva = canva.style
             canva.width = `${_width}px`
             canva.height = `${_height}px`
         } else {
@@ -93,11 +93,11 @@
             }
 
             if (typeof zoom === "number") {
-                if (_height > _innerHeight) {
-                    zoom -= 0.01
+                if (_height > _innerHeight||_width>_innerWidth) {
+                    zoom -= 0.05
                 }
                 if (!canva) {
-                    canva=canvas_wrapper.style
+                    canva = canvas_wrapper.style
                 } else {
                 }
                 canva.zoom = zoom
