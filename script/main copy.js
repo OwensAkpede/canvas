@@ -194,9 +194,9 @@ function loadData(id, data) {
         // var _canvas = canvas.cloneNode();
         // _canvas.width = arguments[0].width;
         // _canvas.height = arguments[0].height;
+
         // _canvas.getContext('2d').putImageData(arguments[0], 0, 0)
         // canvas.getContext('2d').drawImage(_canvas, 0, 0, canvas.width, canvas.height)
-
 
         canvas.getContext('2d').putImageData(arguments[0], 0, 0)
 
