@@ -6,35 +6,16 @@ const canvas_wrapper = document.querySelector('.canvas_wrapper'),
     canvas_reshape = {
         right: function (event, elm) {
             var p = elm.parentElement.querySelector('canvas');
-            // var pX = 0
             canvas_board.onmousemove = function (e) {
                 p.style.height = p.offsetHeight + "px"
-                // if (pX > e.clientX) {
-                //     p.style.width = (p.offsetWidth - (-(e.movementX||e.webkitMovementX||-1))) + "px";
-                // } else if (e.clientX > pX) {
-                // }
                 p.style.width = (p.offsetWidth + ((e.movementX || e.webkitMovementX || -1))) + "px";
-                //    p.style.height = p.offsetHeight + "px"
-                //         p.style.width = (p.offsetWidth + (-(e.movementY||e.webkitMovementY||1))) + "px";
-                // console.log((e.movementY||e.webkitMovementY||0));
-                // pX = e.clientX
             }
         },
         bottom: function (event, elm) {
             var p = elm.parentElement.querySelector('canvas');
-            // var pY = 0
             canvas_board.onmousemove = function (e) {
                 p.style.width = p.offsetWidth + "px";
                 p.style.height = (p.offsetHeight + ((e.movementY || e.webkitMovementY || -1))) + "px";
-
-                // if (pY > e.clientY) {
-                //     p.style.height = (p.offsetHeight - transform_speed) + "px"
-                // } else if (e.clientY > pY) {
-                //     p.style.height = (p.offsetHeight + transform_speed) + "px"
-                //     p.style.width = p.offsetWidth + "px";
-                //     pY = e.offsetY
-                // }
-                // pY = e.clientY
             }
         },
         "bottom-r": function (event, elm) {
@@ -49,79 +30,14 @@ const canvas_wrapper = document.querySelector('.canvas_wrapper'),
                     p.style.width = (p.offsetWidth + transform_speed) + "px";
                     pY = e.offsetY
                 }
-
-                // if (pY > e.clientY) {
-                //     p.style.height = (p.offsetHeight - ((e.movementY||e.webkitMovementY||-1))) + "px"
-                //     p.style.width = (p.offsetWidth - ((e.movementX||e.webkitMovementX||-1))) + "px";
-                // } else if (e.clientY > pY) {
-                //     p.style.height = (p.offsetHeight + ((e.movementY||e.webkitMovementY||-1))) + "px"
-                //     p.style.width = (p.offsetWidth + ((e.movementX||e.webkitMovementX||-1))) + "px";
-                //     pY = e.offsetY
-                // }
-                //    if (pY > e.clientY) {
-                //     p.style.height = (p.offsetHeight - ((e.movementY||e.webkitMovementY||-1))) + "px";
-                //     p.style.width = (p.offsetWidth - ((e.movementX||e.webkitMovementX||-1))) + "px";
-                //                 } else if (e.clientY > pY) {
-                //                     // p.style.height = (p.offsetHeight + transform_speed) + "px"
-                //                     // p.style.width = (p.offsetWidth + transform_speed) + "px";
-                //                     p.style.height = (p.offsetHeight + ((e.movementY||e.webkitMovementY||-1))) + "px";
-                //                     p.style.width = (p.offsetWidth + ((e.movementX||e.webkitMovementX||-1))) + "px";
-                //                     pY = e.offsetY
-                //                 }
-
                 pY = e.clientY
             }
         },
         "center": function (event, elm) {
-            // var pY = 0
-            // var pX = 0
-
             var e = elm.parentElement;
-            // e.style.pointerEvents ="none"
-            // canvas_wrapper.setAttribute('mode', 'edit')
-            // console.log(event);
             canvas_board.onmousemove = function (ev) {
-                // if (ev.offsetX === 0 || ev.offsetY === 0) {
-                //     return
-                // }
-                // if (ev.offsetX > (e.offsetWidth / 2)) {}
-
-                // if (ev.offsetY > (e.offsetHeight / 2)) {}
-
-
-                // e.style.top = (ev.layerY - (e.offsetHeight / 2)) + 'px'
-                // e.style.left = (ev.layerX - (e.offsetWidth / 2)) + 'px'
-
-
                 e.style.top = (e.offsetTop + (ev.movementY || ev.webkitMovementY || 0)) + 'px'
                 e.style.left = (e.offsetLeft + (ev.movementX || ev.webkitMovementX || 0)) + 'px'
-
-                // e.style.top = (ev.offsetY) + 'px'
-                // e.style.left = (ev.offsetX) + 'px'
-                // console.log(e.style.top);
-                // layerX
-                // console.log(ev.clientY,ev.offsetY);
-                // e.style.top = ((ev.clientY+ev.offsetY) - ((e.offsetHeight / 1))) + 'px'
-                // e.style.top = (ev.clientY- ((e.offsetHeight / 1)+ev.offsetY)) + 'px'
-                // e.style.left = (ev.clientX - ((e.offsetWidth / 1 )+ev.offsetX)) + 'px'
-
-                // console.log(ev.movementX);
-                // switch (true) {
-                //     case ev.clientX > pX:
-                //         e.style.left=(e.offsetLeft+1)+'px'
-                //         break;
-                //         case pX > ev.clientX:
-                //             e.style.left=(e.offsetLeft-1)+'px'
-                //             break;
-                //             case ev.clientY > pY:
-                //                 e.style.top=(e.offsetTop+transform_speed)+'px'
-                //                 break;
-                //                 case pY > ev.clientY:
-                //                     e.style.top=(e.offsetTop-transform_speed)+'px'
-                //                     break;
-                // }
-                // pX=ev.clientX
-                // pY=ev.clientY
             }
         },
         currentX: 0,
@@ -143,6 +59,10 @@ canvas_div.querySelectorAll('div').forEach(function (e) {
     if (canvas_reshape.hasOwnProperty(e.getAttribute('d'))) {
         e.setAttribute('onmousedown', `canvas_reshape['${e.getAttribute('d')}'](event,this);
         var elm=this
+        elm.ondrag=function() {
+            canvas_board.onmousemove=null
+            update(elm.parentElement,'${e.getAttribute('d')}')
+        }
         canvas_board.onmouseleave=canvas_board.onmouseup=function(){
             // console.log('up');
             canvas_board.onmouseleave=canvas_board.onmouseup=elm.onmouseleave=canvas_board.onmousemove=null
@@ -162,7 +82,6 @@ canvas_wrapper._append = function (e, stored) {
     if (!e._id) {
         e._id = id()
     }
-    // e.setAttribute("active","")
 
     e.onclick = function () {
 
@@ -183,7 +102,7 @@ canvas_wrapper._append = function (e, stored) {
         }
 
         canvas_board.onclick=function(e){
-            if (e.target===this) {
+            if (e.target===this||e.target===canvas_wrapper) {
         var pa = canvas_wrapper.querySelector('div[active]');
                 if (pa) {
                     pa.onmouseup = pa.onmousedown = null
