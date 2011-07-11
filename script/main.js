@@ -16,7 +16,7 @@ var
 `
     },
     canvas_low_resolution = false,
-    canvas_display_thumb = 0,
+    canvas_display_thumb = 1,
     canvas_defaults = function (r) {
         r()
         getSticker("smiling", void 0, {
@@ -361,7 +361,6 @@ function imageToCanvas(img, r, both, info, val, style) {
     var size;
 
     if (blob) {
-        // size = {width:_canvas.width,height:_canvas.height}
         size = canvas_roundup_size(thumb_size[2], _canvas.width, _canvas.height)
     } else {
         size = canvas_roundup_size(thumb_size[0], _canvas.width, _canvas.height)
@@ -372,14 +371,15 @@ function imageToCanvas(img, r, both, info, val, style) {
 
     thumb_1 = offscreenCanvas(size_1.width, size_1.height, true)
     thumb_1.getContext('2d').drawImage(_canvas, 0, 0, thumb_1.width, thumb_1.height)
+    cnv = _canvas
 
+  if (!(_canvas instanceof HTMLImageElement)) {
     if (canvas_display_thumb === 0) {
         cnv = thumb
     } else if (canvas_display_thumb === 1) {
         cnv = thumb_1
-    } else {
-        cnv = _canvas
     }
+  }
 
     if (typeof img.close === "function") {
         void img.close()

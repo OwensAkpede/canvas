@@ -49,6 +49,7 @@ footer::-webkit-scrollbar-thumb {
 }
 
 footer {
+    z-index: 1;
     padding: 10px 0;
     user-select: none;
     -webkit-user-select: none;
@@ -62,7 +63,6 @@ footer {
     background: #ffffff;
     overflow-x: auto;
     overflow-y: hidden;
-    margin-top: 5px;
 }
 [from="pc"] footer{
     overflow-x: overlay;
