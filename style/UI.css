@@ -232,6 +232,7 @@ footer>div.ft>div .span {
         overflow: overlay;
         overflow-y: hidden;
         height: 60px;
+        background: #ffffff;
     }
 
     footer>div.ft {

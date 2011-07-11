@@ -1,6 +1,7 @@
 "use strict";
 
 var
+    error_msg = 'something unusual here',
     transform_speed = 2,
     canvas_types = {
         IMAGEDATA: "imagedata",
@@ -29,6 +30,7 @@ var
             var PRVX;
             var PRVY;
             var p = elm.parentElement
+
             canvas_board[canvas_events.mousemove] = function (ev) {
                 if (typeof ev.movementX !== 'number') {
                     ev.movementX = PRVX ? (ev.touches[0].clientX - PRVX) : 0;
@@ -58,9 +60,9 @@ var
         },
         "bottom-right_imagedata": function (event, elm) {
             var p = elm.parentElement
-
             var PRVX;
             var PRVY;
+
             canvas_board[canvas_events.mousemove] = function (ev) {
                 if (typeof ev.movementX !== 'number') {
                     ev.movementX = PRVX ? (ev.touches[0].clientX - PRVX) : 0;
@@ -71,6 +73,7 @@ var
 
                 p.style.width = (p.offsetWidth + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
                 p.style.height = "auto";
+
             }
         },
         "bottom-right_text": function (event, elm) {
@@ -228,7 +231,7 @@ function imageToCanvas(img) {
     void _canvas_div.appendChild(_canvas)
 
 
-    void id().then(function (id) {
+    void _zIdexCore().then(function (id) {
         _canvas_div._id = id
         id = void 0;
         _canvas_div._type = canvas_types.IMAGEDATA
@@ -268,7 +271,7 @@ function getImage() {
     });
 }
 
-function getImage() {
+function _getImage() {
     var img = new Image();
     img.src = "image/1.png"
     img.onload = function () {
@@ -292,7 +295,7 @@ function getText(txt, data) {
     _canvas_div.appendChild(span)
 
 
-    id().then(function (id) {
+    _zIdexCore().then(function (id) {
         _canvas_div._id = id
         _canvas_div._type = canvas_types.TEXT
         canvas_wrapper._append(_canvas_div)
@@ -320,7 +323,7 @@ function getText(txt, data) {
     });
 }
 
-function loadStyleSheet(elm){
+function loadStyleSheet(elm) {
     void elm.removeAttribute('hidden')
     //
 }
@@ -328,7 +331,7 @@ function loadStyleSheet(elm){
 function loadImageData(data, id, foo, _canvas_div) {
 
     var _canvas = canvas.cloneNode();
-    void _canvas.setAttribute('hidden',"")
+    void _canvas.setAttribute('hidden', "")
 
 
     _canvas_div.style.width = `${data.width}px`
@@ -342,13 +345,19 @@ function loadImageData(data, id, foo, _canvas_div) {
 
     db.object.getItem(data.data).then(function (e) {
         if (!e) {
-            console.error('something unusual here')
+            console.error(error_msg)
             return void 0
         }
+        var cnv = canvas.cloneNode();
 
-        _canvas.width = data.original_width
-        _canvas.height = data.original_height
-        _canvas.getContext('2d').putImageData(e, 0, 0)
+        cnv.width = e.width
+        cnv.height = e.height
+        cnv.getContext('2d').putImageData(e, 0, 0)
+
+        _canvas.width = data.width
+        _canvas.height = data.height
+
+        _canvas.getContext('2d').drawImage(cnv, 0, 0, _canvas.width, _canvas.height)
         if (foo) {
             foo(_canvas_div)
             foo = void 0
@@ -360,7 +369,7 @@ function loadImageData(data, id, foo, _canvas_div) {
 
 function loadText(data, id, foo, _canvas_div) {
     var span = document.createElement("span")
-    void span.setAttribute('hidden',"")
+    void span.setAttribute('hidden', "")
 
     _canvas_div._id = id
     _canvas_div._type = data.type
@@ -394,6 +403,33 @@ function loadText(data, id, foo, _canvas_div) {
     });
 }
 
+function updatePixels(e, elm) {
+    var c = elm.querySelector('canvas')
+
+    var cnv = canvas.cloneNode();
+
+    cnv.width = e.width
+    cnv.height = e.height
+    cnv.getContext('2d').drawImage(c, 0, 0, cnv.width, cnv.height)
+
+    c.width = e.width
+    c.height = e.height
+
+    c.getContext('2d').drawImage(cnv, 0, 0, c.width, c.height)
+
+    db.object.getItem(e.data).then(function (e) {
+        if (!e) {
+            console.error('something unusual!!!')
+            return
+        }
+        cnv.width = e.width
+        cnv.height = e.height
+        cnv.getContext('2d').putImageData(e, 0, 0)
+        c.getContext('2d').drawImage(cnv, 0, 0, c.width, c.height)
+        cnv = c = void 0
+        e = void 0
+    });
+}
 
 function update(elm, type) {
     db.log.getItem(elm._id).then(function (e) {
@@ -407,6 +443,7 @@ function update(elm, type) {
         } else if (type.match(/^(bottom_imagedata|right_imagedata|bottom\-right_imagedata)$/)) {
             e.width = elm.offsetWidth;
             e.height = elm.offsetHeight;
+            void updatePixels(e, elm)
         } else if (type.match(/^(bottom-right_text)$/)) {
             var c = elm.querySelector('span')
             e.fontSize = c.style.fontSize
@@ -437,11 +474,24 @@ function generateItem(e) {
     // }
 }
 
-function moveup() {
+function Zindex(n) {
+    if (n === 1) {
+        Zindex.up()
+    } else if (n === 2) {
+        Zindex._up();
+    } else if (n === -1) {
+        Zindex.down();
+    } else if (n === -2) {
+        Zindex._down();
+    }
+}
+
+
+Zindex.up = function () {
     var pa = canvas_wrapper.querySelector('div[active]');
     if (pa && pa.nextElementSibling) {
         db.log.getItem(pa._id).then(function (val) {
-            id([pa._id, 1]).then(function (e) {
+            _zIdexCore([pa._id, 1]).then(function (e) {
                 db.log.setItem(e, val)
                 db.log.removeItem(pa._id)
                 pa._id = e
@@ -456,11 +506,11 @@ function moveup() {
     }
 }
 
-function movedown() {
+Zindex.down = function movedown() {
     var pa = canvas_wrapper.querySelector('div[active]');
     if (pa && pa.previousElementSibling) {
         db.log.getItem(pa._id).then(function (val) {
-            id([pa._id, -1]).then(function (e) {
+            _zIdexCore([pa._id, -1]).then(function (e) {
                 db.log.setItem(e, val)
                 db.log.removeItem(pa._id)
                 pa._id = e
@@ -471,11 +521,11 @@ function movedown() {
     }
 }
 
-function _moveup() {
+Zindex._up = function () {
     var pa = canvas_wrapper.querySelector('div[active]');
     if (pa && pa.nextElementSibling) {
         db.log.getItem(pa._id).then(function (val) {
-            id().then(function (e) {
+            _zIdexCore(1).then(function (e) {
                 db.log.setItem(e, val)
                 db.log.removeItem(pa._id)
                 pa._id = e
@@ -486,11 +536,11 @@ function _moveup() {
     }
 }
 
-function _movedown() {
+Zindex._down = function () {
     var pa = canvas_wrapper.querySelector('div[active]');
     if (pa && pa.previousElementSibling) {
         db.log.getItem(pa._id).then(function (val) {
-            id(-1).then(function (e) {
+            _zIdexCore(-1).then(function (e) {
                 db.log.setItem(e, val)
                 db.log.removeItem(pa._id)
                 pa._id = e
@@ -521,15 +571,19 @@ function clone() {
     var pa = canvas_wrapper.querySelector('div[active]');
     if (pa) {
         db.log.getItem(pa._id).then(function (val) {
-            id().then(function (id) {
-                val.data = id;
-                db.log.setItem(id, val)
-                db.object.getItem(pa._id).then(function (e) {
+            _zIdexCore().then(function (id) {
+                db.object.getItem(val.data).then(function (e) {
+                    if (!e) {
+                        console.error(error_msg);
+                        return void 0
+                    }
+                    val.data = id;
+                    db.log.setItem(id, val)
                     db.object.setItem(id, e)
                     incoming(id, val, function (e) {
                         e.click()
                     })
-                    e = void 0
+                    val = e = void 0
                 });
             });
         });
@@ -539,7 +593,7 @@ function clone() {
 
 
 
-function id(_e) {
+function _zIdexCore(_e) {
     return new Promise(function (r, j) {
 
         if (_e === -1) {
@@ -556,35 +610,35 @@ function id(_e) {
                     return
                 }
                 db.log.length().then(function (len) {
-                    if (e>len) {
+                    if (e > len) {
                         j("null value")
                         return
                     }
-                db.log.key(e).then(function (e) {
-                    _e[0] = e
-                    if (_e[1] === -1) {
-                        if (_e[0] >= 0) {
-                            _e[0] -= 0.1
+                    db.log.key(e).then(function (e) {
+                        _e[0] = e
+                        if (_e[1] === -1) {
+                            if (_e[0] >= 0) {
+                                _e[0] -= 0.1
+                            } else {
+                                _e[0] += 0.1
+                            }
                         } else {
-                            _e[0] += 0.1
+                            if (_e[0] >= 0) {
+                                _e[0] += 0.1
+                            } else {
+                                _e[0] -= 0.1
+                            }
                         }
-                    } else {
-                        if (_e[0] >= 0) {
-                            _e[0] += 0.1
-                        } else {
-                            _e[0] -= 0.1
-                        }
-                    }
-                    db.log.has(_e[0]).then(function (e) {
-                        if (e) {
-                            id(_e).then(function (e) {
-                               r(e)
-                            });
-                        } else {
-                           r(_e[0])
-                        }
+                        db.log.has(_e[0]).then(function (e) {
+                            if (e) {
+                                _zIdexCore(_e).then(function (e) {
+                                    r(e)
+                                });
+                            } else {
+                                r(_e[0])
+                            }
+                        })
                     })
-                })
                 });
             });
         } else {
@@ -630,11 +684,11 @@ openFs.fs = document.createElement("input")
 openFs.fs.type = "file"
 openFs.fs.accept = "image/png, image/jpg, image/webp, image/jpeg"
 
-id.split = function (e) {
+_zIdexCore.split = function (e) {
     e = e.split(/([a-z])/img)
     return [Number(e[0]) + 1, e[1]]
 }
-id.default = 0;
+_zIdexCore.default = 0;
 
 function round(number, number_max, percentage) {
     // percentage = less than percentage (100)    (10,1000,100)

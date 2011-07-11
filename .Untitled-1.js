@@ -39,7 +39,7 @@ if (false) {
 
 // Red indicators show where an error occurred. The error message
 // is also shown beside the error
-throw new Error('Something went wrong');
+throw new Error('Something went wrong');// ??
 
 // There's a lot more Quokka can do! Visit our docs to learn more:
 // - https://quokkajs.com/docs/
