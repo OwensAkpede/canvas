@@ -41,22 +41,3 @@ function size(w, h) {
     return (w * 4) * h
 }
 
-var d = null
-d = new Uint8ClampedArray(size(2000))
-    var dt = Date.now();
-    console.log('set');
-
-    d.process(function(data){
-        for (var i = 0; i < data.length; i+=4) {
-            data[i]=2
-            data[i+1]=2
-            data[i+2]=2
-            data[i+3]=9
-        }
-        console.log(data.length);
-       data=void 0
-    }).then(function () {
-        console.log(Date.now() - dt,d[0],d[d.length-1]);
-    }).catch(function(e){
-        console.log(e);
-    })

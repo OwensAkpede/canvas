@@ -3,7 +3,6 @@
 
 var
     error_msg = 'something unusual here',
-    transform_speed = 2,
     canvas_defaults = function (r) {
         var img = new Image();
         img.src = "./image/1.png";
@@ -31,8 +30,8 @@ var
                     PRVY = y
                 }
 
-                e.style.top = (e.offsetTop + (ev.movementY || ev.webkitMovementY || 0)) + 'px'
-                e.style.left = (e.offsetLeft + (ev.movementX || ev.webkitMovementX || 0)) + 'px'
+                e.style.top = (e.offsetTop + (ev.movementY*transform_speed|| 0)) + 'px'
+                e.style.left = (e.offsetLeft + (ev.movementX*transform_speed|| 0)) + 'px'
                 // e.scrollIntoViewIfNeeded(true)
             }
         },
@@ -51,7 +50,7 @@ var
                     PRVY = y
                 }
                 p.style.height = p.offsetHeight + "px"
-                p.style.width = (p.offsetWidth + ((ev.movementX || -1))) + "px";
+                p.style.width = (p.offsetWidth + ((ev.movementX *transform_speed|| -1))) + "px";
             }
         },
         "bottom_imagedata": function (event, elm) {
@@ -69,7 +68,7 @@ var
                     PRVY = y
                 }
                 p.style.width = p.offsetWidth + "px";
-                p.style.height = (p.offsetHeight + ((ev.movementY || ev.webkitMovementY || -1))) + "px";
+                p.style.height = (p.offsetHeight + ((ev.movementY *transform_speed|| -1))) + "px";
             }
         },
         "bottom-right_imagedata": function (event, elm) {
@@ -87,7 +86,7 @@ var
                     PRVY = y
                 }
 
-                p.style.width = (p.offsetWidth + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
+                p.style.width = (p.offsetWidth + ((ev.movementY *transform_speed|| 0))) + "px";
                 p.style.height = "auto";
 
             }
@@ -107,7 +106,7 @@ var
                     PRVY = y
                 }
                 // font: 900 85px serif;
-                p.style.fontSize = (Number(p.style.fontSize.replace(/[a-z]/img, '')) + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
+                p.style.fontSize = (Number(p.style.fontSize.replace(/[a-z]/img, '')) + ((ev.movementY*transform_speed|| 0))) + "px";
                 // elm.style.width = p.offsetWidth+"px"//(p.offsetWidth + ((ev.movementX || ev.webkitMovementX || -1))) + "px";
             }
         },
@@ -125,7 +124,7 @@ var
                     PRVY = y
                 }
                 // p.style.height = p.offsetHeight + "px"
-                p.style.width = (p.offsetWidth + ((ev.movementX || ev.webkitMovementX || -1))) + "px";
+                p.style.width = (p.offsetWidth + ((ev.movementX *transform_speed|| -1))) + "px";
             }
         }
     },

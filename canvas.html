@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="./style/canva.css">
     <link rel="stylesheet" href="./style/UI.css">
     <link rel="stylesheet" href="./style/chrom-scroll.css">
+    <script src="lib/typed.js"></script>
     <script src="lib/TypedArray.js"></script>
     <script src="lib/openFs.js"></script>
     <script src="./lib/nimo-DB.js"></script>
@@ -97,9 +98,11 @@
             } else {
                 zoom = _innerHeight / (_width + _height)
             }
-            zoom = null
-
+            // zoom = null
             if (typeof zoom === "number") {
+                zoom=zoom*1.5
+                transform_speed = zoom*(2.5+zoom)
+
                 if (!canva) {
                     canva = canvas_wrapper.style
                 }
@@ -135,7 +138,7 @@
             <div class="canvas_wrapper" hidden xstyle="zoom:1.5">
             </div>
         </main>
-        <footer style="display:none">
+        <footer xstyle="display:none">
             <div class="ft" block>
                 <div image="add" onclick="getImage()">
                     <div class="icon">
@@ -227,6 +230,7 @@
     <script>
         var canvas_wrapper = document.querySelector('.canvas_wrapper'),
             canvas_board = document.querySelector('.canvas_board'),
+    transform_speed = 1,
             footer = document.querySelector('footer');
         window.onresize()
         canvas_wrapper.removeAttribute('hidden')
