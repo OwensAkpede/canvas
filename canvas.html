@@ -21,6 +21,16 @@
             Element.prototype.requestFullscreen = Element.prototype.webkitRequestFullscreen
         }
 
+        Object.defineProperty(Element.prototype, '_id', {
+            set: function (e) {
+                    this._title=e
+                    this.setAttribute('_id', e)
+            },
+            get: function () {
+                return this._title
+                // return this.getAttribute('_id')
+            }
+        })
 
 
     </script>

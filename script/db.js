@@ -15,7 +15,7 @@ var ready = new Promise(function (_r) {
     var n = Date.now()
     db.db.forceOpen(project_name, 'image logs').then(function (e) {
         db.log = e
-        if (db.log.__new) void canvas_defaults(ready);
+        // if (db.log.__new) void canvas_defaults(ready);
         return db.db.forceOpen(project_name, 'image object thumbs')
     }).then(function (e) {
         //thumb
@@ -28,6 +28,7 @@ var ready = new Promise(function (_r) {
     }).then(function (e) {
         // object
         db.object = e
+        if (db.log.__new) void canvas_defaults(_r);
         return db.db.forceOpen(project_name, 'image style')
     }).then(function (e) {
         db.style = e
@@ -40,6 +41,7 @@ var ready = new Promise(function (_r) {
         if (db.log.__new) {
             void db.detail.setItem('date', Date.now());
             void db.projectList.setItem(project_name, Date.now());
+        }else{
         }
         _r()
     })

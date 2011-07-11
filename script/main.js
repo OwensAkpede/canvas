@@ -3,15 +3,39 @@
 
 var
     error_msg = 'something unusual here',
-    thumb_size = [5, 200],
-    canvas_low_resolution = true,
-    canvas_display_thumb = 1,
+    thumb_size = [5, 200, 200],
+    canvas_stickers = {
+        smiling:
+            `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="#474c83" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-smile"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>`
+        ,
+        text:
+            `<svg width="200" height="200" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers" xmlns="http://www.w3.org/2000/svg">
+<text xml:space="preserve" style="font-size:29.2246px;line-height:1.25;font-family:Roboto;-inkscape-font-specification:Roboto;fill:#000;fill-opacity:1;stroke:none;stroke-width:1.46123" x="-11.021" y="23.108" transform="matrix(.58121 -.83783 .80579 .55899 0 0)">
+ <tspan x="-11.021" y="23.108" style="stroke-width:1.46123">n</tspan></text>
+</svg>
+`
+    },
+    canvas_low_resolution = false,
+    canvas_display_thumb = 0,
     canvas_defaults = function (r) {
-        var img = new Image();
-        img.src = "./image/1.png";
-        img.onload = function () {
-            imageToCanvas(img, r, void 0, { name: "default" });
-        }
+        r()
+        getSticker("smiling", void 0, {
+            ImgCssText: '',
+            ParentCssText: 'top:100px;'
+        }).then(function (e) {
+            getText.load("Edit me", {
+                ImgCssText: 'font-size:60px;font-weight:900',
+                ParentCssText: 'top:350px;'
+            })
+        });
+
+
+
+        // var img = new Image();
+        // img.src = "./image/1.png";
+        // img.onload = function () {
+        //     imageToCanvas(img, r, void 0, { name: "default" });
+        // }
     },
     canvas_types = {
         IMAGEDATA: "imagedata",
@@ -286,7 +310,18 @@ canvas_wrapper._append = function (e) {
             }
         }
     }
-    this.appendChild(e)
+    var d;
+    if (d = this.querySelector('[_id="' + e._id + '"]')) {
+        d.replaceWith(e)
+        d = d.hasAttribute('active')
+    } else {
+        this.appendChild(e)
+    }
+
+    if (d) {
+        e.click()
+        d = void 0
+    }
 }
 
 
@@ -298,7 +333,10 @@ function insert(data) {
     canvas_wrapper.appendChild(canvas)
 }
 
-function imageToCanvas(img, r, both, info, val) {
+function imageToCanvas(img, r, both, info, val, style) {
+    /**
+     * @TODO @remove @r
+     */
     var thumb
     var thumb_1
     var blob
@@ -308,13 +346,26 @@ function imageToCanvas(img, r, both, info, val) {
         img = img[1]
     }
     var cnv;
-    var _canvas = canvas.cloneNode();
-    _canvas.width = img.width
-    _canvas.height = img.height
-    void _canvas.getContext('2d').drawImage(img, 0, 0, _canvas.width, _canvas.height)
+    var _canvas;
 
-    var size = canvas_roundup_size(thumb_size[0], _canvas.width, _canvas.height)
+    if (blob && img instanceof HTMLImageElement) {
+        _canvas = img
+    } else {
+        _canvas = canvas.cloneNode();
+        _canvas.width = img.width
+        _canvas.height = img.height
+        void _canvas.getContext('2d').drawImage(img, 0, 0, _canvas.width, _canvas.height)
+    }
+
     var size_1 = canvas_roundup_size(thumb_size[1], _canvas.width, _canvas.height)
+    var size;
+
+    if (blob) {
+        // size = {width:_canvas.width,height:_canvas.height}
+        size = canvas_roundup_size(thumb_size[2], _canvas.width, _canvas.height)
+    } else {
+        size = canvas_roundup_size(thumb_size[0], _canvas.width, _canvas.height)
+    }
 
     thumb = offscreenCanvas(size.width, size.height, true)
     thumb.getContext('2d').drawImage(_canvas, 0, 0, thumb.width, thumb.height)
@@ -330,9 +381,6 @@ function imageToCanvas(img, r, both, info, val) {
         cnv = _canvas
     }
 
-    // thumb=thumb.getContext('2d')
-    // thumb_1=thumb_1.getContext('2d')
-
     if (typeof img.close === "function") {
         void img.close()
     }
@@ -340,11 +388,11 @@ function imageToCanvas(img, r, both, info, val) {
     img = void 0
 
     var _canvas_div = canvas_div.cloneNode(true)
-    void _canvas_div.setAttribute('default', canvas_types.IMAGEDATA)
     void _canvas_div.appendChild(cnv)
+    void _canvas_div.setAttribute('default', canvas_types.IMAGEDATA)
 
 
-    void _zIdexCore(both || _zIdexCore.both).then(function (id) {
+    return _zIdexCore(both || _zIdexCore.both).then(function (id) {
         _canvas_div._id = id[0]
         if (blob) {
             _canvas_div._type = canvas_types.BLOB
@@ -357,54 +405,37 @@ function imageToCanvas(img, r, both, info, val) {
         _canvas_div.style.height = `${_canvas_div.offsetHeight}px`
         _canvas_div.style.left = `${_canvas_div.offsetLeft - (_canvas_div.offsetWidth / 2)}px`
         _canvas_div.style.top = `${_canvas_div.offsetTop - (_canvas_div.offsetHeight / 2)}px`
+        if (style && style.ParentCssText) {
+            _canvas_div.style.cssText += style.ParentCssText
+        }
         void _canvas_div.removeAttribute('default')
 
-        _canvas_div.style.transform= "rotate(0deg)"
-        _canvas.style.backgroundColor= "rgba(0,0,0,0)"
-
-        void new Promise(function (_r) {
-            if (r instanceof Promise) {
-                _r(r)
-            } else {
-                _r()
-            }
-            r = _r = void 0
+        _canvas_div.style.transform = "rotate(0deg)"
+        _canvas.style.backgroundColor = "rgba(0,0,0,0)"
+        if (style && style.ImgCssText) {
+            _canvas.style.cssText += style.ImgCssText
+        }
+        style = void 0
+        return new Promise(function () {
+            db.log.setItem(_canvas_div._id, val || {
+                original_height: _canvas.height,
+                original_width: _canvas.width,
+                height: _canvas_div.offsetHeight,
+                width: _canvas_div.offsetWidth,
+                x: _canvas_div.offsetLeft,
+                y: _canvas_div.offsetTop,
+                transform: _canvas_div.style.transform,
+                backgroundColor: _canvas.style.backgroundColor,
+                info: info,
+                data: id[1],
+                type: _canvas_div._type
+            }).then(arguments[0])
         })
-            .then(function () {
-                return db.log.setItem(_canvas_div._id, val || {
-                    original_height: _canvas.height,
-                    original_width: _canvas.width,
-                    height: _canvas_div.offsetHeight,
-                    width: _canvas_div.offsetWidth,
-                    x: _canvas_div.offsetLeft,
-                    y: _canvas_div.offsetTop,
-                    transform: _canvas_div.style.transform,
-                    backgroundColor: _canvas.style.backgroundColor,
-                    info: info,
-                    data: id[1],
-                    type: _canvas_div._type
-                })
-            })
             .then(function () {
                 r = void 0;
 
-                // var size = canvas_roundup_size(thumb_size[0], _canvas.width, _canvas.height)
-                // var size_1 = canvas_roundup_size(thumb_size[1], _canvas.width, _canvas.height)
-
-                // thumb = offscreenCanvas(size.width, size.height)
-                // thumb = thumb.getContext('2d')
-                // thumb.drawImage(_canvas, 0, 0, thumb.width, thumb.height)
-
-                // thumb_1 = offscreenCanvas(size_1.width, size_1.height)
-                // thumb_1 = thumb_1.getContext('2d')
-                // thumb_1.drawImage(_canvas, 0, 0, thumb_1.width, thumb.height)
-
                 if (blob) {
                     void db.object.setItem(id[1], blob)
-                    // loadImageData.replicate(blob, _canvas, void 0, {
-                    //     width: _canvas_div.offsetWidth,
-                    //     height: _canvas_div.offsetHeight
-                    // }, 'load')
                 } else {
                     void db.object.setItem(id[1], _canvas.getContext('2d').getImageData(0, 0, _canvas.width, _canvas.height))
                     loadImageData.replicate(void 0, cnv, void 0, {
@@ -416,9 +447,6 @@ function imageToCanvas(img, r, both, info, val) {
 
                 void db.object_thumb.setItem(id[1], thumb.getContext('2d').getImageData(0, 0, thumb.width, thumb.height))
                 void db.object_thumb_medium.setItem(id[1], thumb_1.getContext('2d').getImageData(0, 0, thumb_1.width, thumb_1.height))
-
-                // thumb.getContext('2d').clearRect(0, 0, thumb.width, thumb.height)
-                // thumb_1.getContext('2d').clearRect(0, 0, thumb_1.width, thumb_1.height)
 
                 cnv = info = size_1 = size = thumb = thumb_1 = _canvas_div = _canvas = id = void 0;
             });
@@ -446,6 +474,31 @@ function getBlob() {
     });
 }
 
+function getSticker(name) {
+    if (canvas_stickers.hasOwnProperty(name)) {
+        return getSticker.load(canvas_stickers[name], name, arguments[1], arguments[2])
+    }
+}
+
+getSticker.load = function (b, name, r, style) {
+    return new Promise(function (r) {
+        if (!(b instanceof Blob)) {
+            b = new Blob([b], { type: 'image/svg+xml' });
+        }
+        var img = new Image()
+        img.src = URL.createObjectURL(b)
+
+        img.onload = function () {
+            URL.revokeObjectURL(img.src)
+            imageToCanvas([b, img], r, _zIdexCore.both, { name: name, type: b.type, size: b.size }, void 0, style)
+                .then(r)
+            style = r = b = void 0;
+            // createImageBitmap(img).then(function (e) {
+            //         });
+        }
+    });
+}
+
 function _getImage() {
     var img = new Image();
     img.src = "image/1.png"
@@ -454,55 +507,83 @@ function _getImage() {
     }
 }
 
-function getText(txt, data) {
-    var txt = prompt("Enter Text") || "New Text"
+function getText(txt, style) {
+    var txt = prompt("Enter Text");
+    if ('string' !== typeof txt) {
+        return
+    }
+
+    txt = txt || "New Text"
     txt = txt.trim()
-    var span = document.createElement("span")
-    span.innerText = txt
+    return getText.load(txt, style)
+}
 
-    txt = void 0;
+getText.load = function (txt, style) {
+    return new Promise(function (r) {
+        if ('string' !== typeof txt || !txt.trim()) {
+            r()
+            return
+        }
+        txt = txt
 
-    span.style.fontSize = "24px"
-    span.style.fontFamily = "serif"
-    span.style.fontWeight = "400"
-    span.style.color = "rgba(0,0,0,255)"
-    span.style.backgroundColor = "rgba(255,255,255,0)";
+        var span = document.createElement("span")
+        span.innerText = txt
 
-    var _canvas_div = canvas_div.cloneNode(true)
-    void _canvas_div.setAttribute('default', canvas_types.TEXT)
-    _canvas_div.appendChild(span)
+        txt = void 0;
 
-    void _zIdexCore(_zIdexCore.both).then(function (id) {
-        _canvas_div._id = id[0]
-        _canvas_div._type = canvas_types.TEXT
-        canvas_wrapper._append(_canvas_div)
+        span.style.fontSize = "24px"
+        span.style.fontFamily = "serif"
+        span.style.fontWeight = "400"
+        span.style.color = "rgba(0,0,0,255)"
+        span.style.backgroundColor = "rgba(255,255,255,0)";
 
-        _canvas_div.style.width = `${span.offsetWidth+2}px`
-        _canvas_div.style.left = `${_canvas_div.offsetLeft - (_canvas_div.offsetWidth / 2)}px`
-        _canvas_div.style.top = `${_canvas_div.offsetTop - (_canvas_div.offsetHeight / 2)}px`
+        if (style && style.ImgCssText) {
+            span.style.cssText += style.ImgCssText
+        }
 
-        void _canvas_div.removeAttribute('default')
-        _canvas_div.style.transform = 'rotate(0deg)'
+        var _canvas_div = canvas_div.cloneNode(true)
+        void _canvas_div.setAttribute('default', canvas_types.TEXT)
 
-        db.log.setItem(_canvas_div._id, {
-            original_style: span.style.cssText,
-            fontWeight: span.style.fontWeight,
-            fontSize: span.style.fontSize,
-            fontFamily: span.style.fontFamily,
-            color: span.style.color,
-            transform: _canvas_div.style.transform,
-            backgroundColor: span.style.backgroundColor,
-            width: _canvas_div.offsetWidth,
-            transform: _canvas_div.style.transform,
-            x: _canvas_div.offsetLeft,
-            y: _canvas_div.offsetTop,
-            data: id[1],
-            type: _canvas_div._type
-        }).then(function () {
-            db.object.setItem(id[1], span.innerText)
-            id = void 0
+        _canvas_div.appendChild(span)
+
+        void _zIdexCore(_zIdexCore.both).then(function (id) {
+            _canvas_div._id = id[0]
+            _canvas_div._type = canvas_types.TEXT
+            canvas_wrapper._append(_canvas_div)
+
+            _canvas_div.style.width = `${(span.offsetWidth + 2)}px`
+            _canvas_div.style.left = `${(_canvas_div.offsetLeft - (_canvas_div.offsetWidth / 2))}px`
+            _canvas_div.style.top = `${(_canvas_div.offsetTop - (_canvas_div.offsetHeight / 2))}px`
+
+            if (style && style.ParentCssText) {
+                _canvas_div.style.cssText += style.ParentCssText
+            }
+            style = void 0
+            void _canvas_div.removeAttribute('default')
+
+            _canvas_div.style.transform = 'rotate(0deg)'
+
+            db.log.setItem(_canvas_div._id, {
+                original_style: span.style.cssText,
+                fontWeight: span.style.fontWeight,
+                fontSize: span.style.fontSize,
+                fontFamily: span.style.fontFamily,
+                color: span.style.color,
+                transform: _canvas_div.style.transform,
+                backgroundColor: span.style.backgroundColor,
+                width: _canvas_div.offsetWidth,
+                transform: _canvas_div.style.transform,
+                x: _canvas_div.offsetLeft,
+                y: _canvas_div.offsetTop,
+                data: id[1],
+                type: _canvas_div._type
+            }).then(function () {
+                db.object.setItem(id[1], span.innerText)
+                id = void 0;
+                r()
+            });
+
         });
-
     });
 }
 
@@ -534,6 +615,8 @@ function loadImageData(data, id, foo, _canvas_div) {
             void loadImageData.replicate(e, _canvas, void 0, data, 'reset')
         }
         void loadImageData.replicate(data.data, _canvas, void 0, data, 'reset', canvas_low_resolution);
+        if (canvas_display_thumb === 0 || canvas_display_thumb === 1) {
+        }
 
         if (foo) {
             void foo(_canvas_div)
@@ -543,29 +626,35 @@ function loadImageData(data, id, foo, _canvas_div) {
         _canvas_div = _canvas = void 0
         _load = id = data = void 0
     }
+    _canvas = canvas.cloneNode()
+    _canvas.style.backgroundColor = `${data.backgroundColor}px`
+    void _canvas.setAttribute('hidden', "")
+    _canvas_div.appendChild(_canvas)
 
     if (_data) {
-        if (!(_data instanceof ImageData)) {
+        if (!(_data instanceof ImageData) && !(_data instanceof Blob)) {
             if (_data instanceof HTMLCanvasElement) {
+                _canvas.replaceWith(_data)
                 _canvas = _data
+                _canvas.style.backgroundColor = `${data.backgroundColor}px`
             } else {
-                _canvas = canvas.cloneNode()
+                // _canvas = canvas.cloneNode()
                 _canvas.width = _data.width
                 _canvas.height = _data.height
                 _canvas.getContext('2d').drawImage(_data, 0, 0, _canvas.width, _canvas.height)
             }
             _data = void 0
         } else {
-            _canvas = canvas.cloneNode()
+            // _canvas = canvas.cloneNode()
         }
-        void _canvas.setAttribute('hidden', "")
-        _canvas_div.appendChild(_canvas)
+        // void _canvas.setAttribute('hidden', "")
+        // _canvas_div.appendChild(_canvas)
         _load(_data)
         _data = void 0
     } else {
-        _canvas = canvas.cloneNode()
-        void _canvas.setAttribute('hidden', "")
-        _canvas_div.appendChild(_canvas)
+        // _canvas = canvas.cloneNode()
+        // void _canvas.setAttribute('hidden', "")
+        // _canvas_div.appendChild(_canvas)
         var _db;
         if (canvas_display_thumb === 0) {
             _db = db.object_thumb
@@ -584,7 +673,6 @@ function loadImageData(data, id, foo, _canvas_div) {
         })
         _db = void 0
     }
-    _canvas.style.backgroundColor = `${data.backgroundColor}px`
 }
 loadImageData.replicate = function (e, _canvas, cnv, data, type, lowResolution) {
     if (lowResolution) {
@@ -600,7 +688,7 @@ loadImageData.replicate = function (e, _canvas, cnv, data, type, lowResolution) 
                     return e = void 0
                 }
                 void loadImageData.replicate(e, _canvas, cnv, data, type)
-                r(type = _canvas = data = cnv = e = void 0)
+                r(lowResolution = type = _canvas = data = cnv = e = void 0)
             })
         });
     }
@@ -614,7 +702,7 @@ loadImageData.replicate = function (e, _canvas, cnv, data, type, lowResolution) 
         }
 
         image.src = URL.createObjectURL(e)
-        image.style.cssText=_canvas.style.cssText
+        image.style.cssText = _canvas.style.cssText
         image.onload = function () {
             URL.revokeObjectURL(this.src)
             _canvas.replaceWith(this)
@@ -941,87 +1029,89 @@ function clone() {
 
 
 function _zIdexCore(_e) {
-    return new Promise(function (r, j) {
-        if (_e === -1) {
-            db.log.key(0).then(function (e) {
-                r(e - 1)
-            });
-        } else if (_e instanceof Array) {
+    return _zIdexCore.pending = new Promise(function (r, j) {
+        _zIdexCore.pending.then(function (e) {
+            if (_e === -1) {
+                db.log.key(0).then(function (e) {
+                    r(e - 1)
+                });
+            } else if (_e instanceof Array) {
 
-            db.log.getKey(_e[0]).then(function (e) {
-                e = e + _e[1]
-                if (0 > e) {
-                    j("null value")
-                    return
-                }
-                db.log.length().then(function (len) {
-                    if (e > len) {
+                db.log.getKey(_e[0]).then(function (e) {
+                    e = e + _e[1]
+                    if (0 > e) {
                         j("null value")
                         return
                     }
-                    db.log.key(e).then(function (e) {
-                        _e[0] = e
-                        if (_e[1] === -1) {
-                            if (_e[0] >= 0) {
-                                _e[0] -= 0.1
-                            } else {
-                                _e[0] += 0.1
-                            }
-                        } else {
-                            if (_e[0] >= 0) {
-                                _e[0] += 0.1
-                            } else {
-                                _e[0] -= 0.1
-                            }
+                    db.log.length().then(function (len) {
+                        if (e > len) {
+                            j("null value")
+                            return
                         }
-                        db.log.has(_e[0]).then(function (e) {
-                            if (e) {
-                                _zIdexCore(_e).then(function (e) {
-                                    r(e)
-                                });
+                        db.log.key(e).then(function (e) {
+                            _e[0] = e
+                            if (_e[1] === -1) {
+                                if (_e[0] >= 0) {
+                                    _e[0] -= 0.1
+                                } else {
+                                    _e[0] += 0.1
+                                }
                             } else {
-                                r(_e[0])
+                                if (_e[0] >= 0) {
+                                    _e[0] += 0.1
+                                } else {
+                                    _e[0] -= 0.1
+                                }
                             }
+                            db.log.has(_e[0]).then(function (e) {
+                                if (e) {
+                                    _zIdexCore(_e).then(function (e) {
+                                        r(e)
+                                    });
+                                } else {
+                                    r(_e[0])
+                                }
+                            })
                         })
-                    })
+                    });
                 });
-            });
-        } else if (_e === _zIdexCore.both) {
-            var a = []
-            db.log.length().then(function (e) {
-                if (0 >= e) {
-                    return _zIdexCore.default - 1
-                }
-                return db.log.key(e - 1)
-            }).then(function (e) {
-                a.push(e + 1)
-                if (!db.object) {
+            } else if (_e === _zIdexCore.both) {
+                var a = []
+                db.log.length().then(function (e) {
+                    if (0 >= e) {
+                        return _zIdexCore.default - 1
+                    }
+                    return db.log.key(e - 1)
+                }).then(function (e) {
+                    a.push(e + 1)
+                    if (!db.object) {
+                        a.push(e + 1)
+                        r(a)
+                        a = void 0
+                        throw 'still on hold';
+                    }
+                    return db.object.length()
+                }).then(function (e) {
+                    if (0 >= e) {
+                        return _zIdexCore.default - 1
+                    }
+                    return db.object.key(e - 1)
+                }).then(function (e) {
                     a.push(e + 1)
                     r(a)
                     a = void 0
-                    throw 'still on hold';
-                }
-                return db.object.length()
-            }).then(function (e) {
-                if (0 >= e) {
-                    return _zIdexCore.default - 1
-                }
-                return db.object.key(e - 1)
-            }).then(function (e) {
-                a.push(e + 1)
-                r(a)
-                a = void 0
-            })
-        } else {
-            db.log.length().then(function (e) {
-                if (0 >= e) {
-                    return r(_zIdexCore.default)
-                }
-                db.log.key(e - 1).then(function (e) {
-                    r(e + 1)
+                })
+            } else {
+                db.log.length().then(function (e) {
+                    if (0 >= e) {
+                        return r(_zIdexCore.default)
+                    }
+                    db.log.key(e - 1).then(function (e) {
+                        r(e + 1)
+                    });
                 });
-            });
-        }
+            }
+        });
     });
 }
 
@@ -1050,7 +1140,9 @@ _zIdexCore.default = 0;
 _zIdexCore.both = 'both'
 _zIdexCore.overlapAbove = 1
 _zIdexCore.overlapBelow = -1
-
+_zIdexCore.pending = new Promise(function (r) {
+    r();
+});
 function round(number, number_max, percentage) {
     // percentage = less than percentage (100)    (10,1000,100)
     percentage = percentage || 100;
@@ -1066,7 +1158,7 @@ ready.then(function (e) {
     db.log.getAllItem(function () {
         console.log("loaded");
         incoming(arguments[0], arguments[1])
-    }).then(function(e){
+    }).then(function (e) {
     });
     // .then(function(e){
     // })
@@ -1074,6 +1166,7 @@ ready.then(function (e) {
 });
 
 function incoming(id, data, foo) {
+    // var _canvas_div = canvas_wrapper.querySelector('[_id="'+id+'"]') || canvas_div.cloneNode(true)
     var _canvas_div = canvas_div.cloneNode(true)
     if (!data) {
         console.error('something unusual here')
