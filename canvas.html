@@ -84,11 +84,11 @@
             high: 1
         }
 
-        var original_width = 9000
-        var original_height = 900
-
+        var original_width = 10
+        var original_height = 100
+var padding=1.7;
         // var original_width = 9000
-        // var original_height = 100
+        // var original_height = 9000
 
         var s = canvas_roundup_size(500, original_width, original_height)
         var _width = s.width
@@ -151,11 +151,28 @@
                 _innerHeight = canvas_board.offsetHeight
             }
 
-            if (_innerHeight > _innerWidth) {
-                zoom = _innerWidth / (_width + _height)
+            if (_width>=_height) {
+                if (_innerHeight > _innerWidth ) {
+                zoom = _innerWidth / (_width * padding)
             } else {
-                zoom = _innerHeight / (_width + _height)
+                zoom = _innerHeight / (_width * padding)
             }
+            }else{
+                if (_innerHeight > _innerWidth ) {
+                zoom = _innerWidth / (_height * (padding-0.2))
+            } else {
+                zoom = _innerHeight / (_height * (padding-0.2))
+            }
+            }
+
+            // if (_innerHeight > _innerWidth ) {
+            //     zoom = _innerWidth / (_height * 2)
+            //     console.log(1);
+            // } else {
+            //     zoom = _innerHeight / (_height * 2)
+            //     console.log(2);
+            // }
+
             // if (_innerHeight > _innerWidth) {
             //     zoom = _innerHeight / (_width + _height)
             // } else {
