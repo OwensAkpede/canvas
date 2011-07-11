@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/main.css">
+    <script src="lib/nimo-DB.js"></script>
+    <script>
+        var store
+        var storeIMGD
+        var ready=new Promise(function(_r){
+            new Promise(function(r){
+            new NimoDB().open('a','b').then(function(e){
+        if (e) {
+            r(e)
+        }else{
+            new NimoDB().create('a','b').then(r);
+        }
+        });
+        }).then(function(e){
+            store=e
+            new NimoDB().open('a','imageData').then(function(e){
+        if (e) {
+            _r(e)
+        }else{
+            new NimoDB().openCreatedDatabase('a').then(function(){
+                arguments[0].createTable('imageData').then(_r);
+            });
+        }
+        });
+        });
+        });
+    </script>
+    <title>Canvas</title>
+</head>
+<body>
+    <div class="canvas_board">
+        <div class="canvas_wrapper">
+        </div>
+    </div>
+    <script src="script/main copy.js"></script>
+</body>
+</html>

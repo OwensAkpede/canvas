@@ -1,0 +1,145 @@
+function roundedImage(x,y,width,height,radius){
+ctx.beginPath();
+ctx.moveTo(x + radius, y);
+ctx.lineTo(x + width - radius, y);
+ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+ctx.lineTo(x + width, y + height - radius);
+ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+ctx.lineTo(x + radius, y + height);
+ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+ctx.lineTo(x, y + radius);
+ctx.quadraticCurveTo(x, y, x + radius, y);
+ctx.closePath();
+}
+
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" media="all" href="css/reset.css" /> <!-- reset css -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+
+    <style>
+        body {
+            background-color: rgb(255, 255, 164);
+        }
+
+        #canvas {
+            border: 1px solid red;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <canvas id="canvas" width=300 height=300></canvas>
+    <script>
+        var img = new Image();
+        img.src = "image/1.png"
+        //set-up - probably only needs to be done once
+        
+        
+        img.onloadx = function () {
+            var ctx = document.getElementById("canvas");
+            var scratchCanvas = document.createElement('canvas');
+            scratchCanvas.style.cssText = `
+        position: absolute;
+        top: 0;
+    `
+            document.body.appendChild(scratchCanvas)
+            scratchCanvas.width = img.width;
+            scratchCanvas.height = img.height;
+    
+            ctx.width = img.width;
+            ctx.height = img.height;
+            var scratchCtx = scratchCanvas.getContext('2d');
+    var size=img.width/1.5
+    size=250
+            ctx = ctx.getContext('2d')
+            //drawing code
+            scratchCtx.clearRect(0, 0, scratchCanvas.width, scratchCanvas.height);
+
+            scratchCtx.globalCompositeOperation = 'source-over'; //default
+
+            //Do whatever drawing you want. In your case, draw your image.
+            scratchCtx.drawImage(img, 50, 50, img.width-100, img.height-100);
+
+
+            //As long as we can represent our clipping region as a single path, 
+            //we can perform our clipping by using a non-default composite operation.
+            //You can think of destination-in as "write alpha". It will not touch
+            //the color channel of the canvas, but will replace the alpha channel.
+            //(Actually, it will multiply the already drawn alpha with the alpha
+            //currently being drawn - meaning that things look good where two anti-
+            //aliased pixels overlap.)
+            //
+            //If you can't represent the clipping region as a single path, you can
+            //always draw your clip shape into yet another scratch canvas.
+
+            scratchCtx.fillStyle = 'red'; //color doesn't matter, but we want full opacity
+            scratchCtx.globalCompositeOperation = 'destination-in';
+            scratchCtx.beginPath();
+            // scratchCtx.arc(img.width / 2, img.height / 2, size, 0, 2 * Math.PI, 0);
+            scratchCtx.arc(250, 250, size, 0, 2 * Math.PI, 0);
+            scratchCtx.closePath();
+            scratchCtx.fill();
+
+
+            //Now that we have a nice, cropped image, we can draw it in our
+            //actual canvas. We can even draw it over top existing pixels, and
+            //everything will look great!
+
+            ctx.drawImage(scratchCanvas, 0, 0, img.width, img.height);
+        }
+            ;
+        (function () {
+            // return
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+            // ctx.globalCompositeOperation = 'destination-in'
+            // scratchCtx.globalCompositeOperation = 'source-over'; //default
+
+            // var img = new Image();
+            // img.src = "image/1.png"
+            function roundedImage(x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+
+            // ctx.lineTo(x + width - radius, y);
+            // ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            // ctx.lineTo(x + width, y + height - radius);
+            // ctx.lineTo(0,0);
+
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+
+            ctx.closePath();
+        }
+            img.onload = function () {
+                ctx.save();
+                // ctx.fillStyle='red'
+ctx.lineWidth=20
+                roundedImage(10, 10, img.width / 2, img.height / 2, 130);
+                // ctx.fill()
+                ctx.clip();
+                ctx.drawImage(img, 10, 10, img.width / 2, img.height / 2);
+                ctx.restore();
+            }
+
+
+
+
+        })(); // end $(function(){});
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+       
+       
+        <svg version="1.1"  xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" width="500" height="500" viewBox="0 0 500 500" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <title>finish line_katerina_limpitsouni</title>
+<foreignObject x="0" y="0" width="500" height="500">
+<xhtml:style>
+h1{
+    background:red;
+    display:inline;
+    color:blue;
+    box-shadow:1px 1px 4px blue;
+}
+</xhtml:style>
+                    <canvas  id="canvas" xmlns="http://www.w3.org/1999/xhtml">8hello</canvas>
+
+<xhtml:script>
+   // alert(9)
+    var img = new Image();
+    img.src = "../image/1.png";
+    var canvas=document.querySelector('#canvas')
+console.log(canvas)
+    img.onload = function () {
+        // img.style.borderRadius="600px"
+        // canvas = canvas.cloneNode();
+        canvas.width = img.width / 2
+        canvas.height = img.height / 2
+
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
+
+       // canvas.toBlob(function(e){
+         //   console.log(e);
+        //},"image/webp",9)
+        // var _canvas_div = canvas_div.cloneNode(true)
+        console.log(canvas);
+    }
+</xhtml:script>
+    <xhtml:h1>hello</xhtml:h1>
+    <xhtml:b>hello</xhtml:b>
+    <div xmlns="http://www.w3.org/1999/xhtml">hhhhh</div>
+    <div>09hhhhh</div>
+
+</foreignObject>
+<t-span>ghhhh</t-span>
+        <path xd="m237.478 47.284-9.748 36.023h-12.202l-5.68-23.37-5.876 23.37h-12.136l-9.813-36.023h11.04l5.1 25.759 6.068-25.76h11.685l6.133 25.63 5.035-25.63zm38.154 17.431q0 1.549-.194 3.228h-24.984q.259 3.357 2.13 5.164 1.938 1.743 4.714 1.743 4.131 0 5.745-3.486h11.75q-.904 3.55-3.293 6.391-2.324 2.841-5.874 4.455-3.551 1.614-7.941 1.614-5.294 0-9.426-2.26-4.131-2.26-6.455-6.455-2.324-4.197-2.324-9.813 0-5.617 2.259-9.813 2.324-4.197 6.456-6.456 4.132-2.26 9.49-2.26 5.23 0 9.296 2.195 4.068 2.195 6.327 6.263 2.324 4.067 2.324 9.49zm-11.298-2.906q0-2.84-1.936-4.519-1.937-1.678-4.842-1.678-2.776 0-4.713 1.614-1.872 1.614-2.324 4.583z" transform="translate(-107.043 -41.518)" aria-label="we"/>
+
+    </svg>

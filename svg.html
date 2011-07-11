@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/main.css">
+    <script src="lib/nimo-DB.js"></script>
+    <script>
+        HTMLCollection.prototype.forEach =function(foo){
+            for (var i = 0; i < this.length; i++) {
+                foo(this[i],i)
+            }
+        }
+        var store
+        var storeIMGD
+        var ready = new Promise(function (_r) {
+            new Promise(function (r) {
+                new NimoDB().open('a', 'b').then(function (e) {
+                    if (e) {
+                        r(e)
+                    } else {
+                        new NimoDB().create('a', 'b').then(r);
+                    }
+                });
+            }).then(function (e) {
+                store = e
+                new NimoDB().open('a', 'imageData').then(function (e) {
+                    if (e) {
+                        _r(e)
+                    } else {
+                        new NimoDB().openCreatedDatabase('a').then(function () {
+                            arguments[0].createTable('imageData').then(_r);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+    <title>Canvas</title>
+</head>
+
+<body>
+
+    <h1>hello</h1>
+    <div class="canvas_board">
+        <div class="canvas_wrapper">
+            <svg version="1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2000/svg"
+                data-name="Layer 1" viewBox="0 0 500 500"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <title>canvas</title>
+                <foreignObject x="0" y="0" style="width: inherit;height: inherit;">
+                    <xhtml:h1>hello</xhtml:h1>
+                    <canvas  xmlns="http://www.w3.org/1999/xhtml">hello</canvas>
+                    <h1  xmlns="http://www.w3.org/1999/xhtml">hh</h1>
+                </foreignObject>
+            </svg>
+        </div>
+    </div>
+<img src="image/2.svg" alt="">
+    <script src="script/main.js"></script>
+</body>
+
+</html>
