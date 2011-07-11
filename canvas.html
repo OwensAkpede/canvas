@@ -8,6 +8,7 @@
     <script>
         var _width = 500
         var _height = 500
+
         canva = document.querySelector('style[cmp]');
         canva = (canva.sheet.rules || canva.sheet.cssRules)[0]
         if (canva) {
@@ -27,6 +28,7 @@
 
         var _innerWidth = innerWidth
         var _innerHeight = innerHeight
+
         var canvas_events;
         if (window.navigator.userAgent.match(/Mobile|Android/)) {
             document.documentElement.setAttribute('from', 'mobile')
@@ -35,7 +37,7 @@
                 mouseup: "ontouchend",
                 mousedown: "ontouchstart",
                 mouseleave: "ontouchcancel"
-            }
+            };
         } else {
             document.documentElement.setAttribute('from', 'pc')
             canvas_events = {
@@ -64,45 +66,29 @@
 
             }
 
-            else if (_width > _innerWidth  && _innerHeight > _innerWidth) {
-                // zoom = _innerHeight / _height
+            else if ((_width > _innerWidth && _innerHeight > _innerWidth)) {
                 zoom = _innerWidth / _width
-
-                console.log(1);
-            } else if (_height > _innerHeight&& _innerWidth > _innerHeight) {
-                // zoom = _innerWidth / _width
+            } else if (_height > _innerHeight && _innerWidth > _innerHeight) {
                 zoom = _innerHeight / _height
-
-                console.log(2);
             }
 
-            else if (_width > _innerWidth) {
+            else if (_width > _innerWidth || _innerHeight > _innerWidth) {
                 zoom = _innerWidth / _width
-                // console.log(3);
-            } else if (_height > _innerHeight) {
+            } else if (_height > _innerHeight || _innerWidth > _innerHeight) {
                 zoom = _innerHeight / _height
-                // console.log(4);
             }
 
-            else if (_innerHeight > _innerWidth) {
-                zoom = _innerHeight / _height
-                // console.log(5);
-            } else if (_innerWidth > _innerHeight) {
-                zoom = _innerWidth / _width
-                // console.log(6);
-            }
 
             if (zoom >= 1) {
                 zoom = 1
             }
 
             if (typeof zoom === "number") {
-                if (_height > _innerHeight||_width>_innerWidth) {
+                if (_height > _innerHeight || _width > _innerWidth) {
                     zoom -= 0.05
                 }
                 if (!canva) {
                     canva = canvas_wrapper.style
-                } else {
                 }
                 canva.zoom = zoom
             }
@@ -110,7 +96,7 @@
             window.previousInnerWidth = innerWidth
             window.previousInnerHeight = innerHeight
         }
-        window.onresize()
+    
     </script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -132,7 +118,7 @@
             <h1 center ellipsis>Canva</h1>
         </header>
         <main class="canvas_board">
-            <div class="canvas_wrapper">
+            <div class="canvas_wrapper" hidden>
             </div>
         </main>
         <footer>
@@ -212,14 +198,14 @@
             </div>
         </footer>
     </article>
-
     <script>
         var canvas_wrapper = document.querySelector('.canvas_wrapper'),
-            canvas_board = document.querySelector('.canvas_board')
+            canvas_board = document.querySelector('.canvas_board');
+            window.onresize()
+            canvas_wrapper.removeAttribute('hidden')
         setTimeout(function () {
             document.documentElement.setAttribute('ready', 'true')
         }, 1200)
-        window.onresize()
     </script>
     <script src="script/main copy.js"></script>
 </body>
