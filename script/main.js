@@ -581,6 +581,7 @@ getText.load = function (txt, style) {
                 transform: _canvas_div.style.transform,
                 backgroundColor: span.style.backgroundColor,
                 width: _canvas_div.offsetWidth,
+                height: _canvas_div.offsetHeight,
                 transform: _canvas_div.style.transform,
                 x: _canvas_div.offsetLeft,
                 y: _canvas_div.offsetTop,
@@ -841,8 +842,10 @@ function update(elm, type) {
             var c = elm.querySelector('span')
             e.fontSize = c.style.fontSize
             e.width = elm.offsetWidth
+            e.height = elm.offsetHeight
         } else if (type.match(/^(right_text)$/)) {
             e.width = elm.offsetWidth
+            e.height = elm.offsetHeight
         } else {
             console.error('something unusual!!!')
         }
@@ -1199,5 +1202,11 @@ function incoming(id, data, foo) {
 function _onload() {
     // textToSvg(1)
     // imagedataToSvg(4)
+    // .then(function(e){
+    //     console.log(URL.createObjectURL(e));
+    // })
+    render(dev_mode=0).then(function(e){
+        popper('done')
+        });
     footer.firstElementChild.removeAttribute('block')
 }

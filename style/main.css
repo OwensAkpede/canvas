@@ -34,15 +34,23 @@ body>nav{
     display: none;
 }
 
-body>svg{
+x-shadow{
+    width: fit-content;
+    height: fit-content;
     position: absolute;
-    outline: 1px solid red;
+    left: 50%;
+    top:50%;
+    left: 49.5%;
+    top: 49.5%;
+    transform: translate(-50%,-50%);
+    /* opacity: 0.5; */
+    /* pointer-events: none; */
+    border: 1px solid red;
     z-index: 2;
-    background-color: #ffffff;
+    background-color: #96c4ff;
+    display: inline-flex;
     /* width: 100%; */
     /* height: auto; */
-    /* top: 111px;
-    left: 109px; */
     /* display: none; */
     /* display: none; */
 }

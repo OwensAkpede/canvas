@@ -2,6 +2,7 @@
 <html lang="en" from>
 
 <head>
+    <x-shadow></x-shadow>
     <script src="lib/popper/popper.js"></script>
     <link rel="stylesheet" href="lib/popper/popper.css">
     <script>
@@ -78,10 +79,10 @@
         var _width = 100
         var _height = 70
 
-        var _width = 9000
-        var _height = 9000
+        var original_width = 900
+        var original_height = 900
 
-        var s = canvas_roundup_size(500, _width, _height)
+        var s = canvas_roundup_size(500, original_width, original_height)
         var _width = s.width
         var _height = s.height
         // fake/origina
@@ -154,7 +155,7 @@
                     canva = canvas_wrapper.style
                 }
                 if (canva.hasOwnProperty('zoom')) {
-                    canva.zoom = zoom
+                    shadow.style.zoom=canva.zoom = zoom
                     document.documentElement.setAttribute("zoom", "true")
                 } else {
                     document.documentElement.setAttribute("zoom", "false")
@@ -279,13 +280,25 @@
     <script>
         var canvas_wrapper = document.querySelector('.canvas_wrapper'),
             canvas_board = document.querySelector('.canvas_board'),
-            transform_speed = 1,
-            footer = document.querySelector('footer');
+            shadow = document.querySelector('x-shadow'),
+            footer = document.querySelector('footer'),
+            transform_speed = 1;
         window.onresize()
         canvas_wrapper.removeAttribute('hidden')
         setTimeout(function () {
             document.documentElement.setAttribute('ready', 'true')
         }, 1200)
+
+        shadow=shadow.attachShadow({mode:"closed"})
+        shadow.innerHTML+=`
+        <style>
+            xcanvas,svg{
+                max-width: 90vw;
+    max-height: 69vh;
+            }
+            </style>
+        `
+
     </script>
     <script src="script/main.js"></script>
     <script src="lib/htmlTextToCanvas.js"></script>
