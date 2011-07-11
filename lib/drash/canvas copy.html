@@ -15,8 +15,63 @@
             Element.prototype.requestFullscreen = Element.prototype.webkitRequestFullscreen
         }
 
+        var w1 = new Worker("data:application/javascript; charset=UTF-8,"+encodeURI(`
+                  var foo = null;
+                   onmessage=function(data){
+                       data=data.data;
+if (!foo && data.foo) {
+    foo=eval(\`(\${data.foo})\`);
+}
+                       if(foo){
+                        try {
+                           var d=foo(data.data)
+                       } catch (error) {
+                           self.postMessage({error:error});
+                           return void 0;
+                       }
+                       }
+                       if (d instanceof Promise) {
+                           void d.then(function(e){self.postMessage(data)});
+                           d=void 0
+                       } else {
+                           self.postMessage(data);
+                       }
+                       foo = data=void 0;
+                   }
+                   `
+                   .replace(/\s\s/g,'')
+                   ));
+
+        Uint8ClampedArray.prototype.__proto__.process = function (foo) {
+            if ("function"===typeof foo) {
+                foo=foo.toString().replace(/^[^\(]+(\()/,'function $1')
+            }else{
+              foo=null
+            }
+
         
-      
+            var buffer = this;
+            return new Promise(function (r,j) {
+              w1.onmessage=function(e){
+                  e=e.data.data
+                if (e.hasOwnProperty('error')) {
+                    w1.terminate()
+                    j(new Error(e.error.message))
+                    buffer =e=void 0
+                    return void 0
+                }
+                  buffer.set(e,0)
+                  buffer =e=void 0
+                  r()
+                //   w1.terminate()
+              }
+              w1.onerror=function(e){
+                j(e)
+              }
+              w1.postMessage({data:buffer,foo:foo})
+            foo=void 0
+            });
+        }
     </script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,8 +80,6 @@
     <link rel="stylesheet" href="./style/canva.css">
     <link rel="stylesheet" href="./style/UI.css">
     <link rel="stylesheet" href="./style/chrom-scroll.css">
-    <script src="lib/TypedArray.js"></script>
-    <script src="lib/openFs.js"></script>
     <script src="./lib/nimo-DB.js"></script>
     <script src="./script/db.js"></script>
     <style cmp>
@@ -234,7 +287,7 @@
             document.documentElement.setAttribute('ready', 'true')
         }, 1200)
     </script>
-    <script src="script/main.js"></script>
+    <script src="script/main copy.js"></script>
 </body>
 <script>
     var full = 0

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style id="style">
+        .wrap{
+            display: inline-flex;
+            margin-bottom: 20px;
+        }
+        img,canvas{
+            width: 250px;
+            height: auto;
+            border: 1px solid black;
+        }
+        .contr{
+            display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+        }
+    </style>
+    <script src="lib/TypedArray.js"></script>
+    <script src="lib/openFs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrap" id="board">
+        <img src="image/1.png" id="img">
+    <canvas id="canv"></canvas>
+    </div>
+    <br>
+     <button onclick="foo()">change</button>
+    <br>
+
+<div class="contr">
+<input type="range" oninput=" range[0](this.value);" max="255" min="-255">
+<input type="range" oninput=" range[1](this.value);" max="255" min="-255">
+<input type="range" oninput=" range[2](this.value);" max="255" min="-255">
+<input type="range" oninput=" range[3](this.value);" max="255" min="-255">
+ 
+</div>  
+   <script>
+        style=style.sheet.rules[1].style
+        if (board.offsetWidth>innerWidth) {
+            style.width=(innerWidth/2.5)+"px"
+        }
+        var ctx;
+        var data
+        var fkdata
+        img.onload=function(){
+            canv.width=img.offsetWidth
+            canv.height=img.offsetHeight
+             ctx=canv.getContext('2d')
+             ctx.drawImage(img,0,0,canv.width,canv.height)
+              data=ctx.getImageData(0,0,canv.width,canv.height)
+              fkdata=ctx.getImageData(0,0,canv.width,canv.height)
+        }
+
+        function foo() {
+            openFs().then(function(e){
+                e=URL.createObjectURL(e)
+             img.src=e
+                // URL.revokeObjectURL(e)
+            });
+        }
+
+        var range=[
+            function(e) {
+                fkdata.data.process(function(data,e){
+                for (var i = 0; i < data.length; i+=4) {
+                    data[i] = e[0][i]+e[1]//R
+                    // data[i+1] = e[0][i+1]//G
+                    // data[i+2] = e[0][i+2]//B
+                    // data[i+3] = e[0][i+3]//A
+                }
+             },[data.data,Number(e)]).then(function(){
+                 ctx.putImageData(fkdata,0,0)
+             });
+            },
+            function(e) {
+                fkdata.data.process(function(data,e){
+                for (var i = 0; i < data.length; i+=4) {
+                    // data[i] = e[0][i]//R
+                    data[i+1] = e[0][i+1]+e[1]//G
+                    // data[i+2] = e[0][i+2]//B
+                    // data[i+3] = e[0][i+3]//A
+                }
+             },[data.data,Number(e)]).then(function(){
+                 ctx.putImageData(fkdata,0,0)
+             });
+            },
+            function(e) {
+                fkdata.data.process(function(data,e){
+                for (var i = 0; i < data.length; i+=4) {
+                    // data[i] = e[0][i]//R
+                    // data[i+1] = e[0][i+1]//G
+                    data[i+2] = e[0][i+2]+e[1]//B
+                    // data[i+3] = e[0][i+3]//A
+                }
+             },[data.data,Number(e)]).then(function(){
+                 ctx.putImageData(fkdata,0,0)
+             });
+            },
+            function(e) {
+                console.log(e);
+                fkdata.data.process(function(data,e){
+                for (var i = 0; i < data.length; i+=4) {
+                    // data[i] = e[0][i]//R
+                    // data[i+1] = e[0][i+1]//G
+                    // data[i+2] = e[0][i+2]//B
+                    data[i+3] = e[0][i+3]+e[1]//A
+                }
+             },[data.data,Number(e)]).then(function(){
+                 ctx.putImageData(fkdata,0,0)
+             });
+            },
+        ]
+
+   
+    </script>
+</body>
+</html>

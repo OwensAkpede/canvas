@@ -17,11 +17,13 @@ console.log(quokka);
 
 // See the value of a variable simply by typing its name
 quokka;
-
+//data:application/javascript; charset=UTF-8,alert(9)
 // Use sequence expression to compare objects
 const wallaby = { "is Quokka's BigBrother": true };
 
 (quokka, wallaby)
+
+
 
 // Gutter indicators show what code was executed (code coverage)
 
