@@ -2,19 +2,6 @@
 const canvas_wrapper = document.querySelector('.canvas_wrapper'),
     canvas_board = document.querySelector('.canvas_board'),
     canvas_state = [],
-    canvas_events = window.hasOwnProperty('ontouchmove') ? {
-        mousemove: "ontouchmove",
-        mouseup: "ontouchend",
-        mousedown: "ontouchstart",
-        mouseleave: "ontouchcancel"
-    } :
-    {
-        mousemove: "onmousemove",
-        mouseup: "onmouseup",
-        mousedown: "onmousedown",
-        mouseleave: "onmouseleave"
-    },
-
     transform_speed = 2,
     canvas_reshape = {
         right: function (event, elm) {
@@ -98,13 +85,11 @@ canvas_ctrl.querySelectorAll('div').forEach(function (e) {
     if (canvas_reshape.hasOwnProperty(e.getAttribute('d'))) {
         e.setAttribute(canvas_events.mousedown, `canvas_reshape['${e.getAttribute('d')}'](event,this.parentElement);
         var elm=this
-        // elm.ondragj=function() {
-        //     canvas_board[canvas_events.mouseleave]=canvas_board[canvas_events.mouseup]=elm[canvas_events.mouseleave]=canvas_board[canvas_events.mousemove]=null
-        //     // canvas_board.blur()
-        //     // elm.parentElement.click()
-        //     // canvas_board.click()
-        //     update(elm.parentElement.parentElement,'${e.getAttribute('d')}')
-        // }
+        elm.ondrag=function() {
+            elm.ondrag=canvas_board[canvas_events.mouseleave]=canvas_board[canvas_events.mouseup]=elm[canvas_events.mouseleave]=canvas_board[canvas_events.mousemove]=null
+            canvas_board.click()
+            update(elm.parentElement.parentElement,'${e.getAttribute('d')}')
+        }
         canvas_board[canvas_events.mouseleave]=canvas_board[canvas_events.mouseup]=function(){
             canvas_board[canvas_events.mouseleave]=canvas_board[canvas_events.mouseup]=elm[canvas_events.mouseleave]=canvas_board[canvas_events.mousemove]=null
             update(elm.parentElement.parentElement,'${e.getAttribute('d')}')
@@ -217,7 +202,11 @@ function getImage(src, stored) {
             width: _canvas.offsetWidth || _canvas.width,
             x: _canvas_div.offsetLeft,
             y: _canvas_div.offsetTop,
+            // id: _canvas_div._id,
             data: _canvas_div._id,
+            // value: _canvas_div._id,
+            // style: _canvas_div._id,
+            // thumbnail: _canvas_div._id,
             type: _canvas_div._type
         }).then(function () {
             storeIMGD.setItem(_canvas_div._id, _canvas.getContext('2d').getImageData(0, 0, _canvas.height, _canvas.height))
@@ -229,9 +218,9 @@ function getText(txt, data) {
 
 }
 
-function loadImageData(data) {
+function loadImageData(data, id) {
     var _canvas = canvas.cloneNode();
-    storeIMGD.getItem(data.data).then(function (e) {
+    storeIMGD.getItem(id).then(function (e) {
         _canvas.width = data.original_width
         _canvas.height = data.original_height
         _canvas.style.width = `${data.width||data.original_width}px`
@@ -239,7 +228,7 @@ function loadImageData(data) {
         _canvas.getContext('2d').putImageData(e, 0, 0)
 
         var _canvas_div = canvas_div.cloneNode(true)
-        _canvas_div._id = data.data
+        _canvas_div._id = id
         _canvas_div._type = data.type
         _canvas_div.appendChild(_canvas)
 
@@ -348,9 +337,9 @@ ready.then(function (e) {
     storeIMGD = e
     store.getAllItem(function (id, data) {
         if (data.type === "imagedata") {
-            loadImageData(data)
+            loadImageData(data, id)
         } else {
-            loadImageData(data)
+            loadImageData(data, id)
         }
     })
     // getImage()

@@ -1,6 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" from>
+
 <head>
+    <script>
+        var canvas_events;
+        // window.hasOwnProperty('ontouchmove')
+        window.onresize = function () {
+            // console.log(window.ontouchmove);
+            if (window.navigator.userAgent.match(/Mobile|Android/)) {
+                if (!confirm('device not supported at the moment')) {
+                    document.write('device not supported at the moment')
+                }
+                document.documentElement.setAttribute('from', 'mobile')
+                canvas_events = {
+                    mousemove: "ontouchmove",
+                    mouseup: "ontouchend",
+                    mousedown: "ontouchstart",
+                    mouseleave: "ontouchcancel"
+                }
+            } else {
+                document.documentElement.setAttribute('from', 'pc')
+                canvas_events = {
+                    mousemove: "onmousemove",
+                    mouseup: "onmouseup",
+                    mousedown: "onmousedown",
+                    mouseleave: "onmouseleave"
+                }
+            }
+        }
+        window.onresize()
+    </script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,37 +38,47 @@
     <script>
         var store
         var storeIMGD
-        var ready=new Promise(function(_r){
-            new Promise(function(r){
-            new NimoDB().open('my editor','image logs').then(function(e){
-        if (e) {
-            r(e)
-        }else{
-            new NimoDB().create('my editor','image logs').then(r);
-        }
-        });
-        }).then(function(e){
-            store=e
-            new NimoDB().open('my editor','image objects').then(function(e){
-        if (e) {
-            _r(e)
-        }else{
-            new NimoDB().openCreatedDatabase('my editor').then(function(){
-                arguments[0].createTable('image objects').then(_r);
+        var ready = new Promise(function (_r) {
+            new Promise(function (r) {
+                new NimoDB().open('my editor', 'image logs').then(function (e) {
+                    if (e) {
+                        r(e)
+                    } else {
+                        new NimoDB().create('my editor', 'image logs').then(r);
+                    }
+                });
+            }).then(function (e) {
+                store = e
+                new NimoDB().open('my editor', 'image objects').then(function (e) {
+                    if (e) {
+                        _r(e)
+                    } else {
+                        new NimoDB().openCreatedDatabase('my editor').then(function () {
+                            arguments[0].createTable('image objects').then(_r);
+                            setTimeout(function () {
+                                getImage()
+                            }, 0)
+                        });
+                    }
+                });
             });
-        }
-        });
-        });
         });
     </script>
     <title>Canvas</title>
 </head>
+
 <body>
     <!-- <h1>hello</h1> -->
     <div class="canvas_board">
         <div class="canvas_wrapper">
         </div>
     </div>
+    <footer>
+        <div class="ft">
+            <div image="add">dd</div>
+        </div>
+    </footer>
     <script src="script/main copy.js"></script>
 </body>
+
 </html>

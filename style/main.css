@@ -14,6 +14,9 @@ body{
     height: 100vh;
     position: relative;
     overflow: auto;
+}
+
+[from="mobile"] .canvas_board{
     overflow: hidden;
 }
 
@@ -133,57 +136,21 @@ border-right: 3px dashed;
 }
 
 
-/*  */
-.canvas_wrapper>div div[d="top-r"],
-.canvas_wrapper>div div[d="bottom-right"],
-.canvas_wrapper>div div[d="top-l"],
-.canvas_wrapper>div div[d="bottom-l"] {
+
+
+
+
+
+.canvas_wrapper>div div[d="bottom-right"] {
     width: 10px;
     height: 10px;
     background-color: rgb(255, 255, 255);
     cursor: nwse-resize;
-
-}
-
-/* .canvas_wrapper>div>div[d=top] {
-    top: 0;
-} */
-/* .canvas_wrapper>div>div[d=left] {
-    left: 0;
-} */
-/* .canvas_wrapper>div>div[d="top-r"],
-.canvas_wrapper>div>div[d="bottom-l"] {
-    cursor: nesw-resize;
-}
-
-.canvas_wrapper>div>div[d="top-l"],
-.canvas_wrapper>div>div[d="bottom-right"] {
-    cursor: nwse-resize;
-}
-
-.canvas_wrapper>div>div[d="top-r"] {
-    top: 0;
-    right: 0;
-} */
-
-
-.canvas_wrapper>div div[d="bottom-right"] {
     bottom: -5px;
     right: -5px;
     border-radius: 100%;
     border: 1px solid #606060;
 }
-
-
-/* .canvas_wrapper>div>div[d="top-l"] {
-    top: 0;
-    left: 0;
-}
-
-.canvas_wrapper>div>div[d="bottom-l"] {
-    bottom: 0;
-    left: 0;
-} */
 
 .canvas_wrapper>div div[d="center"] {
     width: 100%;
