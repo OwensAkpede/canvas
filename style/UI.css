@@ -1,0 +1,128 @@
+header {
+    background-color: #ffffff;
+    height: 46px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    padding: 0 36px;
+    box-shadow: 0 2px 4px 1px #d7d7d7;
+    position: relative;
+    justify-content: space-around;
+    z-index: 1;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+header [ellipsis] {
+    min-width: 43px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+
+main {}
+
+footer {
+    user-select: none;
+    -webkit-user-select: none;
+    width: 100vw;
+    height: 76px;
+    position: fixed;
+    bottom: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    padding: 5px;
+    padding-bottom: 31px;
+    pointer-events: none;
+}
+
+footer>div.ft {
+    transition: width 300ms;
+    height: inherit;
+    background: #ffffff;
+    /*min-width: 220px;
+    */border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    box-shadow: 0 0 3px 1px;
+    color: #7c7c7c;
+    pointer-events: auto;
+    -webkit-transition: width 300ms;
+    -moz-transition: width 300ms;
+    -ms-transition: width 300ms;
+    -o-transition: width 300ms;
+}
+
+footer>div.ft>div {
+    margin: 0 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: margin 200ms;
+    -webkit-transition: margin 200ms;
+    -moz-transition: margin 200ms;
+    -ms-transition: margin 200ms;
+    -o-transition: margin 200ms;
+}
+
+footer>div.ft>div>*{
+    pointer-events: none;
+}
+
+footer>div.ft>div>.icon {
+    width: 56px;
+    height: 56px;
+}
+
+footer>div.ft>div:nth-child(even) {
+    margin-left: 0;
+}
+
+[from="pc"] footer>div.ft>div:hover {
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+[from="pc"]  footer>div.ft>div:hover .feather {
+    transform: translateY(-16px) scale(1.3) skew(0);
+    -webkit-transform: translateY(-16px) scale(1.3) skew(0);
+    -moz-transform: translateY(-16px) scale(1.3) skew(0);
+    -ms-transform: translateY(-16px) scale(1.3) skew(0);
+    -o-transform: translateY(-16px) scale(1.3) skew(0);
+}
+
+[from="pc"]  footer>div.ft>div:active .feather {
+    transform: translateY(0px) scale(1) skew(6deg);
+    -webkit-transform: translateY(0px) scale(1) skew(6deg);
+    -moz-transform: translateY(0px) scale(1) skew(6deg);
+    -ms-transform: translateY(0px) scale(1) skew(6deg);
+    -o-transform: translateY(0px) scale(1) skew(6deg);
+}
+
+
+footer>div.ft>div .feather {
+    width: inherit;
+    height: inherit;
+    stroke-width: 1;
+    transition: transform 500ms;
+    -webkit-transition: transform 500ms;
+    -moz-transition: transform 500ms;
+    -ms-transition: transform 500ms;
+    -o-transition: transform 500ms;
+}
+
+footer>div.ft>div .span {
+    margin: 0;
+    max-width: 12vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    display: none;
+}
