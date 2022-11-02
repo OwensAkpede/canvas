@@ -57,16 +57,16 @@
 
                 // }
                 if (previousInnerWidth !== innerWidth) {
+                    zoom = _innerWidth / (_width + ((_width + _height) / _height))
                     if (_width > _height) {
-                        zoom = _innerWidth / (_width + ((_width + _height) / _height))
                     } else {
-                        zoom = _innerHeight / (_height + ((_width + _height) / _width))
+                        // zoom = _innerHeight / (_height + ((_width + _height) / _width))
                     }
                 } else {
+                    zoom = _innerHeight / (_height + ((_width + _height) / _width))
                     if (_height > _width) {
-                        zoom = _innerHeight / (_height + ((_width + _height) / _width))
                     } else {
-                        zoom = _innerWidth / (_width + ((_width + _height) / _height))
+                        // zoom = _innerWidth / (_width + ((_width + _height) / _height))
                     }
                 }
                 //     zoom=_innerWidth/((_width>_height?_width:_height)+((_width+_height)/(_width>_height?_width:_height)))
