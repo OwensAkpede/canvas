@@ -644,7 +644,7 @@ function _zIdexCore(_e) {
         } else {
             db.log.length().then(function (e) {
                 if (0 >= e) {
-                    return r(id.default)
+                    return r(_zIdexCore.default)
                 }
                 db.log.key(e - 1).then(function (e) {
                     r(e + 1)
