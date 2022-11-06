@@ -5,7 +5,7 @@
     align-items: center;
     align-content: center;
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     position: relative;
     overflow: auto;
     background-color: #ffffff;
