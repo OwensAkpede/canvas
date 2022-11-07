@@ -15,6 +15,9 @@
      background: hsla(0, 0%, 0%, 0.096);
  }
 
+ *{
+    scrollbar-width: thin;
+ }
  [from="mobile"] *::-webkit-scrollbar {
      height: 5px;
      width: 5px;

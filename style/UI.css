@@ -40,7 +40,6 @@ footer {
     overflow-y: hidden;
     overflow-x: auto;
     /* overflow-x: overlay; */
-    scrollbar-width: thin;
 }
 
 footer>div.ft {
@@ -269,7 +268,7 @@ justify-content: center;
     footer::after{
         content: "";
         /* background: linear-gradient(90deg, #ffffff -4%,transparent 8%, transparent 81%, #ffffff 100%); */
-        background: linear-gradient(90deg, #ffffff -4%,transparent 8%, transparent 39%, #ffffff 100%);
+        background: linear-gradient(90deg, #ffffff -4%,transparent 8%, transparent 40%, #ffffff 100%);
         width: 100%;
         height: inherit;
         display: block;
@@ -278,6 +277,6 @@ justify-content: center;
         bottom:-2px;
    }
    footer>div.ft{
-    padding-right: 175px;
+    padding-right: 45%;
    }
    }

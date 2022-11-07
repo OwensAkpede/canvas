@@ -18,22 +18,6 @@
 
 .canvas_wrapper {
     position: absolute;
-    top: 0;
-    left: 0;
-    /* width: 500px;
-    height: 500px;
-
-    width: 300px;
-    height: 600px; */
-
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-
     background: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2"><path fill="none" d="M1,0H2V1H1V0ZM0,1H1V2H0V1Z"/><path fill="%23dddddd" d="M0,0H1V1H0V0ZM1,1H2V2H1V1Z"/></svg>');
     background-size: 24px;
     background-color: #ffffff;
@@ -215,10 +199,24 @@ background: radial-gradient(black 23%, #ffffff, 34%, transparent 30%);
 }
 
 
-[notzoomable] .canvas_board{
+[zoom="true"] .canvas_board{
 
 }
 
-[notzoomable] .canvas_wrapper{
+[zoom="true"] .canvas_wrapper{
+    top: 0;
+    left: 0;
+    /* width: 500px;
+    height: 500px;
 
+    width: 300px;
+    height: 600px; */
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
 }

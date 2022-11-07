@@ -92,8 +92,9 @@
                 }
                 if(canva.hasOwnProperty('zoom')){
                     canva.zoom = zoom
+                    document.documentElement.setAttribute("zoom","true")
                 }else{
-                    document.documentElement.setAttribute("notzoomable","")
+                    document.documentElement.setAttribute("zoom","false")
                     canva.scale = zoom
                 }
             }
