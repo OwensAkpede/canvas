@@ -39,7 +39,7 @@ footer {
     pointer-events: none;
     overflow-y: hidden;
     overflow-x: auto;
-    overflow-x: overlay;
+    /* overflow-x: overlay; */
     scrollbar-width: thin;
 }
 
@@ -268,7 +268,8 @@ justify-content: center;
 @media screen and (max-width:492px) {
     footer::after{
         content: "";
-        background: linear-gradient(90deg, #ffffff -4%,transparent 8%, transparent 81%, #ffffff 100%);
+        /* background: linear-gradient(90deg, #ffffff -4%,transparent 8%, transparent 81%, #ffffff 100%); */
+        background: linear-gradient(90deg, #ffffff -4%,transparent 8%, transparent 39%, #ffffff 100%);
         width: 100%;
         height: inherit;
         display: block;
@@ -277,6 +278,6 @@ justify-content: center;
         bottom:-2px;
    }
    footer>div.ft{
-    padding-right: 43px;
+    padding-right: 175px;
    }
    }

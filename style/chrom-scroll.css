@@ -1,0 +1,22 @@
+ *::-webkit-scrollbar {
+     height: 8px;
+     width: 8px;
+     background: hsla(0, 0%, 0%, 0);
+    cursor: pointer;
+ }
+
+ *::-webkit-scrollbar-thumb {
+     background: hsl(0, 0%, 77%);
+     border-radius: 0px;
+     background-clip: padding-box ;
+}
+
+ *::-webkit-scrollbar-corner {
+     background: hsla(0, 0%, 0%, 0.096);
+ }
+
+ [from="mobile"] *::-webkit-scrollbar {
+     height: 5px;
+     width: 5px;
+ }
+

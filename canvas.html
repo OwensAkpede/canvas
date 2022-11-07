@@ -90,7 +90,7 @@
                 if (!canva) {
                     canva = canvas_wrapper.style
                 }
-                if(canva.zoom){
+                if(canva.hasOwnProperty('zoom')){
                     canva.zoom = zoom
                 }else{
                     document.documentElement.setAttribute("notzoomable","")
@@ -109,6 +109,7 @@
     <link rel="stylesheet" href="./style/main.css">
     <link rel="stylesheet" href="./style/canva.css">
     <link rel="stylesheet" href="./style/UI.css">
+    <link rel="stylesheet" href="./style/chrom-scroll.css">
     <script src="./lib/nimo-DB.js"></script>
     <script src="./script/db.js"></script>
     <title>Canvas</title>
