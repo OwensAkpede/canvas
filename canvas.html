@@ -6,6 +6,19 @@
         .canvas_wrapper {}
     </style>
     <script>
+       if (!NodeList.prototype.hasOwnProperty("forEach")) {
+        NodeList.prototype.forEach=function(foo){
+            for (var i = 0; i < this.length; i++) {
+                foo(this[i],i)
+            }
+        }
+       }
+
+       if (!Element.prototype.hasOwnProperty('requestFullscreen')) {
+        Element.prototype.requestFullscreen=Element.prototype.webkitRequestFullscreen
+       }
+    </script>
+    <script>
         var _width = 500
         var _height = 500
 
@@ -239,7 +252,7 @@ onclick=function(){
         onclick=null
     }
     if (document.documentElement.requestFullscreen) {
-document.body.requestFullscreen()
+// document.body.requestFullscreen()
 full=1
 }
 }

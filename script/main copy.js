@@ -1,5 +1,6 @@
 "use strict";
 
+
 var
     error_msg = 'something unusual here',
     transform_speed = 2,
@@ -15,10 +16,12 @@ var
             var PRVY;
             canvas_board[canvas_events.mousemove] = function (ev) {
                 if (typeof ev.movementX !== 'number') {
-                    ev.movementX = PRVX ? (ev.touches[0].clientX - PRVX) : 0;
-                    ev.movementY = PRVY ? (ev.touches[0].clientY - PRVY) : 0;
-                    PRVX = ev.touches[0].clientX
-                    PRVY = ev.touches[0].clientY
+                    var x=ev.clientX|| ev.touches[0].clientX
+                    var y=ev.clientY|| ev.touches[0].clientY
+                    ev.movementX = PRVX ? (x - PRVX) : 0;
+                    ev.movementY = PRVY ? (y - PRVY) : 0;
+                    PRVX = x
+                    PRVY = y
                 }
 
                 e.style.top = (e.offsetTop + (ev.movementY || ev.webkitMovementY || 0)) + 'px'
@@ -33,13 +36,15 @@ var
 
             canvas_board[canvas_events.mousemove] = function (ev) {
                 if (typeof ev.movementX !== 'number') {
-                    ev.movementX = PRVX ? (ev.touches[0].clientX - PRVX) : 0;
-                    ev.movementY = PRVY ? (ev.touches[0].clientY - PRVY) : 0;
-                    PRVX = ev.touches[0].clientX
-                    PRVY = ev.touches[0].clientY
+                    var x=ev.clientX|| ev.touches[0].clientX
+                    var y=ev.clientY|| ev.touches[0].clientY
+                    ev.movementX = PRVX ? (x - PRVX) : 0;
+                    ev.movementY = PRVY ? (y - PRVY) : 0;
+                    PRVX = x
+                    PRVY = y
                 }
                 p.style.height = p.offsetHeight + "px"
-                p.style.width = (p.offsetWidth + ((ev.movementX || ev.webkitMovementX || -1))) + "px";
+                p.style.width = (p.offsetWidth + ((ev.movementX || -1))) + "px";
             }
         },
         "bottom_imagedata": function (event, elm) {
@@ -49,10 +54,12 @@ var
 
             canvas_board[canvas_events.mousemove] = function (ev) {
                 if (typeof ev.movementX !== 'number') {
-                    ev.movementX = PRVX ? (ev.touches[0].clientX - PRVX) : 0;
-                    ev.movementY = PRVY ? (ev.touches[0].clientY - PRVY) : 0;
-                    PRVX = ev.touches[0].clientX
-                    PRVY = ev.touches[0].clientY
+                    var x=ev.clientX|| ev.touches[0].clientX
+                    var y=ev.clientY|| ev.touches[0].clientY
+                    ev.movementX = PRVX ? (x - PRVX) : 0;
+                    ev.movementY = PRVY ? (y - PRVY) : 0;
+                    PRVX = x
+                    PRVY = y
                 }
                 p.style.width = p.offsetWidth + "px";
                 p.style.height = (p.offsetHeight + ((ev.movementY || ev.webkitMovementY || -1))) + "px";
@@ -65,10 +72,12 @@ var
 
             canvas_board[canvas_events.mousemove] = function (ev) {
                 if (typeof ev.movementX !== 'number') {
-                    ev.movementX = PRVX ? (ev.touches[0].clientX - PRVX) : 0;
-                    ev.movementY = PRVY ? (ev.touches[0].clientY - PRVY) : 0;
-                    PRVX = ev.touches[0].clientX
-                    PRVY = ev.touches[0].clientY
+                    var x=ev.clientX|| ev.touches[0].clientX
+                    var y=ev.clientY|| ev.touches[0].clientY
+                    ev.movementX = PRVX ? (x - PRVX) : 0;
+                    ev.movementY = PRVY ? (y - PRVY) : 0;
+                    PRVX = x
+                    PRVY = y
                 }
 
                 p.style.width = (p.offsetWidth + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
@@ -83,10 +92,12 @@ var
             var PRVY;
             canvas_board[canvas_events.mousemove] = function (ev) {
                 if (typeof ev.movementX !== 'number') {
-                    ev.movementX = PRVX ? (ev.touches[0].clientX - PRVX) : 0;
-                    ev.movementY = PRVY ? (ev.touches[0].clientY - PRVY) : 0;
-                    PRVX = ev.touches[0].clientX
-                    PRVY = ev.touches[0].clientY
+                    var x=ev.clientX|| ev.touches[0].clientX
+                    var y=ev.clientY|| ev.touches[0].clientY
+                    ev.movementX = PRVX ? (x - PRVX) : 0;
+                    ev.movementY = PRVY ? (y - PRVY) : 0;
+                    PRVX = x
+                    PRVY = y
                 }
                 // font: 900 85px serif;
                 p.style.fontSize = (Number(p.style.fontSize.replace(/[a-z]/img, '')) + ((ev.movementY || ev.webkitMovementY || 0))) + "px";
@@ -99,10 +110,12 @@ var
             var p = elm.parentElement
             canvas_board[canvas_events.mousemove] = function (ev) {
                 if (typeof ev.movementX !== 'number') {
-                    ev.movementX = PRVX ? (ev.touches[0].clientX - PRVX) : 0;
-                    ev.movementY = PRVY ? (ev.touches[0].clientY - PRVY) : 0;
-                    PRVX = ev.touches[0].clientX
-                    PRVY = ev.touches[0].clientY
+                    var x=ev.clientX|| ev.touches[0].clientX
+                    var y=ev.clientY|| ev.touches[0].clientY
+                    ev.movementX = PRVX ? (x - PRVX) : 0;
+                    ev.movementY = PRVY ? (y - PRVY) : 0;
+                    PRVX = x
+                    PRVY = y
                 }
                 // p.style.height = p.offsetHeight + "px"
                 p.style.width = (p.offsetWidth + ((ev.movementX || ev.webkitMovementX || -1))) + "px";
@@ -152,7 +165,6 @@ canvas_ctrl.querySelectorAll('div').forEach(function (e) {
         }
     }
 })
-
 
 
 canvas_wrapper._remove = function () {
