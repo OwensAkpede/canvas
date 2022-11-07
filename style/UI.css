@@ -283,6 +283,6 @@ justify-content: center;
    }
 
 
-   [block]{
+   footer>div.ft[block]{
     pointer-events: none;
    }

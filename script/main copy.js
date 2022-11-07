@@ -232,7 +232,7 @@ function insert(data) {
     canvas_wrapper.appendChild(canvas)
 }
 
-function imageToCanvas(img, r) {
+function imageToCanvas(img, r, both) {
     var _canvas = canvas.cloneNode();
     _canvas.width = img.width
     _canvas.height = img.height
@@ -250,9 +250,8 @@ function imageToCanvas(img, r) {
     void _canvas_div.appendChild(_canvas)
 
 
-    void _zIdexCore().then(function (id) {
-        _canvas_div._id = id
-        id = void 0;
+    void _zIdexCore(_zIdexCore.both).then(function (id) {
+        _canvas_div._id = id[0]
         _canvas_div._type = canvas_types.IMAGEDATA
         void canvas_wrapper._append(_canvas_div)
 
@@ -260,7 +259,6 @@ function imageToCanvas(img, r) {
         _canvas_div.style.height = `${_canvas_div.offsetHeight}px`
         _canvas_div.style.left = `${_canvas_div.offsetLeft-(_canvas_div.offsetWidth/2)}px`
         _canvas_div.style.top = `${_canvas_div.offsetTop-(_canvas_div.offsetHeight/2)}px`
-
         void _canvas_div.removeAttribute('default')
 
         void new Promise(function (_r) {
@@ -279,13 +277,19 @@ function imageToCanvas(img, r) {
                     width: _canvas_div.offsetWidth,
                     x: _canvas_div.offsetLeft,
                     y: _canvas_div.offsetTop,
-                    data: _canvas_div._id,
+                    data: id[1],
                     type: _canvas_div._type
                 })
             })
             .then(function () {
                 r = void 0;
-                void db.object.setItem(_canvas_div._id, _canvas.getContext('2d').getImageData(0, 0, _canvas.width, _canvas.height))
+                void db.object.setItem(id[1], _canvas.getContext('2d').getImageData(0, 0, _canvas.width, _canvas.height))
+                id = void 0;
+                loadImageData.replicate(void 0, _canvas, void 0, {
+                    width: _canvas_div.offsetWidth,
+                    height: _canvas_div.offsetHeight
+                }, 'load')
+
                 _canvas_div = _canvas = void 0;
             });
 
@@ -326,8 +330,8 @@ function getText(txt, data) {
     _canvas_div.appendChild(span)
 
 
-    _zIdexCore().then(function (id) {
-        _canvas_div._id = id
+    void _zIdexCore(_zIdexCore.both).then(function (id) {
+        _canvas_div._id = id[0]
         _canvas_div._type = canvas_types.TEXT
         canvas_wrapper._append(_canvas_div)
 
@@ -342,13 +346,14 @@ function getText(txt, data) {
             fontWeight: span.style.fontWeight,
             fontSize: span.style.fontSize,
             fontFamily: span.style.fontFamily,
-            width: _canvas_div.offsetWidth,
+            width: span.offsetWidth+1,
             x: _canvas_div.offsetLeft,
             y: _canvas_div.offsetTop,
-            data: _canvas_div._id,
+            data: id[1],
             type: _canvas_div._type
         }).then(function () {
-            db.object.setItem(_canvas_div._id, span.innerText)
+            db.object.setItem(id[1], span.innerText)
+            id = void 0
         });
 
     });
@@ -374,49 +379,64 @@ function loadImageData(data, id, foo, _canvas_div) {
     _canvas_div._type = data.type
     _canvas_div.appendChild(_canvas)
 
-    db.object.getItem(data.data).then(function (e) {
-        if (!e) {
-            console.error(error_msg)
-            return void 0
-        }
-        var cnv = canvas.cloneNode();
-
-        cnv.width = e.width
-        cnv.height = e.height
-        cnv.getContext('2d').putImageData(e, 0, 0)
-
-        _canvas.width = data.width
-        _canvas.height = data.height
-
-        _canvas.getContext('2d').drawImage(cnv, 0, 0, _canvas.width, _canvas.height)
+    void loadImageData.replicate(data.data, _canvas, void 0, data, 'reset').then(function () {
         if (foo) {
-            foo(_canvas_div)
+            void foo(_canvas_div)
             foo = void 0
         }
         void loadStyleSheet(_canvas)
-        data = e = void 0
+        _canvas_div = _canvas = void 0
     });
+    id = data = void 0
 }
-loadImageData.replicate=function(e,cnv,data){
-    if (!cnv) {
-        cnv = canvas.cloneNode();
+
+loadImageData.replicate = function (e, _canvas, cnv, data, type) {
+    if ('number' === typeof e) {
+        return new Promise(function (r) {
+            void db.object.getItem(e).then(function (e) {
+                if (!e) {
+                    void console.error(error_msg)
+                    return e = void 0
+                }
+                void loadImageData.replicate(e, _canvas, cnv, data, type)
+                r(type = _canvas = data = cnv = e = void 0)
+            })
+        });
     }
 
+    if (!cnv) {
+        cnv = _canvas.cloneNode();
+    }
+
+
+    if (e) {
         cnv.width = e.width
         cnv.height = e.height
-        cnv.getContext('2d').putImageData(e, 0, 0)
+    } else if (data) {
+        cnv.width = data.width
+        cnv.height = data.height
+    }
 
+    if (e instanceof ImageData) {
+        void cnv.getContext('2d').putImageData(e, 0, 0)
+    } else {
+        if (e) {
+            void cnv.getContext('2d').drawImage(e, 0, 0, cnv.width, cnv.height)
+        } else {
+            void cnv.getContext('2d').drawImage(_canvas, 0, 0, cnv.width, cnv.height)
+        }
+    }
+
+    if (type === "reset") {
         _canvas.width = data.width
         _canvas.height = data.height
+    }
 
-        _canvas.getContext('2d').drawImage(cnv, 0, 0, _canvas.width, _canvas.height)
-        if (foo) {
-            foo(_canvas_div)
-            foo = void 0
-        }
-        data=cnv = e=void loadStyleSheet(_canvas)
-        
+    void _canvas.getContext('2d').drawImage(cnv, 0, 0, _canvas.width, _canvas.height)
+    type = _canvas = data = cnv = e = void 0
+
 }
+
 function loadText(data, id, foo, _canvas_div) {
     var span = document.createElement("span")
     void span.setAttribute('hidden', "")
@@ -466,19 +486,9 @@ function updatePixels(e, elm) {
     c.height = e.height
 
     c.getContext('2d').drawImage(cnv, 0, 0, c.width, c.height)
-
-    db.object.getItem(e.data).then(function (e) {
-        if (!e) {
-            console.error('something unusual!!!')
-            return
-        }
-        cnv.width = e.width
-        cnv.height = e.height
-        cnv.getContext('2d').putImageData(e, 0, 0)
-        c.getContext('2d').drawImage(cnv, 0, 0, c.width, c.height)
-        cnv = c = void 0
-        e = void 0
-    });
+    void loadImageData.replicate(e.data, c, cnv, void 0, 'update')
+    cnv = c = void 0
+    e = void 0
 }
 
 function update(elm, type) {
@@ -646,7 +656,6 @@ function clone() {
 
 function _zIdexCore(_e) {
     return new Promise(function (r, j) {
-
         if (_e === -1) {
             db.log.key(0).then(function (e) {
                 r(e - 1)
@@ -655,7 +664,6 @@ function _zIdexCore(_e) {
 
             db.log.getKey(_e[0]).then(function (e) {
                 e = e + _e[1]
-
                 if (0 > e) {
                     j("null value")
                     return
@@ -692,6 +700,32 @@ function _zIdexCore(_e) {
                     })
                 });
             });
+        } else if (_e === _zIdexCore.both) {
+            var a = []
+            db.log.length().then(function (e) {
+                if (0 >= e) {
+                    return _zIdexCore.default-1
+                }
+                return db.log.key(e - 1)
+            }).then(function (e) {
+                a.push(e + 1)
+                if (!db.object) {
+                    a.push(e + 1)
+                    r(a)
+                    a = void 0
+                    throw 'still on hold';
+                }
+                return db.object.length()
+            }).then(function (e) {
+                if (0 >= e) {
+                    return _zIdexCore.default-1
+                }
+                return db.object.key(e - 1)
+            }).then(function (e) {
+                a.push(e + 1)
+                r(a)
+                a = void 0
+            })
         } else {
             db.log.length().then(function (e) {
                 if (0 >= e) {
@@ -740,6 +774,9 @@ _zIdexCore.split = function (e) {
     return [Number(e[0]) + 1, e[1]]
 }
 _zIdexCore.default = 0;
+_zIdexCore.both = 'both'
+_zIdexCore.overlapAbove = 1
+_zIdexCore.overlapBelow = -1
 
 function round(number, number_max, percentage) {
     // percentage = less than percentage (100)    (10,1000,100)
@@ -753,6 +790,7 @@ ready.then(function (e) {
     db.log.getAllItem(incoming)
     // .then(function(e){
     // })
+    footer.firstElementChild.removeAttribute('block')
 });
 
 function incoming(id, data, foo) {

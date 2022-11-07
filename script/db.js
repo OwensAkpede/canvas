@@ -33,3 +33,13 @@ var n=Date.now()
         _r()
     })
 });
+
+
+// new Promise(function(r) {
+//     r()
+// }).then(function(e){
+//     return 8
+
+// }).then(function(e){
+// console.log(e);
+// });
