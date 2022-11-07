@@ -4,6 +4,13 @@
 var
     error_msg = 'something unusual here',
     transform_speed = 2,
+    canvas_defaults=function(r){
+        var img = new Image();
+        img.src = "./image/1.png";
+        img.onload = function () {
+            imageToCanvas(img,r);
+        }  
+    },
     canvas_types = {
         IMAGEDATA: "imagedata",
         TEXT: "text"
@@ -225,7 +232,7 @@ function insert(data) {
     canvas_wrapper.appendChild(canvas)
 }
 
-function imageToCanvas(img) {
+function imageToCanvas(img,r) {
     var _canvas = canvas.cloneNode();
     _canvas.width = img.width
     _canvas.height = img.height
@@ -256,7 +263,9 @@ function imageToCanvas(img) {
 
         void _canvas_div.removeAttribute('default')
 
-        void db.log.setItem(_canvas_div._id, {
+      
+        
+        db.log.setItem(_canvas_div._id, {
             original_height: _canvas.height,
             original_width: _canvas.width,
             height: _canvas_div.offsetHeight,
@@ -265,7 +274,12 @@ function imageToCanvas(img) {
             y: _canvas_div.offsetTop,
             data: _canvas_div._id,
             type: _canvas_div._type
+        }).then(function(){
+            if (r instanceof Promise) {
+                return r
+            }
         }).then(function () {
+            r=void 0;
             void db.object.setItem(_canvas_div._id, _canvas.getContext('2d').getImageData(0, 0, _canvas.width, _canvas.height))
             _canvas_div = _canvas = void 0;
         });
@@ -466,6 +480,7 @@ function update(elm, type) {
             console.error('something unusual!!!')
         }
         db.log.setItem(elm._id, e)
+        db.detail.setItem('last modified date', Date.now());
     });
 }
 
