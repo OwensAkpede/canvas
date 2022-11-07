@@ -2,22 +2,31 @@
 <html lang="en" from>
 
 <head>
+    <script>
+        if (!NodeList.prototype.hasOwnProperty("forEach")) {
+         NodeList.prototype.forEach=function(foo){
+             for (var i = 0; i < this.length; i++) {
+                 foo(this[i],i)
+             }
+         }
+        }
+ 
+        if (!Element.prototype.hasOwnProperty('requestFullscreen')) {
+         Element.prototype.requestFullscreen=Element.prototype.webkitRequestFullscreen
+        }
+     </script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./style/main.css">
+    <link rel="stylesheet" href="./style/canva.css">
+    <link rel="stylesheet" href="./style/UI.css">
+    <link rel="stylesheet" href="./style/chrom-scroll.css">
+    <script src="./lib/nimo-DB.js"></script>
+    <script src="./script/db.js"></script>
     <style cmp>
         .canvas_wrapper {}
     </style>
-    <script>
-       if (!NodeList.prototype.hasOwnProperty("forEach")) {
-        NodeList.prototype.forEach=function(foo){
-            for (var i = 0; i < this.length; i++) {
-                foo(this[i],i)
-            }
-        }
-       }
-
-       if (!Element.prototype.hasOwnProperty('requestFullscreen')) {
-        Element.prototype.requestFullscreen=Element.prototype.webkitRequestFullscreen
-       }
-    </script>
     <script>
         var _width = 500
         var _height = 500
@@ -119,15 +128,6 @@
         }
 
     </script>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="./style/main.css">
-    <link rel="stylesheet" href="./style/canva.css">
-    <link rel="stylesheet" href="./style/UI.css">
-    <link rel="stylesheet" href="./style/chrom-scroll.css">
-    <script src="./lib/nimo-DB.js"></script>
-    <script src="./script/db.js"></script>
     <title>Canvas</title>
 </head>
 
@@ -145,7 +145,7 @@
             </div>
         </main>
         <footer>
-            <div class="ft">
+            <div class="ft" block>
                 <div image="add" onclick="getImage()">
                     <div class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -218,7 +218,7 @@
                     </div>
                     <span class="span">Move down</span>
                 </div>
-                <div image="more" onclick="">
+                <div image="more" onclick="db.db.deleteAllCreatedDatabase().then(location.reload())">
                     <div class="icon" invertx>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
                             stroke="currentColor" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"
@@ -248,13 +248,18 @@
 <script>
 var full=0
 onclick=function(){
-    if (full) {
-        onclick=null
+    if (full||document.webkitIsFullScreen||document.fullscreen) {
+        return
     }
     if (document.documentElement.requestFullscreen) {
 // document.body.requestFullscreen()
 full=1
 }
+}
+
+document[document.onwebkitfullscreenchange?"onwebkitfullscreenchange":"onfullscreenchange"]=function(e){
+    console.log(e);
+    full=0
 }
 </script>
 

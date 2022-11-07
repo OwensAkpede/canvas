@@ -4,12 +4,12 @@
 var
     error_msg = 'something unusual here',
     transform_speed = 2,
-    canvas_defaults=function(r){
+    canvas_defaults = function (r) {
         var img = new Image();
         img.src = "./image/1.png";
         img.onload = function () {
-            imageToCanvas(img,r);
-        }  
+            imageToCanvas(img, r);
+        }
     },
     canvas_types = {
         IMAGEDATA: "imagedata",
@@ -23,8 +23,8 @@ var
             var PRVY;
             canvas_board[canvas_events.mousemove] = function (ev) {
                 if (typeof ev.movementX !== 'number') {
-                    var x=ev.clientX|| ev.touches[0].clientX
-                    var y=ev.clientY|| ev.touches[0].clientY
+                    var x = ev.clientX || ev.touches[0].clientX
+                    var y = ev.clientY || ev.touches[0].clientY
                     ev.movementX = PRVX ? (x - PRVX) : 0;
                     ev.movementY = PRVY ? (y - PRVY) : 0;
                     PRVX = x
@@ -43,8 +43,8 @@ var
 
             canvas_board[canvas_events.mousemove] = function (ev) {
                 if (typeof ev.movementX !== 'number') {
-                    var x=ev.clientX|| ev.touches[0].clientX
-                    var y=ev.clientY|| ev.touches[0].clientY
+                    var x = ev.clientX || ev.touches[0].clientX
+                    var y = ev.clientY || ev.touches[0].clientY
                     ev.movementX = PRVX ? (x - PRVX) : 0;
                     ev.movementY = PRVY ? (y - PRVY) : 0;
                     PRVX = x
@@ -61,8 +61,8 @@ var
 
             canvas_board[canvas_events.mousemove] = function (ev) {
                 if (typeof ev.movementX !== 'number') {
-                    var x=ev.clientX|| ev.touches[0].clientX
-                    var y=ev.clientY|| ev.touches[0].clientY
+                    var x = ev.clientX || ev.touches[0].clientX
+                    var y = ev.clientY || ev.touches[0].clientY
                     ev.movementX = PRVX ? (x - PRVX) : 0;
                     ev.movementY = PRVY ? (y - PRVY) : 0;
                     PRVX = x
@@ -79,8 +79,8 @@ var
 
             canvas_board[canvas_events.mousemove] = function (ev) {
                 if (typeof ev.movementX !== 'number') {
-                    var x=ev.clientX|| ev.touches[0].clientX
-                    var y=ev.clientY|| ev.touches[0].clientY
+                    var x = ev.clientX || ev.touches[0].clientX
+                    var y = ev.clientY || ev.touches[0].clientY
                     ev.movementX = PRVX ? (x - PRVX) : 0;
                     ev.movementY = PRVY ? (y - PRVY) : 0;
                     PRVX = x
@@ -99,8 +99,8 @@ var
             var PRVY;
             canvas_board[canvas_events.mousemove] = function (ev) {
                 if (typeof ev.movementX !== 'number') {
-                    var x=ev.clientX|| ev.touches[0].clientX
-                    var y=ev.clientY|| ev.touches[0].clientY
+                    var x = ev.clientX || ev.touches[0].clientX
+                    var y = ev.clientY || ev.touches[0].clientY
                     ev.movementX = PRVX ? (x - PRVX) : 0;
                     ev.movementY = PRVY ? (y - PRVY) : 0;
                     PRVX = x
@@ -117,8 +117,8 @@ var
             var p = elm.parentElement
             canvas_board[canvas_events.mousemove] = function (ev) {
                 if (typeof ev.movementX !== 'number') {
-                    var x=ev.clientX|| ev.touches[0].clientX
-                    var y=ev.clientY|| ev.touches[0].clientY
+                    var x = ev.clientX || ev.touches[0].clientX
+                    var y = ev.clientY || ev.touches[0].clientY
                     ev.movementX = PRVX ? (x - PRVX) : 0;
                     ev.movementY = PRVY ? (y - PRVY) : 0;
                     PRVX = x
@@ -232,7 +232,7 @@ function insert(data) {
     canvas_wrapper.appendChild(canvas)
 }
 
-function imageToCanvas(img,r) {
+function imageToCanvas(img, r) {
     var _canvas = canvas.cloneNode();
     _canvas.width = img.width
     _canvas.height = img.height
@@ -263,26 +263,31 @@ function imageToCanvas(img,r) {
 
         void _canvas_div.removeAttribute('default')
 
-      
-        
-        db.log.setItem(_canvas_div._id, {
-            original_height: _canvas.height,
-            original_width: _canvas.width,
-            height: _canvas_div.offsetHeight,
-            width: _canvas_div.offsetWidth,
-            x: _canvas_div.offsetLeft,
-            y: _canvas_div.offsetTop,
-            data: _canvas_div._id,
-            type: _canvas_div._type
-        }).then(function(){
-            if (r instanceof Promise) {
-                return r
-            }
-        }).then(function () {
-            r=void 0;
-            void db.object.setItem(_canvas_div._id, _canvas.getContext('2d').getImageData(0, 0, _canvas.width, _canvas.height))
-            _canvas_div = _canvas = void 0;
-        });
+        void new Promise(function (_r) {
+                if (r instanceof Promise) {
+                    _r(r)
+                } else {
+                    _r()
+                }
+                r = _r = void 0
+            })
+            .then(function () {
+                return db.log.setItem(_canvas_div._id, {
+                    original_height: _canvas.height,
+                    original_width: _canvas.width,
+                    height: _canvas_div.offsetHeight,
+                    width: _canvas_div.offsetWidth,
+                    x: _canvas_div.offsetLeft,
+                    y: _canvas_div.offsetTop,
+                    data: _canvas_div._id,
+                    type: _canvas_div._type
+                })
+            })
+            .then(function () {
+                r = void 0;
+                void db.object.setItem(_canvas_div._id, _canvas.getContext('2d').getImageData(0, 0, _canvas.width, _canvas.height))
+                _canvas_div = _canvas = void 0;
+            });
 
     });
 }
@@ -392,7 +397,26 @@ function loadImageData(data, id, foo, _canvas_div) {
         data = e = void 0
     });
 }
+loadImageData.replicate=function(e,cnv,data){
+    if (!cnv) {
+        cnv = canvas.cloneNode();
+    }
 
+        cnv.width = e.width
+        cnv.height = e.height
+        cnv.getContext('2d').putImageData(e, 0, 0)
+
+        _canvas.width = data.width
+        _canvas.height = data.height
+
+        _canvas.getContext('2d').drawImage(cnv, 0, 0, _canvas.width, _canvas.height)
+        if (foo) {
+            foo(_canvas_div)
+            foo = void 0
+        }
+        data=cnv = e=void loadStyleSheet(_canvas)
+        
+}
 function loadText(data, id, foo, _canvas_div) {
     var span = document.createElement("span")
     void span.setAttribute('hidden', "")
@@ -726,9 +750,9 @@ function round(number, number_max, percentage) {
 
 
 ready.then(function (e) {
-    db.log.getAllItem(incoming).then(function(e){
-        footer.scrollIntoView()
-    })
+    db.log.getAllItem(incoming)
+    // .then(function(e){
+    // })
 });
 
 function incoming(id, data, foo) {
