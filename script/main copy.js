@@ -699,7 +699,9 @@ function round(number, number_max, percentage) {
 
 
 ready.then(function (e) {
-    db.log.getAllItem(incoming)
+    db.log.getAllItem(incoming).then(function(e){
+        footer.scrollIntoView()
+    })
 });
 
 function incoming(id, data, foo) {
