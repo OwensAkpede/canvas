@@ -4,17 +4,17 @@
 <head>
     <script>
         if (!NodeList.prototype.hasOwnProperty("forEach")) {
-         NodeList.prototype.forEach=function(foo){
-             for (var i = 0; i < this.length; i++) {
-                 foo(this[i],i)
-             }
-         }
+            NodeList.prototype.forEach = function (foo) {
+                for (var i = 0; i < this.length; i++) {
+                    foo(this[i], i)
+                }
+            }
         }
- 
+
         if (!Element.prototype.hasOwnProperty('requestFullscreen')) {
-         Element.prototype.requestFullscreen=Element.prototype.webkitRequestFullscreen
+            Element.prototype.requestFullscreen = Element.prototype.webkitRequestFullscreen
         }
-     </script>
+    </script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,8 +28,12 @@
         .canvas_wrapper {}
     </style>
     <script>
-        var _width = 500
+        var _width = 100
+        var _height = 70
+
+        var _width = 900
         var _height = 500
+        var zoom =1;
 
         canva = document.querySelector('style[cmp]');
         canva = (canva.sheet.rules || canva.sheet.cssRules)[0]
@@ -82,45 +86,29 @@
                 _innerHeight = canvas_board.offsetHeight
             }
 
-            var zoom
 
-            if (false) {
-
-            }
-
-            else if ((_width > _innerWidth && _innerHeight > _innerWidth)) {
-                zoom = _innerWidth / _width
-            } else if (_height > _innerHeight && _innerWidth > _innerHeight) {
-                zoom = _innerHeight / _height
-            }
-
-            else if (_width > _innerWidth || _innerHeight > _innerWidth) {
-                zoom = _innerWidth / _width
+            if (_innerHeight > _innerWidth ) {
                 console.log(1);
-            } else if (_height > _innerHeight || _innerWidth > _innerHeight) {
-                zoom = _innerHeight / _height
+                zoom = _innerWidth/(_width+_height)
+            } else {
+                    zoom = _innerHeight/(_width+_height)
                 console.log(2);
             }
-
-
-            if (zoom >= 1) {
-                zoom = 1
-            }
+            // zoom = null
 
             if (typeof zoom === "number") {
-                if (_height > _innerHeight || _width > _innerWidth) {
-                    zoom -= 0.05
-                }
                 if (!canva) {
                     canva = canvas_wrapper.style
                 }
-                if(canva.hasOwnProperty('zoom')){
+                if (canva.hasOwnProperty('zooms')) {
                     canva.zoom = zoom
-                    document.documentElement.setAttribute("zoom","true")
-                }else{
-                    document.documentElement.setAttribute("zoom","false")
-                    canva.scale = zoom
+                    document.documentElement.setAttribute("zoom", "true")
+                } else {
+                    document.documentElement.setAttribute("zoom", "false")
+                    canva.transform = `scale(${zoom})`
                 }
+            }else{
+                zoom=1
             }
 
             window.previousInnerWidth = innerWidth
@@ -144,7 +132,7 @@
             <div class="canvas_wrapper" hidden xstyle="zoom:1.5">
             </div>
         </main>
-        <footer>
+        <footer style="display:none">
             <div class="ft" block>
                 <div image="add" onclick="getImage()">
                     <div class="icon">
@@ -220,9 +208,9 @@
                 </div>
                 <div image="more" onclick="db.db.deleteAllCreatedDatabase().then(location.reload())">
                     <div class="icon" invertx>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
-                            stroke="currentColor" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-more-horizontal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="currentColor" stroke="currentColor" stroke-width="0" stroke-linecap="round"
+                            stroke-linejoin="round" class="feather feather-more-horizontal">
                             <circle cx="12" cy="12" r="1"></circle>
                             <circle cx="19" cy="12" r="1"></circle>
                             <circle cx="5" cy="12" r="1"></circle>
@@ -246,21 +234,21 @@
     <script src="script/main copy.js"></script>
 </body>
 <script>
-var full=0
-onclick=function(){
-    if (full||document.webkitIsFullScreen||document.fullscreen) {
-        return
+    var full = 0
+    onclick = function () {
+        if (full || document.webkitIsFullScreen || document.fullscreen) {
+            return
+        }
+        if (document.documentElement.requestFullscreen) {
+            // document.body.requestFullscreen()
+            full = 1
+        }
     }
-    if (document.documentElement.requestFullscreen) {
-// document.body.requestFullscreen()
-full=1
-}
-}
 
-document[document.onwebkitfullscreenchange?"onwebkitfullscreenchange":"onfullscreenchange"]=function(e){
-    console.log(e);
-    full=0
-}
+    document[document.onwebkitfullscreenchange ? "onwebkitfullscreenchange" : "onfullscreenchange"] = function (e) {
+        console.log(e);
+        full = 0
+    }
 </script>
 
 </html>
