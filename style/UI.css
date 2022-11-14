@@ -16,6 +16,10 @@ header {
 }
 
 
+header [name]{
+    font-weight: 600;
+    font-size: 24px;
+}
 
 header [ellipsis] {
     min-width: 43px;
@@ -159,6 +163,9 @@ x-popped {
 
 
 @media screen and (max-width:492px) {
+    header{
+        height: 52px;
+    }
        footer{
         justify-content: flex-start;
        }
