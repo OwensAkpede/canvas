@@ -23,11 +23,11 @@ var ready = new Promise(function (_r) {
         return db.db.forceOpen(project_name, 'image object medium thumbs')
     }).then(function (e) {
         //medium thumb
-        db.object = e
+        db.object_thumb_medium = e
         return db.db.forceOpen(project_name, 'image objects')
     }).then(function (e) {
         // object
-        db.object_thumb_medium = e
+        db.object = e
         return db.db.forceOpen(project_name, 'image style')
     }).then(function (e) {
         db.style = e

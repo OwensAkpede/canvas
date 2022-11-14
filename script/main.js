@@ -4,8 +4,8 @@
 var
     error_msg = 'something unusual here',
     thumb_size = [5, 200],
-    canvas_low_resolution = false,
-    canvas_display_thumb = 0,
+    canvas_low_resolution = true,
+    canvas_display_thumb = 1,
     canvas_defaults = function (r) {
         var img = new Image();
         img.src = "./image/1.png";
