@@ -1,6 +1,6 @@
 header {
     background-color: #ffffff;
-    height: 46px;
+    height: 52px;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -54,8 +54,7 @@ footer {
     user-select: none;
     -webkit-user-select: none;
     width: 100vw;
-    display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     flex-direction: row;
     box-shadow: 0 -2px 4px 1px #d7d7d7;
@@ -63,6 +62,8 @@ footer {
     background: #ffffff;
     overflow-x: auto;
     overflow-y: hidden;
+    pointer-events: auto;
+
 }
 [from="pc"] footer{
     overflow-x: overlay;
@@ -75,6 +76,7 @@ footer>div.ft {
     flex-direction: row;
     pointer-events: auto;
     margin: 0 34px;
+    margin-right: 45%;
 }
 
 footer>div.ft>div {
@@ -161,28 +163,38 @@ x-popped {
     color: rgb(0, 0, 0);
 }
 
-
-@media screen and (max-width:492px) {
+/* pc */
+@media screen and (min-width:492px) {
     header{
-        height: 52px;
+        height: 46px;
     }
        footer{
-        justify-content: flex-start;
+    display: flex;
+        justify-content: center;
        }
 
     footer::after{
         content: "";
-        /* background: linear-gradient(90deg, #ffffff -4%,transparent 8%, transparent 81%, #ffffff 100%); */
-        background: linear-gradient(90deg, #ffffff -4%,transparent 8%, transparent 40%, #ffffff 100%);
-        width: 100%;
-        height: 52px;
-        display: block;
-        position: fixed;
-        pointer-events: none;
-        bottom:-2px;
+        display: none;
    }
+
    footer>div.ft{
-    margin-right: 45%;
+    margin-right: 34px;
+    /* margin-right: revert; */
    }
    }
 
+  
+
+   footer::after{
+    content: "";
+    /* background: linear-gradient(90deg, #ffffff -4%,transparent 8%, transparent 81%, #ffffff 100%); */
+    background: linear-gradient(90deg, #ffffff -4%,transparent 8%, transparent 40%, #ffffff 100%);
+    width: 100%;
+    /* height: 52px; */
+    height: 45px;
+    display: block;
+    position: fixed;
+    pointer-events: none;
+    bottom:-2px;
+}
