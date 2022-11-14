@@ -29,7 +29,7 @@ var
         })
         getText.load("Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quibusdam delectus harum dolorum ipsum. Ad, ipsum ex!", {
             ImgCssText: 'font-size:24px;font-weight:600;text-align:center;',
-            ParentCssText: 'top:350px;'
+            ParentCssText: 'top:360px;'
         })
 
 
