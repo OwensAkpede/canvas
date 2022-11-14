@@ -22,12 +22,12 @@ var
         getSticker("smiling", void 0, {
             ImgCssText: '',
             ParentCssText: 'top:100px;'
-        }).then(function (e) {
-            getText.load("Edit me", {
-                ImgCssText: 'font-size:60px;font-weight:900',
-                ParentCssText: 'top:350px;'
-            })
-        });
+        })
+
+        getText.load("Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quibusdam delectus harum dolorum ipsum. Ad, ipsum ex!", {
+            ImgCssText: 'font-size:24px;font-weight:400;text-align:center;',
+            ParentCssText: 'top:350px;'
+        })
 
 
 
@@ -416,7 +416,7 @@ function imageToCanvas(img, r, both, info, val, style) {
             _canvas.style.cssText += style.ImgCssText
         }
         style = void 0
-        return new Promise(function () {
+         new Promise(function () {
             db.log.setItem(_canvas_div._id, val || {
                 original_height: _canvas.height,
                 original_width: _canvas.width,
@@ -535,6 +535,7 @@ getText.load = function (txt, style) {
         span.style.fontFamily = "serif"
         span.style.fontWeight = "400"
         span.style.color = "rgba(0,0,0,255)"
+        span.style.textAlign=''
         span.style.backgroundColor = "rgba(255,255,255,0)";
 
         if (style && style.ImgCssText) {
@@ -568,6 +569,7 @@ getText.load = function (txt, style) {
                 fontWeight: span.style.fontWeight,
                 fontSize: span.style.fontSize,
                 fontFamily: span.style.fontFamily,
+                textAlign: span.style.textAlign,
                 color: span.style.color,
                 transform: _canvas_div.style.transform,
                 backgroundColor: span.style.backgroundColor,
@@ -759,6 +761,7 @@ function loadText(data, id, foo, _canvas_div) {
     span.style.fontSize = data.fontSize
     span.style.fontWeight = data.fontWeight
     span.style.fontFamily = data.fontFamily
+    span.style.textAlign = data.textAlign
 
 
     void db.object.getItem(data.data).then(function (e) {
