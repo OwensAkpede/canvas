@@ -163,7 +163,7 @@ x-popped {
     color: rgb(0, 0, 0);
 }
 
-/* pc */
+/* pc  wider screen*/
 @media screen and (min-width:492px) {
     header{
         height: 46px;
