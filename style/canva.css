@@ -148,18 +148,25 @@
     box-shadow: 0 0 3px #fff;
 }
 .canvas_wrapper>div>div[controller] div[d="rotate"] {
-    width: 50px;
-    height: 20px;
-    border: 9px solid #000000;
-    bottom: -28px;
+    width: 29px;
+    height: 13px;
+    border: 6px solid #000000;
+    filter: drop-shadow(0px 0px 4px #ddd);
+    bottom: -24px;
     border-top: none;
     left: 50%;
     transform: translateX(-50%);
     border-radius: 150px;
-    display: none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
 
-
+.canvas_wrapper>div>div[controller] div[d="rotate"] svg{
+    width: 42px;
+    height: 42px;
+    stroke-width: 6px;
+    display: none;
+}
 /*  */
 
 

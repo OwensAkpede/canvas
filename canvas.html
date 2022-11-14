@@ -2,7 +2,13 @@
 <html lang="en" from>
 
 <head>
+    <script src="lib/popper/popper.js"></script>
+    <link rel="stylesheet" href="lib/popper/popper.css">
     <script>
+        addEventListener('error', function (e) {
+            popper(e.message + `.\n line:${e.lineno},col:${e.colno}`, { source: e.filename, type: 'critical' })
+        })
+
         if (!NodeList.prototype.hasOwnProperty("forEach")) {
             NodeList.prototype.forEach = function (foo) {
                 for (var i = 0; i < this.length; i++) {
@@ -36,7 +42,13 @@
         .canvas_wrapper {}
     </style>
     <script>
+        // for (var i = 0; i < 0; i++) {
+        //     popper('hello world-'+i)
+        // }
+        // popper(`Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officiis corrupti error ut et quo, asperiores ea 
+        // suscipit eum quos, eius nam at inventore neque. Impedit quaerat iusto exercitationem eaque sunt.
 
+        // `)
         var _width = 100
         var _height = 70
 
@@ -141,7 +153,9 @@
     </nav>
     <article>
         <header>
-            <h1 center ellipsis>Canva</h1>
+            <div center ellipsis side></div>
+            <div center ellipsis>Canva</div>
+            <div center ellipsis side onclick="save()">save</div>
         </header>
         <main class="canvas_board">
             <div class="canvas_wrapper" hidden xstyle="zoom:1.5">
@@ -248,6 +262,7 @@
         }, 1200)
     </script>
     <script src="script/main.js"></script>
+    <script src="lib/htmlTextToCanvas.js"></script>
 </body>
 <script>
     var full = 0

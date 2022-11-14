@@ -18,13 +18,16 @@ var ready = new Promise(function (_r) {
         if (db.log.__new) void canvas_defaults(ready);
         return db.db.forceOpen(project_name, 'image object thumbs')
     }).then(function (e) {
+        //thumb
         db.object_thumb = e
         return db.db.forceOpen(project_name, 'image object medium thumbs')
     }).then(function (e) {
-        db.object_thumb_medium = e
+        //medium thumb
+        db.object = e
         return db.db.forceOpen(project_name, 'image objects')
     }).then(function (e) {
-        db.object = e
+        // object
+        db.object_thumb_medium = e
         return db.db.forceOpen(project_name, 'image style')
     }).then(function (e) {
         db.style = e

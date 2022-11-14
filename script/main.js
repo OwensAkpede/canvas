@@ -4,7 +4,7 @@
 var
     error_msg = 'something unusual here',
     thumb_size = [5, 200],
-    canvas_low_resolution = true,
+    canvas_low_resolution = false,
     canvas_display_thumb = 0,
     canvas_defaults = function (r) {
         var img = new Image();
@@ -52,7 +52,16 @@ var
                     PRVX = x
                     PRVY = y
                 }
-                   console.log('null');
+
+                var df = e.style.transform
+                df = Number(df.replace(/rotate\(([^\)]*)(deg)?\)/img, '$1').replace(/[a-z]/img, '')) || 0
+
+                // df=df-(ev.movementY*ev.movementX);
+                df = df - (ev.movementX);
+
+                e.style.transform = e.style.transform.
+                    replace(/(rotate\()([^\)]*)(deg)?(\))/img, '$1' + df + "deg" + '$4')
+                // console.log(e.style.transform);
             }
         },
         "right_imagedata": function (event, elm) {
@@ -339,6 +348,9 @@ function imageToCanvas(img, r, both, info, val) {
         _canvas_div.style.top = `${_canvas_div.offsetTop - (_canvas_div.offsetHeight / 2)}px`
         void _canvas_div.removeAttribute('default')
 
+        _canvas_div.style.transform= "rotate(0deg)"
+        _canvas.style.backgroundColor= "rgba(0,0,0,0)"
+
         void new Promise(function (_r) {
             if (r instanceof Promise) {
                 _r(r)
@@ -355,7 +367,8 @@ function imageToCanvas(img, r, both, info, val) {
                     width: _canvas_div.offsetWidth,
                     x: _canvas_div.offsetLeft,
                     y: _canvas_div.offsetTop,
-                    transform: 'rotateZ(0deg)',
+                    transform: _canvas_div.style.transform,
+                    backgroundColor: _canvas.style.backgroundColor,
                     info: info,
                     data: id[1],
                     type: _canvas_div._type
@@ -440,29 +453,36 @@ function getText(txt, data) {
 
     span.style.fontSize = "24px"
     span.style.fontFamily = "serif"
+    span.style.fontWeight = "400"
+    span.style.color = "rgba(0,0,0,255)"
+    span.style.backgroundColor = "rgba(255,255,255,0)";
 
     var _canvas_div = canvas_div.cloneNode(true)
     void _canvas_div.setAttribute('default', canvas_types.TEXT)
     _canvas_div.appendChild(span)
-
 
     void _zIdexCore(_zIdexCore.both).then(function (id) {
         _canvas_div._id = id[0]
         _canvas_div._type = canvas_types.TEXT
         canvas_wrapper._append(_canvas_div)
 
-        _canvas_div.style.width = `${span.offsetWidth + 1}px`
+        _canvas_div.style.width = `${span.offsetWidth+2}px`
         _canvas_div.style.left = `${_canvas_div.offsetLeft - (_canvas_div.offsetWidth / 2)}px`
         _canvas_div.style.top = `${_canvas_div.offsetTop - (_canvas_div.offsetHeight / 2)}px`
 
         void _canvas_div.removeAttribute('default')
+        _canvas_div.style.transform = 'rotate(0deg)'
+
         db.log.setItem(_canvas_div._id, {
             original_style: span.style.cssText,
             fontWeight: span.style.fontWeight,
             fontSize: span.style.fontSize,
             fontFamily: span.style.fontFamily,
-            width: span.offsetWidth + 1,
-            transform: 'rotateZ(0deg)',
+            color: span.style.color,
+            transform: _canvas_div.style.transform,
+            backgroundColor: span.style.backgroundColor,
+            width: _canvas_div.offsetWidth,
+            transform: _canvas_div.style.transform,
             x: _canvas_div.offsetLeft,
             y: _canvas_div.offsetTop,
             data: id[1],
@@ -553,6 +573,7 @@ function loadImageData(data, id, foo, _canvas_div) {
         })
         _db = void 0
     }
+    _canvas.style.backgroundColor = `${data.backgroundColor}px`
 }
 loadImageData.replicate = function (e, _canvas, cnv, data, type, lowResolution) {
     if (lowResolution) {
@@ -582,6 +603,7 @@ loadImageData.replicate = function (e, _canvas, cnv, data, type, lowResolution) 
         }
 
         image.src = URL.createObjectURL(e)
+        image.style.cssText=_canvas.style.cssText
         image.onload = function () {
             URL.revokeObjectURL(this.src)
             _canvas.replaceWith(this)
@@ -633,6 +655,8 @@ function loadText(data, id, foo, _canvas_div) {
     _canvas_div.style.width = `${data.width}px`
     _canvas_div.style.transform = `${data.transform}`
 
+    span.style.color = data.color
+    span.style.backgroundColor = data.backgroundColor
     span.style.fontSize = data.fontSize
     span.style.fontWeight = data.fontWeight
     span.style.fontFamily = data.fontFamily
@@ -690,7 +714,7 @@ function update(elm, type) {
         if (type === 'center') {
             e.x = elm.offsetLeft
             e.y = elm.offsetTop
-        }else if(type === 'rotate') {
+        } else if (type === 'rotate') {
             e.transform = elm.style.transform
         } else if (type.match(/^(bottom_imagedata|right_imagedata|bottom\-right_imagedata)$/)) {
             e.width = elm.offsetWidth;
@@ -1022,10 +1046,17 @@ function round(number, number_max, percentage) {
     return Math.min((number * percentage) / number_max, percentage);
 }
 
+function save() {
 
+}
 
 ready.then(function (e) {
-    db.log.getAllItem(incoming)
+    // db.log.getAllItem(incoming)
+    db.log.getAllItem(function () {
+        console.log("loaded");
+        incoming(arguments[0], arguments[1])
+    }).then(function(e){
+    });
     // .then(function(e){
     // })
     footer.firstElementChild.removeAttribute('block')

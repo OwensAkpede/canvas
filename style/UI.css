@@ -12,12 +12,25 @@ header {
     z-index: 1;
     user-select: none;
     -webkit-user-select: none;
+    font-weight: 400;
 }
+
+
 
 header [ellipsis] {
     min-width: 43px;
     text-overflow: ellipsis;
     overflow: hidden;
+}
+
+header [side]{
+    color: #2196f3;
+    font-size: 17px;
+    background: white;
+    padding: 4px 10px;
+    border-radius: 100px;
+    text-align: center;
+    /* border: 1px solid; */
 }
 
 
@@ -125,6 +138,23 @@ footer>div.ft[block] {
     pointer-events: none;
 }
 
+
+x-popped {
+    background: #2196f3;
+    color: #fff;
+}
+x-pop>x-popped>x-pop-icon[l="alert"]>svg {
+    stroke: #0061d1;
+}
+x-pop>x-popped>x-pop-icon[l="warning"]>svg {
+    stroke: #f7bd5d;
+}
+
+
+x-popped {
+    background: #ffffff;
+    color: rgb(0, 0, 0);
+}
 
 
 @media screen and (max-width:492px) {
