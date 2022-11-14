@@ -25,6 +25,7 @@ var
             var PRVX;
             var PRVY;
             canvas_board[canvas_events.mousemove] = function (ev) {
+                ev.preventDefault()
                 if (typeof ev.movementX !== 'number') {
                     var x = ev.clientX || ev.touches[0].clientX
                     var y = ev.clientY || ev.touches[0].clientY
@@ -44,6 +45,7 @@ var
             var PRVX;
             var PRVY;
             canvas_board[canvas_events.mousemove] = function (ev) {
+                ev.preventDefault()
                 if (typeof ev.movementX !== 'number') {
                     var x = ev.clientX || ev.touches[0].clientX
                     var y = ev.clientY || ev.touches[0].clientY
@@ -70,6 +72,7 @@ var
             var p = elm.parentElement
 
             canvas_board[canvas_events.mousemove] = function (ev) {
+                ev.preventDefault()
                 if (typeof ev.movementX !== 'number') {
                     var x = ev.clientX || ev.touches[0].clientX
                     var y = ev.clientY || ev.touches[0].clientY
@@ -88,6 +91,7 @@ var
             var p = elm.parentElement
 
             canvas_board[canvas_events.mousemove] = function (ev) {
+                ev.preventDefault()
                 if (typeof ev.movementX !== 'number') {
                     var x = ev.clientX || ev.touches[0].clientX
                     var y = ev.clientY || ev.touches[0].clientY
@@ -106,6 +110,7 @@ var
             var PRVY;
 
             canvas_board[canvas_events.mousemove] = function (ev) {
+                ev.preventDefault()
                 if (typeof ev.movementX !== 'number') {
                     var x = ev.clientX || ev.touches[0].clientX
                     var y = ev.clientY || ev.touches[0].clientY
@@ -132,6 +137,8 @@ var
                 _c = void 0
             }
             canvas_board[canvas_events.mousemove] = function (ev) {
+                ev.preventDefault()
+
                 if (typeof ev.movementX !== 'number') {
                     var x = ev.clientX || ev.touches[0].clientX
                     var y = ev.clientY || ev.touches[0].clientY
@@ -152,6 +159,8 @@ var
             var PRVX;
             var PRVY;
             canvas_board[canvas_events.mousemove] = function (ev) {
+                ev.preventDefault()
+
                 if (typeof ev.movementX !== 'number') {
                     var x = ev.clientX || ev.touches[0].clientX
                     var y = ev.clientY || ev.touches[0].clientY
@@ -170,6 +179,8 @@ var
             var PRVY;
             var p = elm.parentElement
             canvas_board[canvas_events.mousemove] = function (ev) {
+                ev.preventDefault()
+
                 if (typeof ev.movementX !== 'number') {
                     var x = ev.clientX || ev.touches[0].clientX
                     var y = ev.clientY || ev.touches[0].clientY
