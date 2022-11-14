@@ -23,9 +23,12 @@ var
             ImgCssText: '',
             ParentCssText: 'top:100px;'
         })
-
+        getText.load("Lorem ipsum dolor", {
+            ImgCssText: 'text-align:center;',
+            ParentCssText: 'top:300px;'
+        })
         getText.load("Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quibusdam delectus harum dolorum ipsum. Ad, ipsum ex!", {
-            ImgCssText: 'font-size:24px;font-weight:400;text-align:center;',
+            ImgCssText: 'font-size:24px;font-weight:600;text-align:center;',
             ParentCssText: 'top:350px;'
         })
 
@@ -531,9 +534,9 @@ getText.load = function (txt, style) {
 
         txt = void 0;
 
-        span.style.fontSize = "24px"
+        span.style.fontSize = "40px"
         span.style.fontFamily = "serif"
-        span.style.fontWeight = "400"
+        span.style.fontWeight = "900"
         span.style.color = "rgba(0,0,0,255)"
         span.style.textAlign=''
         span.style.backgroundColor = "rgba(255,255,255,0)";
