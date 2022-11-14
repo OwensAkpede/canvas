@@ -57,11 +57,12 @@ footer {
     color: #7c7c7c;
     background: #ffffff;
     overflow-x: auto;
-    overflow-x: overlay;
     overflow-y: hidden;
     margin-top: 5px;
 }
-
+[from="pc"] footer{
+    overflow-x: overlay;
+}
 footer>div.ft {
     height: inherit;
     display: inline-flex;
