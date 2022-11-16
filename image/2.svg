@@ -3,7 +3,7 @@
         <svg version="1.1"   xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" width="500" height="500" viewBox="0 0 500 500" xmlns:xlink="http://www.w3.org/1999/xlink">
             <title>finish line_katerina_limpitsouni</title>
 <foreignObject x="0" y="0" width="500" height="500">
-<body xmlns="http://www.w3.org/1999/xhtml">
+<bodys xmlns="http://www.w3.org/1999/xhtml">
 <style>
 h1{
     background:red;
@@ -40,7 +40,7 @@ console.log(canvas)
     <b>hello</b>
     <div>hhhhh</div>
     <div>09hhhhh</div>
-</body>
+</bodys>
 
 </foreignObject>
 <t-span>ghhhh</t-span>

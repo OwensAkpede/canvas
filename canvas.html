@@ -20,7 +20,22 @@
         if (!Element.prototype.hasOwnProperty('requestFullscreen')) {
             Element.prototype.requestFullscreen = Element.prototype.webkitRequestFullscreen
         }
+        
+        if (!HTMLCanvasElement.prototype.hasOwnProperty('toBlob')) {
+            HTMLCanvasElement.prototype.toBlob=function(callback,type,quality){
+                callback(new Blob([atob(this.toDataURL(type,quality).replace(/data[^,]+,/,''))],{type:type}))
+            }
+        }
 
+        if (!HTMLCanvasElement.prototype.hasOwnProperty('convertToBlob')) {
+            HTMLCanvasElement.prototype.convertToBlob=function(opt){
+                var t=this
+                return new Promise(function(r){
+                t.toBlob(r,opt.type,opt.quality),t=r=void 0;
+                });
+            }
+        }
+        
         Object.defineProperty(Element.prototype, '_id', {
             set: function (e) {
                     this._title=e
@@ -43,6 +58,7 @@
     <link rel="stylesheet" href="./style/chrom-scroll.css">
     <script src="lib/typed.js"></script>
     <script src="lib/TypedArray.js"></script>
+    <script src="lib/threads.js"></script>
     <script src="lib/OffscreenCanvas.js"></script>
     <script src="lib/openFs.js"></script>
     <script src="lib/nimo-DB.js"></script>

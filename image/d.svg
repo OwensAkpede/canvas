@@ -1,0 +1,33 @@
+<svg xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 318.593994140625 161.33026123046875" width="318.593994140625" height="161.33026123046875" style="max-height: 161.33px; min-height: 161.33px; height: 161.33px; max-width: 318.594px; min-width: 318.594px; width: 318.594px;">
+    <foreignObject x="0" y="0" width="318.594px" height="161.33px">
+    <body xmlns="http://www.w3.org/1999/xhtml">
+    <h1>d</h1>
+    <style>
+    svg div{
+        position: absolute;
+        display: inline-flex;
+        position: fixed;
+        display: inline-flex;
+    }
+    .x-center{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    svg span{
+        // text-align: center;
+        // font-size:24px;
+        // font-family:serif;
+
+    }
+    </style>
+    <xhtml:img>dd</xhtml:img>
+       <div  style="width: 308px; height: 135px;">
+       <div style="width: 308px; transform: rotate(5deg);">
+       <span style="color: rgb(0, 0, 0); background-color: rgba(255, 255, 255, 0); font-size: 24px; font-weight: 600; font-family: serif; text-align: center;">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quibusdam delectus harum dolorum ipsum. Ad, ipsum ex!</span>
+       </div>
+       </div>
+    </body>
+</foreignObject>
+    </svg>

@@ -1,65 +1,306 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" from>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style/main.css">
-    <script src="lib/nimo-DB.js"></script>
+    <script src="lib/popper/popper.js"></script>
+    <link rel="stylesheet" href="lib/popper/popper.css">
     <script>
-        HTMLCollection.prototype.forEach =function(foo){
-            for (var i = 0; i < this.length; i++) {
-                foo(this[i],i)
+        addEventListener('error', function (e) {
+            popper(e.message + `.\n line:${e.lineno},col:${e.colno}`, { source: e.filename, type: 'critical' })
+        })
+
+        if (!NodeList.prototype.hasOwnProperty("forEach")) {
+            NodeList.prototype.forEach = function (foo) {
+                for (var i = 0; i < this.length; i++) {
+                    foo(this[i], i)
+                }
             }
         }
-        var store
-        var storeIMGD
-        var ready = new Promise(function (_r) {
-            new Promise(function (r) {
-                new NimoDB().open('a', 'b').then(function (e) {
-                    if (e) {
-                        r(e)
-                    } else {
-                        new NimoDB().create('a', 'b').then(r);
-                    }
-                });
-            }).then(function (e) {
-                store = e
-                new NimoDB().open('a', 'imageData').then(function (e) {
-                    if (e) {
-                        _r(e)
-                    } else {
-                        new NimoDB().openCreatedDatabase('a').then(function () {
-                            arguments[0].createTable('imageData').then(_r);
-                        });
-                    }
-                });
-            });
-        });
+
+        if (!Element.prototype.hasOwnProperty('requestFullscreen')) {
+            Element.prototype.requestFullscreen = Element.prototype.webkitRequestFullscreen
+        }
+
+        Object.defineProperty(Element.prototype, '_id', {
+            set: function (e) {
+                this._title = e
+                this.setAttribute('_id', e)
+            },
+            get: function () {
+                return this._title
+                // return this.getAttribute('_id')
+            }
+        })
+
+
+    </script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./style/main.css">
+    <link rel="stylesheet" href="./style/canva.css">
+    <link rel="stylesheet" href="./style/UI.css">
+    <link rel="stylesheet" href="./style/chrom-scroll.css">
+    <script src="lib/typed.js"></script>
+    <script src="lib/TypedArray.js"></script>
+    <script src="lib/OffscreenCanvas.js"></script>
+    <script src="lib/openFs.js"></script>
+    <script src="lib/nimo-DB.js"></script>
+    <script src="lib/canvas_roundup_size.js"></script>
+    <script src="script/db.js"></script>
+    <style cmp>
+        .viewBox{}
+        .canvas_wrapper {}
+    </style>
+    <script>
+        // for (var i = 0; i < 0; i++) {
+        //     popper('hello world-'+i)
+        // }
+        // popper(`Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officiis corrupti error ut et quo, asperiores ea 
+        // suscipit eum quos, eius nam at inventore neque. Impedit quaerat iusto exercitationem eaque sunt.
+
+        // `)
+        var _width = 100
+        var _height = 70
+
+        var _width = 9000
+        var _height = 9000
+
+        var s = canvas_roundup_size(500, _width, _height)
+        var _width = s.width
+        var _height = s.height
+        // fake/origina
+        var zoom = 1;
+
+        canva = document.querySelector('style[cmp]');
+        canva = (canva.sheet.rules || canva.sheet.cssRules)[0]
+        if (canva) {
+            canva = canva.style
+            canva.width = `${_width}px`
+            canva.height = `${_height}px`
+        } else {
+            canva.textContent = `
+                    .viewBox {
+                       width: ${_width}px;
+                        height: ${_height}px;
+                     }`;
+        }
+
+        window.previousInnerWidth = innerWidth
+        window.previousInnerHeight = innerHeight
+
+        var _innerWidth = innerWidth
+        var _innerHeight = innerHeight
+
+        var canvas_events;
+        if (window.navigator.userAgent.match(/Mobile|Android/)) {
+            document.documentElement.setAttribute('from', 'mobile')
+            canvas_events = {
+                mousemove: "ontouchmove",
+                mouseup: "ontouchend",
+                mousedown: "ontouchstart",
+                mouseleave: "ontouchcancel"
+            };
+        } else {
+            document.documentElement.setAttribute('from', 'pc')
+            canvas_events = {
+                mousemove: "onmousemove",
+                mouseup: "onmouseup",
+                mousedown: "onmousedown",
+                mouseleave: "onmouseleave"
+            }
+        }
+
+        window.onresize = function (ev) {
+            if (window.navigator.userAgent.match(/Mobile|Android/)) {
+                document.documentElement.setAttribute('from', 'mobile')
+            } else {
+                document.documentElement.setAttribute('from', 'pc')
+            }
+
+            if (window.canvas_board) {
+                _innerWidth = canvas_board.offsetWidth
+                _innerHeight = canvas_board.offsetHeight
+            }
+
+
+            if (_innerHeight > _innerWidth) {
+                zoom = _innerWidth / (_width + _height)
+            } else {
+                zoom = _innerHeight / (_width + _height)
+            }
+            // zoom = null
+            if (typeof zoom === "number") {
+                zoom = zoom * 1.5
+
+                transform_speed = (zoom + 1) * (2.5)
+
+                if (!canva) {
+                    canva = viewBox.style
+                }
+                if (canva.hasOwnProperty('zoom')) {
+                    canva.zoom = zoom
+                    document.documentElement.setAttribute("zoom", "true")
+                } else {
+                    document.documentElement.setAttribute("zoom", "false")
+                    canva.transform = `scale(${zoom})`
+                }
+            } else {
+                zoom = 1
+            }
+
+            window.previousInnerWidth = innerWidth
+            window.previousInnerHeight = innerHeight
+        }
+
     </script>
     <title>Canvas</title>
 </head>
 
 <body>
 
-    <h1>hello</h1>
-    <div class="canvas_board">
-        <div class="canvas_wrapper">
-            <svg version="1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2000/svg"
-                data-name="Layer 1" viewBox="0 0 500 500"
-                xmlns:xlink="http://www.w3.org/1999/xlink">
-                <title>canvas</title>
-                <foreignObject x="0" y="0" style="width: inherit;height: inherit;">
-                    <xhtml:h1>hello</xhtml:h1>
-                    <canvas  xmlns="http://www.w3.org/1999/xhtml">hello</canvas>
-                    <h1  xmlns="http://www.w3.org/1999/xhtml">hh</h1>
+    <nav>
+        hello
+    </nav>
+    <article>
+        <header>
+            <div center ellipsis side></div>
+            <div center ellipsis name>Canva</div>
+            <div center ellipsis side onclick="save()">save</div>
+        </header>
+        <main class="canvas_board">
+            <svg width="500" height="500" viewBox="0 0 500 500" class="viewBox">
+                <foreignObject x="0" y="0" width="500" height="500">
+                    <style>
+                        
+                    </style>
+                    <body xmlns:xhtml="http://www.w3.org/1999/xhtml">
+                        <div class="canvas_wrapper" hidden xstyle="zoom:1.5">
+                        </div>
+                    </body>
                 </foreignObject>
             </svg>
-        </div>
-    </div>
-<img src="image/2.svg" alt="">
+        </main>
+        <footer xstyle="display:none">
+            <div class="ft" block>
+                <div image="add" onclick="getImage()">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-image">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                    </div>
+                    <span class="span">Import Image</span>
+                </div>
+                <div image="remove" onclick="remove()">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-trash">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                            </path>
+                        </svg>
+                    </div>
+                    <span class="span">Remove Image</span>
+                </div>
+                <div image="clone" onclick="clone()">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-copy">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </div>
+                    <span class="span">Clone</span>
+                </div>
+                <div image="text" onclick="getText()">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-type">
+                            <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                            <line x1="9" y1="20" x2="15" y2="20"></line>
+                            <line x1="12" y1="4" x2="12" y2="20"></line>
+                        </svg>
+                    </div>
+                    <span class="span">Text</span>
+                </div>
+                <div image="move up" onclick="Zindex(1)">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-layers">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                    </div>
+                    <span class="span">Move up</span>
+                </div>
+                <div image="move down" onclick="Zindex(-1)">
+                    <div class="icon" invertx>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-layers" xmlns="http://www.w3.org/2000/svg">
+                            <defs id="defs12" />
+                            <polyline points="2 17 12 22 22 17" id="polyline2" transform="rotate(178.4735,12,12)" />
+                            <polyline points="2 12 12 17 22 12" id="polyline4" transform="rotate(178.4735,12,12)" />
+                            <polygon points="2,7 12,12 22,7 12,2 " id="polygon6" transform="rotate(178.4735,12,12)" />
+                        </svg>
+                    </div>
+                    <span class="span">Move down</span>
+                </div>
+                <div image="clear" onclick="db.db.deleteAllCreatedDatabase().then(location.reload())">
+                    <div class="icon" invertx>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-delete">
+                            <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+                            <line x1="18" y1="9" x2="12" y2="15"></line>
+                            <line x1="12" y1="9" x2="18" y2="15"></line>
+                        </svg>
+                    </div>
+                    <span class="span">clear</span>
+                </div>
+            </div>
+        </footer>
+    </article>
+    <script>
+        var canvas_wrapper = document.querySelector('.canvas_wrapper'),
+            canvas_board = document.querySelector('.canvas_board'),
+            viewBox = document.querySelector('.viewBox'),
+            transform_speed = 1,
+            footer = document.querySelector('footer');
+        window.onresize()
+        canvas_wrapper.removeAttribute('hidden')
+        setTimeout(function () {
+            document.documentElement.setAttribute('ready', 'true')
+        }, 1200)
+    </script>
     <script src="script/main.js"></script>
+    <script src="lib/htmlTextToCanvas.js"></script>
 </body>
+<script>
+    var full = 0
+    onclick = function () {
+        if (full || document.webkitIsFullScreen || document.fullscreen) {
+            return
+        }
+        if (document.documentElement.requestFullscreen) {
+            // document.body.requestFullscreen()
+            full = 1
+        }
+    }
+
+    document[document.onwebkitfullscreenchange ? "onwebkitfullscreenchange" : "onfullscreenchange"] = function (e) {
+        console.log(e);
+        full = 0
+    }
+</script>
 
 </html>

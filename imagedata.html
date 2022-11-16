@@ -62,7 +62,15 @@
     </div>
 
     <button onclick="reset(0,0,0,0)">reset</button>
+
+    <video src="" id="vid"></video>
     <script>
+var sm =canv.captureStream()
+// t=sm.getVideoTracks()[0]
+sm.onactive=sm.onaddtrack=sm.oninactive=sm.onremovetrack=function(e){
+    console.log(e);
+}
+vid.srcObject=sm
         var img = new Image()
         img.src = "image/1.png";
         style = style.sheet.rules[1].style
@@ -86,7 +94,7 @@
             canv.width = sz.width
             canv.height = sz.height
             ctx = canv.getContext('2d')
-            ctx.setTransform(r)
+            // ctx.setTransform(r)
             ctx.drawImage(img, 0, 0, canv.width, canv.height)
             data = ctx.getImageData(0, 0, canv.width, canv.height)
             fkdata = ctx.getImageData(0, 0, canv.width, canv.height)

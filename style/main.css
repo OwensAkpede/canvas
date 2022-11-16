@@ -35,11 +35,14 @@ body>nav{
 }
 
 body>svg{
-position: absolute;
-z-index: 2;
-background-color: #ffffff;
-width: 50%;
-    height: auto;
-    top:20px;
-    left: 20px;
+    position: absolute;
+    outline: 1px solid red;
+    z-index: 2;
+    background-color: #ffffff;
+    /* width: 100%; */
+    /* height: auto; */
+    /* top: 111px;
+    left: 109px; */
+    /* display: none; */
+    /* display: none; */
 }
