@@ -16,7 +16,7 @@ createdObjectURL=[],
 </svg>
 `
     },
-    canvas_low_resolution = false,
+    canvas_low_resolution = true,
     canvas_display_thumb = 1,
     canvas_defaults = function (r) {
         // r()
@@ -63,8 +63,8 @@ createdObjectURL=[],
                     PRVY = y
                 }
 
-                e.style.top = (e.offsetTop + (ev.movementY * transform_speed || 0)) + 'px'
-                e.style.left = (e.offsetLeft + (ev.movementX * transform_speed || 0)) + 'px'
+                e.style.top = (e.offsetTop + (ev.movementY * (transform_speed) || 0)) + 'px'
+                e.style.left = (e.offsetLeft + (ev.movementX * (transform_speed) || 0)) + 'px'
                 // e.scrollIntoViewIfNeeded(true)
             }
         },
@@ -87,8 +87,8 @@ createdObjectURL=[],
                 df = Number(df.replace(/rotate\(([^\)]*)(deg)?\)/img, '$1').replace(/[a-z]/img, '')) || 0
 
                 // df=df-(ev.movementY*ev.movementX);
-                df = (df - (ev.movementX+ev.movementY))*1;
-console.log(df);
+                df = (df - ((ev.movementX+ev.movementY)*Math.PI));
+// console.log(ev.movementX,ev.movementY,df);
                 e.style.transform = e.style.transform.
                     replace(/(rotate\()([^\)]*)(deg)?(\))/img, '$1' + df + "deg" + '$4')
                 // console.log(e.style.transform);
@@ -110,7 +110,7 @@ console.log(df);
                     PRVY = y
                 }
                 p.style.height = p.offsetHeight + "px"
-                p.style.width = (p.offsetWidth + ((ev.movementX * transform_speed || -1))) + "px";
+                p.style.width = (p.offsetWidth + ((ev.movementX * transform_speed || 0))) + "px";
             }
         },
         "bottom_imagedata": function (event, elm) {
@@ -129,7 +129,7 @@ console.log(df);
                     PRVY = y
                 }
                 p.style.width = p.offsetWidth + "px";
-                p.style.height = (p.offsetHeight + ((ev.movementY * transform_speed || -1))) + "px";
+                p.style.height = (p.offsetHeight + ((ev.movementY * transform_speed || 0))) + "px";
             }
         },
         "bottom-right_imagedata": function (event, elm) {
@@ -148,7 +148,7 @@ console.log(df);
                     PRVY = y
                 }
 
-                p.style.width = (p.offsetWidth + ((ev.movementY * transform_speed || 0))) + "px";
+                p.style.width = (p.offsetWidth + (((ev.movementY+ev.movementX) * transform_speed || 0))) + "px";
                 p.style.height = "auto";
 
             }
@@ -176,7 +176,7 @@ console.log(df);
                     PRVY = y
                 }
 
-                p.style.width = (p.offsetWidth + ((ev.movementY * transform_speed || 0))) + "px";
+                p.style.width = (p.offsetWidth + (((ev.movementY+ev.movementX) * transform_speed || 0))) + "px";
                 p.style.height = "auto";
 
             }
@@ -198,8 +198,10 @@ console.log(df);
                     PRVY = y
                 }
                 // font: 900 85px serif;
-                p.style.fontSize = (Number(p.style.fontSize.replace(/[a-z]/img, '')) + ((ev.movementY * transform_speed || 0))) + "px";
-                // elm.style.width = p.offsetWidth+"px"//(p.offsetWidth + ((ev.movementX || ev.webkitMovementX || -1))) + "px";
+                p.style.fontSize = (Number(p.style.fontSize.replace(/[a-z]/img, '')) + (((ev.movementY+ev.movementX) * transform_speed || 0))) + "px";
+                // p.style.width = (p.offsetWidth + m) + "px";
+
+                // p.parentElement.style.width = p.offsetWidth+"px"//(p.offsetWidth + ((ev.movementX || ev.webkitMovementX || -1))) + "px";
             }
         },
         "right_text": function (event, elm) {
@@ -218,7 +220,7 @@ console.log(df);
                     PRVY = y
                 }
                 // p.style.height = p.offsetHeight + "px"
-                p.style.width = (p.offsetWidth + ((ev.movementX * transform_speed || -1))) + "px";
+                p.style.width = (p.offsetWidth + ((ev.movementX * transform_speed || 0))) + "px";
             }
         }
     },
@@ -538,7 +540,7 @@ getText.load = function (txt, style) {
         txt = void 0;
 
         span.style.fontSize = "40px"
-        span.style.fontFamily = "san-serif"
+        span.style.fontFamily = "sans-serif"
         span.style.fontWeight = "900"
         span.style.color = "rgba(0,0,0,255)"
         span.style.textAlign=''
@@ -559,6 +561,7 @@ getText.load = function (txt, style) {
             canvas_wrapper._append(_canvas_div)
 
             _canvas_div.style.width = `${(span.offsetWidth + 2)}px`
+            // _canvas_div.style.width = `auto`
             _canvas_div.style.left = `${(_canvas_div.offsetLeft - (_canvas_div.offsetWidth / 2))}px`
             _canvas_div.style.top = `${(_canvas_div.offsetTop - (_canvas_div.offsetHeight / 2))}px`
 
@@ -1162,13 +1165,27 @@ _zIdexCore.pending = new Promise(function (r) {
     r();
 });
 function round(number, number_max, percentage) {
+    if (!number_max) {
+/**
+ * @FIX_ME
+ */
+        number_max= number=1
+    }
     // percentage = less than percentage (100)    (10,1000,100)
     percentage = percentage || 100;
     return Math.min((number * percentage) / number_max, percentage);
 }
 
 function save() {
-
+    void renderAsCanvas('low',console.log).then(function(e){
+        e.toBlob(function(e){
+            e=URL.createObjectURL(e)
+            open(e)
+            URL.revokeObjectURL(e)
+            e=void 0;
+        },'image/webp',1),
+        e=void 0;
+    })
 }
 
 ready.then(function (e) {
@@ -1207,8 +1224,7 @@ function incoming(id, data, foo) {
 function _onload() {
     // textToSvg(1)
     // imagedataToSvg(7)
-
-    // renderAsCanvas(dev_mode=0)
+    dev_mode=0,
     footer.firstElementChild.removeAttribute('block')
 
 }
