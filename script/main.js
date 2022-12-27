@@ -16,8 +16,8 @@ createdObjectURL=[],
 </svg>
 `
     },
-    canvas_low_resolution = true,
-    canvas_display_thumb = 1,
+    canvas_low_resolution = false,
+    canvas_display_thumb = 0,
     canvas_defaults = function (r) {
         // r()
         getSticker("smiling", void 0, {
@@ -1178,6 +1178,9 @@ function round(number, number_max, percentage) {
 
 function save() {
     void renderAsCanvas('low',console.log).then(function(e){
+        if (prv_mode) {
+            return void 0;
+        }
         e.toBlob(function(e){
             e=URL.createObjectURL(e)
             open(e)
