@@ -1185,9 +1185,10 @@ function save() {
             e=URL.createObjectURL(e)
 
             //open(e)
+             popper(e)
             location.href=e;
-
-            URL.revokeObjectURL(e)
+            
+         //   URL.revokeObjectURL(e)
             e=void 0;
         },'image/webp',1),
         e=void 0;
