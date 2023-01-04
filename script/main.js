@@ -1183,7 +1183,10 @@ function save() {
         }
         e.toBlob(function(e){
             e=URL.createObjectURL(e)
-            open(e)
+
+            //open(e)
+            location.href=e;
+
             URL.revokeObjectURL(e)
             e=void 0;
         },'image/webp',1),
