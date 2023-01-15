@@ -8,7 +8,7 @@
     <script>
         addEventListener('error', function (e) {
             popper(e.message + `.\n line:${e.lineno},col:${e.colno}`, { source: e.filename, type: 'critical' })
-        })
+        }) 
 
         if (!NodeList.prototype.hasOwnProperty("forEach")) {
             NodeList.prototype.forEach = function (foo) {

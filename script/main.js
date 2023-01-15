@@ -638,7 +638,7 @@ function loadImageData(data, id, foo, _canvas_div) {
         void loadStyleSheet(_canvas)
         _canvas_div = _canvas = void 0
         _load = id = data = void 0
-    }
+    }   
     _canvas = canvas.cloneNode()
     _canvas.style.backgroundColor = `${data.backgroundColor}px`
     void _canvas.setAttribute('hidden', "")
@@ -658,7 +658,7 @@ function loadImageData(data, id, foo, _canvas_div) {
             }
             _data = void 0
         } else {
-            // _canvas = canvas.cloneNode()
+            //   _canvas = canvas.cloneNode()
         }
         // void _canvas.setAttribute('hidden', "")
         // _canvas_div.appendChild(_canvas)
