@@ -1186,9 +1186,15 @@ function save() {
         }
         e.toBlob(function(e){
             e=URL.createObjectURL(e)
+                  popper(e);
             open(e)
-            URL.revokeObjectURL(e)
+             
+            location.href=e;
+            
+            //  URL.revokeObjectURL(e)
+
             e=void 0;
+              
         },'image/webp',1),
         e=void 0;
     })
