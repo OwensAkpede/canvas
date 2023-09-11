@@ -156,7 +156,7 @@
             }
         }
 
-        window.onresize = function (ev) {
+        _onresize = function (ev) {
             var rect = canvas_wrapper.getBoundingClientRect()
             var c_width = rect.width
             var c_height = rect.height
@@ -326,8 +326,10 @@
             footer = document.querySelector('footer'),
             transform_speed = 1;
         canvas_wrapper.removeAttribute('hidden')
-        window.onresize()
+        _onresize()
+        window.onresize=_onresize
         setTimeout(function () {
+          
             document.documentElement.setAttribute('ready', 'true')
         }, 1200)
 
@@ -347,12 +349,13 @@
 </body>
 <script>
     var full = 0
-    onclick = function () {
+    fullscreen = function () {
         if (full || document.webkitIsFullScreen || document.fullscreen) {
             return
         }
         if (document.documentElement.requestFullscreen) {
-            // document.body.requestFullscreen()
+             document.body.requestFullscreen()
+             document.body.className=""
             full = 1
         }
     }
@@ -361,6 +364,12 @@
         console.log(e);
         full = 0
     }
+   var c= confirm("this app would like to enable fullscreen mode")
+  if(c){
+    document.body.className="cover"
+    document.body.onclick=fullscreen
+  }  
+   // fullscreen()
 </script>
 
 </html>
