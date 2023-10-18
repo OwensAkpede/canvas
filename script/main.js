@@ -3,7 +3,7 @@
 
 var
     error_msg = 'something unusual here',
-    thumb_size = [5, 200, 200],
+    thumb_size = [100, 200, 200],
 createdObjectURL=[],
     canvas_stickers = {
         smiling:
@@ -16,8 +16,8 @@ createdObjectURL=[],
 </svg>
 `
     },
-    canvas_low_resolution = false,
-    canvas_display_thumb = 0,
+    canvas_low_resolution = 0,
+    canvas_display_thumb = 1,
     canvas_defaults = function (r) {
         // r()
         getSticker("smiling", void 0, {
@@ -677,6 +677,7 @@ function loadImageData(data, id, foo, _canvas_div) {
             _db = db.object
         }
         void _db.getItem(data.data).then(function (e) {
+        // console.log(e);
             if (!e) {
                 void console.error(error_msg)
                 return e = void 0
@@ -984,6 +985,9 @@ function clone() {
                     val.data = id[1];
 
                     if (val.type === canvas_types.IMAGEDATA || val.type === canvas_types.BLOB) {
+                        val.x+=20
+                        val.y+=20
+                        // console.log(id);
                         void db.log.setItem(id[0], val)
                         void db.object.getItem(_id).then(function (e) {
                             if (!e) {
@@ -993,9 +997,9 @@ function clone() {
                                 if (typeof canvas_display_thumb !== "number") {
                                     incoming([id[0], e], val, function (e) {
                                         e.click()
-                                        e = void 0
+                                        // e = void 0
                                     })
-                                    e = id = val = o = void 0;
+                                    // e = id = val = o = void 0;
                                 }
                             });
                         });
@@ -1006,10 +1010,9 @@ function clone() {
                             void db.object_thumb_medium.setItem(id[1], e).then(function () {
                                 if (canvas_display_thumb === 1) {
                                     incoming([id[0], e], val, function (e) {
-                                        e.click()
-                                        e = void 0
+                                        setTimeout(function(){e.click()})
                                     })
-                                    e = id = val = o = void 0;
+                                    // e = id = val = o = void 0;
                                 }
                             });
                         });
@@ -1023,7 +1026,7 @@ function clone() {
                                         e.click()
                                         e = void 0
                                     })
-                                    e = id = val = o = void 0;
+                                    // e = id = val = o = void 0;
                                 }
                             });
                         });
@@ -1033,7 +1036,7 @@ function clone() {
                         incoming(id[0], val, function (e) {
                             e.click()
                         })
-                        id = val = o = void 0
+                        // id = val = o = void 0
                     } else {
                         console.error(error_msg)
                     }
